@@ -485,6 +485,7 @@ transform:translateX(-100%);
 box-shadow:8px 0 32px rgba(0,0,0,.4);
 }
 #sidebar.open{transform:translateX(0)}
+#right-panel{display:none!important}
 #bottom-nav{display:flex!important;flex-direction:column;flex-shrink:0;}
 #canvas-toolbar{padding:6px 10px;gap:4px}
 .tbtn-label{display:none}
@@ -1864,47 +1865,85 @@ function applyMobileLayout(){
 const isMob = window.innerWidth <= 768;
 const bottomNav = document.getElementById(‘bottom-nav’);
 const rightPanel = document.getElementById(‘right-panel’);
+
 if(isMob){
 bottomNav.style.cssText=‘display:flex!important;flex-direction:column;flex-shrink:0;’;
-if(rightPanel) rightPanel.classList.remove(‘open’);
+if(rightPanel){ rightPanel.style.display=‘none’; rightPanel.classList.remove(‘open’); }
 } else {
 bottomNav.style.cssText=‘display:none;’;
+if(rightPanel) rightPanel.style.display=’’;
 }
 
-// iOS: ubah label tombol PNG → PDF
+// iOS: ubah label tombol PNG → PDF (jalankan sekali saja)
 if(isIOS()){
 const btnPng=document.getElementById(‘btn-png’);
-if(btnPng) btnPng.innerHTML=’<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF (iOS)’;
+if(btnPng && !btnPng.dataset.iosPatched){
+btnPng.dataset.iosPatched=‘1’;
+btnPng.innerHTML=’<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF (iOS)’;
 }
-
-// iOS: paksa 1×, disable 2× & 3×, tampilkan warning
+// Paksa 1×, disable 2× & 3×
 const scaleNote = document.getElementById(‘ios-scale-note’);
 const scaleSelect = document.getElementById(‘sel-scale’);
-if(isIOS() && scaleSelect){
+if(scaleSelect && !scaleSelect.dataset.iosPatched){
+scaleSelect.dataset.iosPatched=‘1’;
 scaleSelect.value = ‘1’;
 […scaleSelect.options].forEach(o => {
-if(o.value !== ‘1’){
-o.disabled = true;
-o.text = o.text + ’ (not supported on iOS)’;
-}
+if(o.value !== ‘1’){ o.disabled=true; o.text=o.text+’ (iOS)’; }
 });
-if(scaleNote) scaleNote.style.display = ‘block’;
+if(scaleNote) scaleNote.style.display=‘block’;
+}
 }
 }
 window.addEventListener(‘resize’, applyMobileLayout);
 
 // ══════════════════════════════════════════════════════════
-// INIT
+// INIT — Safari iOS perlu window load, bukan DOMContentLoaded
+// karena font & layout baru siap setelah semua resource load
 // ══════════════════════════════════════════════════════════
+function init(){
+setVh();
 buildFontGrid();
 buildLayoutGrid();
 applyMobileLayout();
 renderPoster();
-// Double rAF ensures layout paint complete before zoom calc
-requestAnimationFrame(()=>requestAnimationFrame(()=>{
-setVh();
+
+// Safari iOS: gunakan multiple fallback untuk pastikan zoom
+// dihitung setelah layout benar-benar selesai di-paint
+function tryZoom(attempts){
+const vp = document.getElementById(‘canvas-viewport’);
+const h = vp ? vp.clientHeight : 0;
+const w = vp ? vp.clientWidth : 0;
+if(h > 50 && w > 50){
 resetZoom();
-}));
+} else if(attempts > 0){
+setTimeout(()=>tryZoom(attempts-1), 120);
+} else {
+// Last resort: set zoom manual berdasarkan window size
+const navH = window.innerWidth <= 768 ? 60 : 0;
+const toolbarH = 44;
+const headerH = 52;
+const avH = window.innerHeight - headerH - toolbarH - navH - 48;
+const avW = window.innerWidth - 48;
+S.zoom = Math.min(avW / S.posterW, avH / S.posterH) * 0.88;
+S.zoom = Math.max(0.05, Math.min(3, S.zoom));
+applyZoom();
+}
+}
+
+// rAF chain → setTimeout fallback
+requestAnimationFrame(()=>{
+requestAnimationFrame(()=>{
+tryZoom(8); // coba 8× dengan interval 120ms = max 960ms tunggu
+});
+});
+}
+
+// Pakai window load (semua resource termasuk font sudah siap)
+if(document.readyState === ‘complete’){
+init();
+} else {
+window.addEventListener(‘load’, init);
+}
 </script>
 
 </body>
