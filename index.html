@@ -1126,6 +1126,65 @@ async function imgToDataUri(img) {
   });
 }
 
+// Kumpulkan semua CSS dari dokumen (inline + computed) sebagai string
+async function collectAllCSS() {
+  let css = '';
+  for (const sheet of [...document.styleSheets]) {
+    try {
+      // stylesheet lokal (inline <style>)
+      const rules = [...(sheet.cssRules || [])];
+      css += rules.map(r => r.cssText).join('\n');
+    } catch(e) {
+      // stylesheet external (Tailwind CDN, Google Fonts) — fetch langsung
+      if (sheet.href) {
+        try {
+          const res = await fetch(sheet.href);
+          css += await res.text();
+        } catch(e2) {}
+      }
+    }
+  }
+  return css;
+}
+
+// Deep-inline computed styles ke setiap node di clone
+// Ini yang membuat hasil capture identik dengan live preview
+function deepInlineComputedStyles(original, clone) {
+  if (original.nodeType !== 1) return; // hanya element nodes
+  const computed = window.getComputedStyle(original);
+  const important = [
+    'position','top','left','right','bottom','width','height',
+    'display','flex-direction','align-items','justify-content',
+    'flex-wrap','gap','overflow','z-index','opacity',
+    'background','background-color','background-image','background-size',
+    'background-position','background-repeat',
+    'color','font-family','font-size','font-weight','font-style',
+    'line-height','letter-spacing','word-spacing','text-align',
+    'text-transform','white-space',
+    'margin','margin-top','margin-right','margin-bottom','margin-left',
+    'padding','padding-top','padding-right','padding-bottom','padding-left',
+    'border','border-radius','border-color','border-width','border-style',
+    'box-shadow','transform','transform-origin',
+    'object-fit','object-position',
+    'mask-image','-webkit-mask-image',
+    'mix-blend-mode','clip-path',
+    'max-width','max-height','min-width','min-height',
+    'word-break','overflow-wrap',
+  ];
+  important.forEach(prop => {
+    try {
+      const val = computed.getPropertyValue(prop);
+      if (val) clone.style.setProperty(prop, val, 'important');
+    } catch(e) {}
+  });
+  // Recurse ke children
+  const origChildren = original.children;
+  const cloneChildren = clone.children;
+  for (let i = 0; i < origChildren.length; i++) {
+    if (cloneChildren[i]) deepInlineComputedStyles(origChildren[i], cloneChildren[i]);
+  }
+}
+
 document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
   const btn      = document.getElementById('downloadPdfBtn');
   const posterEl = document.getElementById('posterCanvas');
@@ -1135,39 +1194,50 @@ document.getElementById('downloadPdfBtn').addEventListener('click', async () => 
   btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px;"></i> Processing...';
   lucide.createIcons();
 
-  const origTransform = wrapEl.style.transform;
-  const origWidth     = wrapEl.style.width;
-  const origHeight    = wrapEl.style.height;
-
-  const restore = () => {
-    wrapEl.style.transform = origTransform;
-    wrapEl.style.width     = origWidth;
-    wrapEl.style.height    = origHeight;
-    scalePoster();
-  };
+  const restore = () => scalePoster();
 
   try {
-    // 1. Fonts
+    // 1. Fonts ready
     await document.fonts.ready;
 
-    // 2. Pre-convert every poster <img> to base64 data URI.
-    //    This is the key iOS fix — domtoimage won't need to fetch() anything.
-    const posterImgs = [...posterEl.querySelectorAll('img')];
-    await Promise.all(posterImgs.map(imgToDataUri));
+    // 2. Pre-convert semua <img> ke base64 (iOS fix)
+    await Promise.all([...posterEl.querySelectorAll('img')].map(imgToDataUri));
 
-    // 3. Reset wrapper to true 1:1 scale before capture
-    wrapEl.style.transform = 'scale(1)';
-    wrapEl.style.width     = '1080px';
-    wrapEl.style.height    = '1350px';
+    // 3. Clone posterCanvas dan deep-inline semua computed styles
+    //    Ini bypass masalah external CSS tidak terbaca di SVG foreignObject
+    const clone = posterEl.cloneNode(true);
+    clone.style.cssText = [
+      'position:fixed',
+      'top:0',
+      'left:-9999px',
+      'width:1080px',
+      'height:1350px',
+      'transform:none',
+      'zoom:1',
+      'overflow:hidden',
+      'background:#ffffff',
+    ].join(';');
 
-    // 4. Small settle — let browser reflow at full size
-    await new Promise(r => setTimeout(r, 150));
+    // Copy img src base64 dari original ke clone
+    const origImgs  = [...posterEl.querySelectorAll('img')];
+    const cloneImgs = [...clone.querySelectorAll('img')];
+    origImgs.forEach((img, i) => { if (cloneImgs[i]) cloneImgs[i].src = img.src; });
 
-    // 5. Capture with dom-to-image-more at 2× for retina quality.
-    //    imagePlaceholder: transparent so missing images don't show
-    //    as grey boxes (shouldn't happen after step 2, but safety net).
+    // Inject ke body (perlu di DOM untuk getComputedStyle)
+    document.body.appendChild(clone);
+    await new Promise(r => setTimeout(r, 50));
+
+    // Deep-inline computed styles dari original ke clone
+    deepInlineComputedStyles(posterEl, clone);
+
+    // Hapus swipe-indicator dari clone
+    clone.querySelectorAll('.swipe-indicator').forEach(el => el.remove());
+
+    await new Promise(r => setTimeout(r, 100));
+
+    // 4. Capture clone (bukan original) — bebas dari transform parent
     const SCALE = 2;
-    const dataUrl = await domtoimage.toPng(posterEl, {
+    const dataUrl = await domtoimage.toPng(clone, {
       width:  1080 * SCALE,
       height: 1350 * SCALE,
       style: {
@@ -1176,23 +1246,16 @@ document.getElementById('downloadPdfBtn').addEventListener('click', async () => 
         width:           '1080px',
         height:          '1350px',
       },
-      bgcolor:           '#ffffff',
-      imagePlaceholder:  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-      filter: (node) => {
-        // Strip swipe UI from export
-        if (node.classList && node.classList.contains('swipe-indicator')) return false;
-        return true;
-      }
+      bgcolor:          '#ffffff',
+      imagePlaceholder: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
     });
 
-    // 6. Restore scale immediately after capture
-    restore();
+    // 5. Cleanup clone
+    document.body.removeChild(clone);
 
-    // 7. Trigger download.
-    //    On iOS Safari/Chrome, <a download> doesn't work — open in new tab instead.
+    // 6. Trigger download
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
-      // Open as image in new tab — user can long-press → Save to Photos
       const win = window.open();
       if (win) {
         win.document.write(
@@ -1219,6 +1282,9 @@ document.getElementById('downloadPdfBtn').addEventListener('click', async () => 
 
   } catch (err) {
     console.error('Download error:', err);
+    // Cleanup clone jika masih ada di DOM
+    const leftover = document.querySelector('div[style*="left:-9999px"]');
+    if (leftover) document.body.removeChild(leftover);
     restore();
     btn.disabled = false;
     btn.innerHTML = '<i data-lucide="alert-circle" style="width:14px;height:14px;"></i> Error – retry';
