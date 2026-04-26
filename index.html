@@ -484,6 +484,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
     box-shadow:8px 0 32px rgba(0,0,0,.4);
   }
   #sidebar.open{transform:translateX(0)}
+  #right-panel{display:none!important}
   #bottom-nav{display:flex!important;flex-direction:column;flex-shrink:0;}
   #canvas-toolbar{padding:6px 10px;gap:4px}
   .tbtn-label{display:none}
@@ -821,6 +822,9 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
             <option value="2" selected>2× — Print ready (2160px)</option>
             <option value="3">3× — Ultra HD (3240px)</option>
           </select>
+          <div id="ios-scale-note" style="display:none;margin-top:8px;padding:8px 10px;background:#fa6d7c18;border:1px solid #fa6d7c44;border-radius:8px;font-size:10px;font-family:var(--font-mono);color:#fa6d7c;line-height:1.6">
+            ⚠️ iOS: otomatis 1× (1080px)<br>Safari tidak support render skala besar
+          </div>
         </div>
         <div class="section">
           <span class="sec-label">Filename</span>
@@ -1604,7 +1608,11 @@ async function captureDataUrl(){
   await document.fonts.ready;
   const posterEl=document.getElementById('poster');
   await Promise.all([...posterEl.querySelectorAll('img')].map(imgToDataUri));
-  const scale=+(document.getElementById('sel-scale').value)||2;
+
+  // iOS Safari: canvas size limit ~16.7MP, 2× sudah crash → paksa 1×
+  const selectedScale = +(document.getElementById('sel-scale').value)||2;
+  const scale = isIOS() ? 1 : selectedScale;
+
   const clone=posterEl.cloneNode(true);
   clone.style.cssText=[
     'position:fixed','top:0','left:-9999px',
@@ -1734,43 +1742,18 @@ async function exportPNG(){
   const btn=document.getElementById('btn-png');
   const fn=document.getElementById('inp-filename').value||'forma-poster';
 
-  // iOS: buka tab dulu SINKRON dalam user gesture, sebelum await apapun
-  let iosTab = null;
-  if(isIOS()){
-    iosTab = iosOpenTab(true);
-  }
+  // iOS → langsung export PDF 1× (lebih reliable di Safari)
+  if(isIOS()){ exportPDF(); return; }
 
   if(btn){ btn.disabled=true; btn.textContent='Rendering…'; }
   showToast('Preparing PNG…');
-
   try{
-    const dataUrl = await captureDataUrl();
-
-    if(isIOS()){
-      // Tulis gambar ke tab yang sudah terbuka
-      iosWriteImage(iosTab, dataUrl, fn);
-      showToast('✓ Tap & hold gambar → Save to Photos');
-    } else {
-      const a=document.createElement('a');
-      a.href=dataUrl; a.download=fn+'.png';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      showToast('PNG exported!');
-    }
-  } catch(e){
-    console.error(e);
-    // Kalau gagal tapi tab sudah terbuka, tulis pesan error
-    if(iosTab && !iosTab.closed){
-      iosTab.document.open();
-      iosTab.document.write(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
-        <style>body{background:#0c0c0f;display:flex;align-items:center;justify-content:center;
-        min-height:100vh;font-family:-apple-system,sans-serif;color:#e4e4f0;text-align:center;padding:20px}
-        h2{font-size:18px;margin-bottom:8px}p{font-size:13px;color:#6a6a80}</style></head>
-        <body><div><h2>Export gagal</h2><p>Coba lagi dari Forma</p></div></body></html>`);
-      iosTab.document.close();
-    }
-    showToast('Export failed. Coba lagi.');
-  }
-
+    const dataUrl=await captureDataUrl();
+    const a=document.createElement('a');
+    a.href=dataUrl; a.download=fn+'.png';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    showToast('PNG exported!');
+  }catch(e){ console.error(e); showToast('Export failed. Try again.'); }
   if(btn){
     btn.disabled=false;
     btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
@@ -1779,18 +1762,60 @@ async function exportPNG(){
 
 async function exportPDF(){
   const btn=document.getElementById('btn-pdf');
-  if(btn){ btn.disabled=true; btn.textContent='Exporting…'; }
+  const fn=document.getElementById('inp-filename').value||'forma-poster';
+
+  // iOS: buka tab SINKRON dulu dalam user gesture sebelum async apapun
+  let iosTab=null;
+  if(isIOS()) iosTab=iosOpenTab(true);
+
+  if(btn){ btn.disabled=true; btn.textContent='Rendering…'; }
   showToast('Preparing PDF…');
   try{
-    const dataUrl=await captureDataUrl();
+    const dataUrl=await captureDataUrl(); // sudah paksa 1× di iOS
     const{jsPDF}=window.jspdf;
     const mmW=S.posterW*0.2646, mmH=S.posterH*0.2646;
     const pdf=new jsPDF({orientation:mmW>mmH?'landscape':'portrait',unit:'mm',format:[mmW,mmH]});
     pdf.addImage(dataUrl,'PNG',0,0,mmW,mmH);
-    const fn=document.getElementById('inp-filename').value||'forma-poster';
-    pdf.save(fn+'.pdf');
-    showToast('PDF exported!');
-  }catch(e){ console.error(e); showToast('PDF export failed.'); }
+
+    if(isIOS()){
+      // iOS: embed PDF sebagai data URI di tab yang sudah terbuka
+      const pdfDataUri=pdf.output('datauristring');
+      if(iosTab && !iosTab.closed){
+        iosTab.document.open();
+        iosTab.document.write(`<!DOCTYPE html><html><head>
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>${fn}</title>
+          <style>
+            *{margin:0;padding:0;box-sizing:border-box}
+            body{background:#0c0c0f;font-family:-apple-system,sans-serif;min-height:100vh;
+                 display:flex;flex-direction:column;align-items:center}
+            .bar{width:100%;padding:14px 20px;background:#141418;
+                 border-bottom:1px solid #252530;display:flex;align-items:center;gap:10px;flex-shrink:0}
+            .logo{font-size:18px;font-weight:900;
+                  background:linear-gradient(135deg,#7c6dfa,#fa6d7c);
+                  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+            .info{font-size:11px;color:#6a6a80;font-family:monospace}
+            embed,iframe{width:100%;flex:1;min-height:calc(100vh - 53px);border:none}
+          </style>
+        </head><body>
+          <div class="bar">
+            <div class="logo">Forma</div>
+            <span class="info">${fn}.pdf — tap ⬆ Share → Save to Files</span>
+          </div>
+          <embed src="${pdfDataUri}" type="application/pdf">
+        </body></html>`);
+        iosTab.document.close();
+      }
+      showToast('✓ Tap Share → Save to Files');
+    } else {
+      pdf.save(fn+'.pdf');
+      showToast('PDF exported!');
+    }
+  }catch(e){
+    console.error(e);
+    if(iosTab && !iosTab.closed){ iosTab.close(); }
+    showToast('PDF export failed.');
+  }
   if(btn){ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Export PDF'; }
 }
 
@@ -1808,30 +1833,88 @@ window.addEventListener('resize',()=>{ setVh(); resetZoom(); });
 // MOBILE LAYOUT - Force bottom nav JS-side (GitHub Pages fix)
 // ══════════════════════════════════════════════════════════
 function applyMobileLayout(){
-  const isMobile = window.innerWidth <= 768;
+  const isMob = window.innerWidth <= 768;
   const bottomNav = document.getElementById('bottom-nav');
   const rightPanel = document.getElementById('right-panel');
-  if(isMobile){
+
+  if(isMob){
     bottomNav.style.cssText='display:flex!important;flex-direction:column;flex-shrink:0;';
-    if(rightPanel) rightPanel.classList.remove('open');
+    if(rightPanel){ rightPanel.style.display='none'; rightPanel.classList.remove('open'); }
   } else {
     bottomNav.style.cssText='display:none;';
+    if(rightPanel) rightPanel.style.display='';
+  }
+
+  // iOS: ubah label tombol PNG → PDF (jalankan sekali saja)
+  if(isIOS()){
+    const btnPng=document.getElementById('btn-png');
+    if(btnPng && !btnPng.dataset.iosPatched){
+      btnPng.dataset.iosPatched='1';
+      btnPng.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF (iOS)';
+    }
+    // Paksa 1×, disable 2× & 3×
+    const scaleNote = document.getElementById('ios-scale-note');
+    const scaleSelect = document.getElementById('sel-scale');
+    if(scaleSelect && !scaleSelect.dataset.iosPatched){
+      scaleSelect.dataset.iosPatched='1';
+      scaleSelect.value = '1';
+      [...scaleSelect.options].forEach(o => {
+        if(o.value !== '1'){ o.disabled=true; o.text=o.text+' (iOS)'; }
+      });
+      if(scaleNote) scaleNote.style.display='block';
+    }
   }
 }
 window.addEventListener('resize', applyMobileLayout);
 
 // ══════════════════════════════════════════════════════════
-// INIT
+// INIT — Safari iOS perlu window load, bukan DOMContentLoaded
+// karena font & layout baru siap setelah semua resource load
 // ══════════════════════════════════════════════════════════
-buildFontGrid();
-buildLayoutGrid();
-applyMobileLayout();
-renderPoster();
-// Double rAF ensures layout paint complete before zoom calc
-requestAnimationFrame(()=>requestAnimationFrame(()=>{
+function init(){
   setVh();
-  resetZoom();
-}));
+  buildFontGrid();
+  buildLayoutGrid();
+  applyMobileLayout();
+  renderPoster();
+
+  // Safari iOS: gunakan multiple fallback untuk pastikan zoom
+  // dihitung setelah layout benar-benar selesai di-paint
+  function tryZoom(attempts){
+    const vp = document.getElementById('canvas-viewport');
+    const h = vp ? vp.clientHeight : 0;
+    const w = vp ? vp.clientWidth : 0;
+    if(h > 50 && w > 50){
+      resetZoom();
+    } else if(attempts > 0){
+      setTimeout(()=>tryZoom(attempts-1), 120);
+    } else {
+      // Last resort: set zoom manual berdasarkan window size
+      const navH = window.innerWidth <= 768 ? 60 : 0;
+      const toolbarH = 44;
+      const headerH = 52;
+      const avH = window.innerHeight - headerH - toolbarH - navH - 48;
+      const avW = window.innerWidth - 48;
+      S.zoom = Math.min(avW / S.posterW, avH / S.posterH) * 0.88;
+      S.zoom = Math.max(0.05, Math.min(3, S.zoom));
+      applyZoom();
+    }
+  }
+
+  // rAF chain → setTimeout fallback
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      tryZoom(8); // coba 8× dengan interval 120ms = max 960ms tunggu
+    });
+  });
+}
+
+// Pakai window load (semua resource termasuk font sudah siap)
+if(document.readyState === 'complete'){
+  init();
+} else {
+  window.addEventListener('load', init);
+}
 </script>
 </body>
 </html>
