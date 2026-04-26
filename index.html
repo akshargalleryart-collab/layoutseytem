@@ -1,10 +1,12 @@
 <!doctype html>
+
 <html lang="en" class="h-full">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Layout System Generator</title>
   <script>
+    /* tailwind.config MUST be defined before the CDN script loads */
     window.tailwind = window.tailwind || {};
     window.tailwind.config = {
       theme: {
@@ -20,8 +22,7 @@
   </script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/src/dom-to-image-more.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     html, body { height: 100%; margin: 0; }
@@ -71,39 +72,24 @@
       z-index: 2;
       overflow: hidden;
       border-radius: 16px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
     }
     .hero-image-area img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    /* html2canvas-safe fade overlays — real divs replacing CSS pseudo-elements & mask-image */
-    .hero-fade-overlay {
+    .hero-image-area::after {
+      content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 0%, transparent 70%, rgba(255,255,255,1) 100%);
       pointer-events: none;
       z-index: 10;
-    }
-    .hero-fade-bottom {
-      background: linear-gradient(to bottom, transparent 0%, transparent 70%, rgba(255,255,255,1) 100%);
-    }
-    .hero-fade-top {
-      background: linear-gradient(to top, transparent 0%, transparent 60%, rgba(255,255,255,1) 100%);
-    }
-    /* Side image fade overlays (layout 6) */
-    .side-fade-right {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to right, transparent 0%, transparent 40%, rgba(255,255,255,1) 100%);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .side-fade-left {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to left, transparent 0%, transparent 40%, rgba(255,255,255,1) 100%);
-      pointer-events: none;
-      z-index: 2;
     }
     .tagline-area {
       position: absolute;
@@ -447,35 +433,33 @@
     .poster-canvas.layout-6 .side-image-center {
       display: none;
     }
-    /* Layout 6: Left side image wrapper div */
+    /* Layout 6: Left side image */
     .poster-canvas.layout-6 .side-image-left {
       position: absolute;
       top: 40px;
       left: 40px;
       width: 30%;
       height: 1270px;
+      object-fit: cover;
       z-index: 1;
       display: block;
       opacity: 0.35;
-      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+      mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
     }
-    .poster-canvas.layout-6 .side-image-left img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    /* Layout 6: Right side image wrapper div */
+    /* Layout 6: Right side image */
     .poster-canvas.layout-6 .side-image-right {
       position: absolute;
       top: 40px;
       right: 40px;
       width: 30%;
       height: 1270px;
+      object-fit: cover;
       z-index: 1;
       display: block;
       opacity: 0.35;
-      overflow: hidden;
-    }
-    .poster-canvas.layout-6 .side-image-right img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
+      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+      mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
     }
     .poster-canvas.layout-6 .sub-headline {
       top: 400px;
@@ -563,42 +547,36 @@
     .poster-canvas.layout-7 .hero-image-area::after {
       display: none;
     }
-    /* Layout 7: Right image wrapper (smaller, top-right) */
+    /* Layout 7: Right image (smaller, top-right) */
     .poster-canvas.layout-7 .side-image-right {
       position: absolute;
       top: 420px;
       right: 40px;
       width: 280px;
       height: 280px;
+      object-fit: cover;
       z-index: 1;
       display: block;
       opacity: 1;
       border-radius: 50%;
-      overflow: hidden;
+      mask-image: none;
+      -webkit-mask-image: none;
     }
-    .poster-canvas.layout-7 .side-image-right img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    .poster-canvas.layout-7 .side-image-right .side-fade-left,
-    .poster-canvas.layout-7 .side-image-right .side-fade-right { display: none; }
-    /* Layout 7: Left image wrapper (larger, bottom-left) */
+    /* Layout 7: Left image (larger, bottom-left, aligned with right) */
     .poster-canvas.layout-7 .side-image-left {
       position: absolute;
       bottom: 150px;
       left: 40px;
       width: 380px;
       height: 380px;
+      object-fit: cover;
       z-index: 1;
       display: block;
       opacity: 1;
       border-radius: 50%;
-      overflow: hidden;
+      mask-image: none;
+      -webkit-mask-image: none;
     }
-    .poster-canvas.layout-7 .side-image-left img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    .poster-canvas.layout-7 .side-image-left .side-fade-left,
-    .poster-canvas.layout-7 .side-image-left .side-fade-right { display: none; }
     /* Layout 7: Hide center image */
     .poster-canvas.layout-7 .side-image-center {
       display: none;
@@ -806,6 +784,8 @@
       right: 0;
       height: 900px;
       border-radius: 0;
+      mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
     }
     .poster-canvas.layout-9 .hero-image-area::after {
       display: none;
@@ -927,7 +907,7 @@
     input[type="color"]::-webkit-color-swatch { border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; }
   </style>
   <style>body { box-sizing: border-box; }</style>
-  <!-- data_sdk: platform-only, safe to omit -->
+
  </head>
  <body class="h-full bg-neutral-50 text-neutral-900 font-body overflow-auto">
   <div id="app" class="w-full min-h-full"><!-- Header -->
@@ -987,18 +967,7 @@
          <p class="text-xs font-mono mt-3 tracking-wider uppercase">Upload Visual Hook</p>
         </div>
        </div>
-       <div class="hero-fade-overlay hero-fade-bottom" id="p_hero_fade"></div>
-      </div>
-      <!-- Side Images — wrapper divs with inner <img> + fade overlay for html2canvas compat -->
-      <div id="p_side_left_wrap" class="side-image-left" style="display:none;">
-        <img id="p_side_image_left" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Side Image Left">
-        <div class="side-fade-right"></div>
-      </div>
-      <img id="p_side_image_center" class="side-image-center" style="display:none;" alt="Center Image">
-      <div id="p_side_right_wrap" class="side-image-right" style="display:none;">
-        <img id="p_side_image_right" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Side Image Right">
-        <div class="side-fade-left"></div>
-      </div> <!-- Sub Headline -->
+      </div><!-- Side Images for Layout 6 --> <img id="p_side_image_left" class="side-image-left" style="display:none;" alt="Side Image Left"> <img id="p_side_image_center" class="side-image-center" style="display:none;" alt="Center Image"> <img id="p_side_image_right" class="side-image-right" style="display:none;" alt="Side Image Right"> <!-- Sub Headline -->
       <div class="sub-headline" id="p_sub" style="color:#1f2937;">
        Exploring the invisible boundaries of modern creative culture
       </div><!-- Tagline -->
@@ -1035,306 +1004,344 @@
         app_title: 'Poster Layout System'
       };
 
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange: async (config) => {
-          const t = document.getElementById('app-title');
-          if (t) t.textContent = config.app_title || defaultConfig.app_title;
-        },
-        mapToCapabilities: (config) => ({
-          recolorables: [],
-          borderables: [],
-          fontEditable: undefined,
-          fontSizeable: undefined
-        }),
-        mapToEditPanelValues: (config) => new Map([
-          ['app_title', config.app_title || defaultConfig.app_title]
-        ])
-      });
+```
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => {
+      const t = document.getElementById('app-title');
+      if (t) t.textContent = config.app_title || defaultConfig.app_title;
+    },
+    mapToCapabilities: (config) => ({
+      recolorables: [],
+      borderables: [],
+      fontEditable: undefined,
+      fontSizeable: undefined
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['app_title', config.app_title || defaultConfig.app_title]
+    ])
+  });
+}
+
+// --- Layout switching with swipe support ---
+let currentLayout = 1;
+let lastUploadedImage = null;
+let touchStartX = 0;
+
+function updateLayout(layoutNum) {
+  currentLayout = layoutNum;
+  const canvas = document.getElementById('posterCanvas');
+  const infoBar = document.getElementById('p_info_bar');
+  const colorInput = document.getElementById('inp_color').value;
+  
+  // Update indicator
+  document.getElementById('layoutIndicator').textContent = `Layout ${layoutNum}`;
+  
+  // Remove all layout classes
+  canvas.classList.remove('layout-1', 'layout-2', 'layout-3', 'layout-4', 'layout-5', 'layout-6', 'layout-7', 'layout-8', 'layout-9');
+  
+  // Hide side images by default
+  document.getElementById('p_side_image_left').style.display = 'none';
+  document.getElementById('p_side_image_center').style.display = 'none';
+  document.getElementById('p_side_image_right').style.display = 'none';
+  
+  // Reset info bar border
+  infoBar.style.borderBottom = 'none';
+  
+  // Add new layout class
+  if (layoutNum !== 1) {
+    canvas.classList.add(`layout-${layoutNum}`);
+  }
+  
+  // If layout 8, apply color to bottom border
+  if (layoutNum === 8) {
+    infoBar.style.borderBottom = `50px solid ${colorInput}`;
+    const anchorLine = document.getElementById('p_layout8_line');
+    if (anchorLine) {
+      anchorLine.style.backgroundColor = colorInput;
+      anchorLine.style.display = 'block';
     }
-
-    // --- Layout switching with swipe support ---
-    let currentLayout = 1;
-    let lastUploadedImage = null;
-    let touchStartX = 0;
-    
-    function updateLayout(layoutNum) {
-      currentLayout = layoutNum;
-      const canvas = document.getElementById('posterCanvas');
-      const infoBar = document.getElementById('p_info_bar');
-      const colorInput = document.getElementById('inp_color').value;
-      
-      // Update indicator
-      document.getElementById('layoutIndicator').textContent = `Layout ${layoutNum}`;
-      
-      // Remove all layout classes
-      canvas.classList.remove('layout-1', 'layout-2', 'layout-3', 'layout-4', 'layout-5', 'layout-6', 'layout-7', 'layout-8', 'layout-9');
-      
-      // Hide side images by default
-      document.getElementById('p_side_left_wrap').style.display = 'none';
-      document.getElementById('p_side_image_center').style.display = 'none';
-      document.getElementById('p_side_right_wrap').style.display = 'none';
-      
-      // Reset info bar border
-      infoBar.style.borderBottom = 'none';
-      
-      // Add new layout class
-      if (layoutNum !== 1) {
-        canvas.classList.add(`layout-${layoutNum}`);
-      }
-      
-      // Toggle hero fade direction for layout 9, hide for 6 & 7
-      const heroFade = document.getElementById('p_hero_fade');
-      if (heroFade) {
-        if (layoutNum === 9) {
-          heroFade.classList.remove('hero-fade-bottom');
-          heroFade.classList.add('hero-fade-top');
-        } else {
-          heroFade.classList.remove('hero-fade-top');
-          heroFade.classList.add('hero-fade-bottom');
-        }
-        heroFade.style.display = (layoutNum === 6 || layoutNum === 7) ? 'none' : 'block';
-      }
-
-      // If layout 8, apply color to bottom border
-      if (layoutNum === 8) {
-        infoBar.style.borderBottom = `50px solid ${colorInput}`;
-        const anchorLine = document.getElementById('p_layout8_line');
-        if (anchorLine) {
-          anchorLine.style.backgroundColor = colorInput;
-          anchorLine.style.display = 'block';
-        }
-      } else {
-        const anchorLine = document.getElementById('p_layout8_line');
-        if (anchorLine) {
-          anchorLine.style.display = 'none';
-        }
-      }
-      
-      // If layout 6 and visual already uploaded, show left and right images
-      if ((layoutNum === 6 || layoutNum === 7) && lastUploadedImage) {
-        document.getElementById('p_side_image_left').src = lastUploadedImage;
-        document.getElementById('p_side_left_wrap').style.display = 'block';
-        document.getElementById('p_side_image_right').src = lastUploadedImage;
-        document.getElementById('p_side_right_wrap').style.display = 'block';
-      }
+  } else {
+    const anchorLine = document.getElementById('p_layout8_line');
+    if (anchorLine) {
+      anchorLine.style.display = 'none';
     }
-    
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      if (currentLayout < 9) updateLayout(currentLayout + 1);
-    });
-    
-    document.getElementById('prevBtn').addEventListener('click', () => {
-      if (currentLayout > 1) updateLayout(currentLayout - 1);
-    });
+  }
+  
+  // If layout 6 and visual already uploaded, show left and right images
+  if (layoutNum === 6 && lastUploadedImage) {
+    document.getElementById('p_side_image_left').src = lastUploadedImage;
+    document.getElementById('p_side_image_left').style.display = 'block';
+    document.getElementById('p_side_image_right').src = lastUploadedImage;
+    document.getElementById('p_side_image_right').style.display = 'block';
+  }
+  
+  // If layout 7 and visual already uploaded, show left and right images
+  if (layoutNum === 7 && lastUploadedImage) {
+    document.getElementById('p_side_image_left').src = lastUploadedImage;
+    document.getElementById('p_side_image_left').style.display = 'block';
+    document.getElementById('p_side_image_right').src = lastUploadedImage;
+    document.getElementById('p_side_image_right').style.display = 'block';
+  }
+}
 
-    // ── iOS-safe: convert any <img> src to base64 data URI via canvas ──
-    function ensureBase64Img(img) {
-      return new Promise((resolve) => {
-        const src = img.src || '';
-        if (!src || src.startsWith('data:')) { resolve(); return; }
-        const tmp = new Image();
-        tmp.crossOrigin = 'anonymous';
-        tmp.onload = () => {
-          try {
-            const c = document.createElement('canvas');
-            c.width = tmp.naturalWidth; c.height = tmp.naturalHeight;
-            c.getContext('2d').drawImage(tmp, 0, 0);
-            img.src = c.toDataURL('image/png');
-          } catch(e) {}
-          resolve();
-        };
-        tmp.onerror = () => resolve();
-        tmp.src = src;
-      });
-    }
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (currentLayout < 9) updateLayout(currentLayout + 1);
+});
 
-    // ── Download PNG (html2canvas, iOS-safe, 2× retina) ─────────────────
-    document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
-      const btn      = document.getElementById('downloadPdfBtn');
-      const posterEl = document.getElementById('posterCanvas');
-      const wrapEl   = document.getElementById('posterWrapper');
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (currentLayout > 1) updateLayout(currentLayout - 1);
+});
 
-      btn.disabled = true;
-      btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px;"></i> Processing...';
-      lucide.createIcons();
+// ─────────────────────────────────────────────────────────────────────
+// DOWNLOAD — dom-to-image-more (pixel-perfect CSS: mask-image, fonts,
+// gradients, transforms). iOS fix: pre-convert all <img> to base64
+// data URIs so domtoimage never needs to fetch() anything.
+// ─────────────────────────────────────────────────────────────────────
 
-      const origTransform = wrapEl.style.transform;
-      const origWidth     = wrapEl.style.width;
-      const origHeight    = wrapEl.style.height;
-      const restore = () => {
-        wrapEl.style.transform = origTransform;
-        wrapEl.style.width     = origWidth;
-        wrapEl.style.height    = origHeight;
-        scalePoster();
-      };
-
+/** Draw an <img> through an offscreen canvas → replace src with data URI.
+ *  Works for blob: URLs and same-origin URLs. Skips if already data:. */
+async function imgToDataUri(img) {
+  const src = img.getAttribute('src') || '';
+  if (!src || src.startsWith('data:')) return;          // already safe
+  return new Promise((resolve) => {
+    const tmp = new window.Image();
+    // crossOrigin attr only for http(s) URLs, not blob/data
+    if (src.startsWith('http')) tmp.crossOrigin = 'anonymous';
+    tmp.onload = () => {
       try {
-        await document.fonts.ready;
-
-        // Convert all poster images to base64 (critical for iOS Chrome)
-        await Promise.all([...posterEl.querySelectorAll('img')].map(ensureBase64Img));
-
-        // Reset to true 1080×1350 for capture
-        wrapEl.style.transform = 'scale(1)';
-        wrapEl.style.width     = '1080px';
-        wrapEl.style.height    = '1350px';
-        await new Promise(r => setTimeout(r, 200));
-
-        const snapshot = await html2canvas(posterEl, {
-          allowTaint:      true,
-          useCORS:         true,
-          backgroundColor: '#ffffff',
-          scale:           2,
-          logging:         false,
-          width:           1080,
-          height:          1350,
-          windowWidth:     1080,
-          windowHeight:    1350,
-          onclone: (doc) => {
-            doc.querySelectorAll('.swipe-indicator').forEach(el => el.remove());
-            const w = doc.getElementById('posterWrapper');
-            if (w) { w.style.transform = 'scale(1)'; w.style.width = '1080px'; w.style.height = '1350px'; }
-            // Push base64 srcs from live images into the clone
-            const liveSrcs = [...posterEl.querySelectorAll('img')].map(i => i.src);
-            doc.getElementById('posterCanvas').querySelectorAll('img').forEach((img, i) => {
-              if (liveSrcs[i]) img.src = liveSrcs[i];
-            });
-          }
-        });
-
-        restore();
-
-        snapshot.toBlob((blob) => {
-          const url  = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href  = url;
-          link.download = `poster-layout-${currentLayout}.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }, 'image/png', 1.0);
-
-        btn.disabled = false;
-        btn.innerHTML = '<i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG';
-        lucide.createIcons();
-
-      } catch (err) {
-        console.error('Download error:', err);
-        restore();
-        btn.disabled = false;
-        btn.innerHTML = '<i data-lucide="alert-circle" style="width:14px;height:14px;"></i> Error – retry';
-        lucide.createIcons();
-        setTimeout(() => {
-          btn.innerHTML = '<i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG';
-          lucide.createIcons();
-        }, 2500);
+        const c = document.createElement('canvas');
+        c.width  = tmp.naturalWidth  || tmp.width  || 1;
+        c.height = tmp.naturalHeight || tmp.height || 1;
+        c.getContext('2d').drawImage(tmp, 0, 0);
+        img.src = c.toDataURL('image/png');
+      } catch (e) {
+        // tainted canvas (truly cross-origin) — leave src as-is,
+        // domtoimage will try its own fetch path
       }
-    });
-    
-    // Touch swipe support on poster wrapper
-    const posterWrapper = document.getElementById('posterWrapper');
-    posterWrapper.addEventListener('touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
-    });
-    
-    posterWrapper.addEventListener('touchend', (e) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      if (touchStartX - touchEndX > 50 && currentLayout < 9) {
-        updateLayout(currentLayout + 1);
-      } else if (touchEndX - touchStartX > 50 && currentLayout > 1) {
-        updateLayout(currentLayout - 1);
-      }
-    });
-
-    // --- Live bindings ---
-    const bind = (inputId, posterId, prop = 'textContent') => {
-      document.getElementById(inputId).addEventListener('input', (e) => {
-        document.getElementById(posterId)[prop] = e.target.value;
-      });
+      resolve();
     };
+    tmp.onerror = () => resolve();   // broken image — leave as-is
+    tmp.src = src;
+  });
+}
 
-    // Bind with special handling for headline (allows HTML)
-    document.getElementById('inp_judul').addEventListener('input', (e) => {
-      document.getElementById('p_headline').textContent = e.target.value;
-    });
+document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+  const btn      = document.getElementById('downloadPdfBtn');
+  const posterEl = document.getElementById('posterCanvas');
+  const wrapEl   = document.getElementById('posterWrapper');
 
-    bind('inp_sub_judul', 'p_sub');
-    bind('inp_info', 'p_info');
-    bind('inp_desc1', 'p_desc1');
-    bind('inp_desc2', 'p_desc2');
-    bind('inp_tagline', 'p_tagline');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px;"></i> Processing...';
+  lucide.createIcons();
 
-    // Color
-    document.getElementById('inp_color').addEventListener('input', (e) => {
-      const c = e.target.value;
-      document.getElementById('color_label').textContent = c.toUpperCase();
-      document.getElementById('p_headline').style.color = c;
-      document.getElementById('p_tagline').style.color = c;
-      // If layout 8, apply color to bottom border
-      const infoBar = document.getElementById('p_info_bar');
-      const anchorLine = document.getElementById('p_layout8_line');
-      if (currentLayout === 8) {
-        infoBar.style.borderBottom = `3px solid ${c}`;
-        if (anchorLine) {
-          anchorLine.style.backgroundColor = c;
-        }
-      }
-    });
+  const origTransform = wrapEl.style.transform;
+  const origWidth     = wrapEl.style.width;
+  const origHeight    = wrapEl.style.height;
 
-    // File uploads
-    function setupUpload(dropId, fileId, labelId, onLoad) {
-      const drop = document.getElementById(dropId);
-      const file = document.getElementById(fileId);
-      const label = document.getElementById(labelId);
-      drop.addEventListener('click', () => file.click());
-      file.addEventListener('change', (e) => {
-        const f = e.target.files[0];
-        if (!f) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          label.textContent = f.name.slice(0, 20);
-          onLoad(ev.target.result);
-        };
-        reader.readAsDataURL(f);
-      });
-    }
-
-    setupUpload('drop_visual', 'file_visual', 'visual_label', (dataUrl) => {
-      lastUploadedImage = dataUrl;
-      const hero = document.getElementById('p_hero');
-      hero.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-      
-      // For Layout 6 & 7: populate side images
-      if (currentLayout === 6 || currentLayout === 7) {
-        document.getElementById('p_side_image_left').src = dataUrl;
-        document.getElementById('p_side_left_wrap').style.display = 'block';
-        document.getElementById('p_side_image_right').src = dataUrl;
-        document.getElementById('p_side_right_wrap').style.display = 'block';
-      }
-    });
-
-    setupUpload('drop_logo', 'file_logo', 'logo_label', (dataUrl) => {
-      const brand = document.getElementById('p_brand');
-      brand.innerHTML = `<img src="${dataUrl}" style="height:36px;width:auto;">`;
-    });
-
-    // --- Poster scaling ---
-    function scalePoster() {
-      const wrapper = document.getElementById('posterWrapper');
-      const available = Math.min(window.innerWidth - 48, 900);
-      const scale = Math.min(available / 1080, 0.55);
-      wrapper.style.transform = `scale(${scale})`;
-      wrapper.style.width = '1080px';
-      wrapper.style.height = `${1350 * scale}px`;
-    }
-
-    window.addEventListener('resize', scalePoster);
+  const restore = () => {
+    wrapEl.style.transform = origTransform;
+    wrapEl.style.width     = origWidth;
+    wrapEl.style.height    = origHeight;
     scalePoster();
+  };
 
-    // Init icons
+  try {
+    // 1. Fonts
+    await document.fonts.ready;
+
+    // 2. Pre-convert every poster <img> to base64 data URI.
+    //    This is the key iOS fix — domtoimage won't need to fetch() anything.
+    const posterImgs = [...posterEl.querySelectorAll('img')];
+    await Promise.all(posterImgs.map(imgToDataUri));
+
+    // 3. Reset wrapper to true 1:1 scale before capture
+    wrapEl.style.transform = 'scale(1)';
+    wrapEl.style.width     = '1080px';
+    wrapEl.style.height    = '1350px';
+
+    // 4. Small settle — let browser reflow at full size
+    await new Promise(r => setTimeout(r, 150));
+
+    // 5. Capture with dom-to-image-more at 2× for retina quality.
+    //    imagePlaceholder: transparent so missing images don't show
+    //    as grey boxes (shouldn't happen after step 2, but safety net).
+    const SCALE = 2;
+    const dataUrl = await domtoimage.toPng(posterEl, {
+      width:  1080 * SCALE,
+      height: 1350 * SCALE,
+      style: {
+        transform:       `scale(${SCALE})`,
+        transformOrigin: 'top left',
+        width:           '1080px',
+        height:          '1350px',
+      },
+      bgcolor:           '#ffffff',
+      imagePlaceholder:  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+      filter: (node) => {
+        // Strip swipe UI from export
+        if (node.classList && node.classList.contains('swipe-indicator')) return false;
+        return true;
+      }
+    });
+
+    // 6. Restore scale immediately after capture
+    restore();
+
+    // 7. Trigger download.
+    //    On iOS Safari/Chrome, <a download> doesn't work — open in new tab instead.
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      // Open as image in new tab — user can long-press → Save to Photos
+      const win = window.open();
+      if (win) {
+        win.document.write(
+          '<html><head><title>poster-layout-' + currentLayout + '.png</title></head>' +
+          '<body style="margin:0;background:#111;">' +
+          '<img src="' + dataUrl + '" style="max-width:100%;display:block;margin:auto;">' +
+          '<p style="color:#aaa;font-family:sans-serif;text-align:center;padding:12px;font-size:13px;">' +
+          'Tekan & tahan gambar → Simpan ke Foto</p></body></html>'
+        );
+        win.document.close();
+      }
+    } else {
+      const link = document.createElement('a');
+      link.href  = dataUrl;
+      link.download = `poster-layout-${currentLayout}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG';
     lucide.createIcons();
+
+  } catch (err) {
+    console.error('Download error:', err);
+    restore();
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="alert-circle" style="width:14px;height:14px;"></i> Error – retry';
+    lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = '<i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG';
+      lucide.createIcons();
+    }, 2500);
+  }
+});
+
+// Touch swipe support on poster wrapper
+const posterWrapper = document.getElementById('posterWrapper');
+posterWrapper.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+});
+
+posterWrapper.addEventListener('touchend', (e) => {
+  const touchEndX = e.changedTouches[0].clientX;
+  if (touchStartX - touchEndX > 50 && currentLayout < 9) {
+    updateLayout(currentLayout + 1);
+  } else if (touchEndX - touchStartX > 50 && currentLayout > 1) {
+    updateLayout(currentLayout - 1);
+  }
+});
+
+// --- Live bindings ---
+const bind = (inputId, posterId, prop = 'textContent') => {
+  document.getElementById(inputId).addEventListener('input', (e) => {
+    document.getElementById(posterId)[prop] = e.target.value;
+  });
+};
+
+// Bind with special handling for headline (allows HTML)
+document.getElementById('inp_judul').addEventListener('input', (e) => {
+  document.getElementById('p_headline').textContent = e.target.value;
+});
+
+bind('inp_sub_judul', 'p_sub');
+bind('inp_info', 'p_info');
+bind('inp_desc1', 'p_desc1');
+bind('inp_desc2', 'p_desc2');
+bind('inp_tagline', 'p_tagline');
+
+// Color
+document.getElementById('inp_color').addEventListener('input', (e) => {
+  const c = e.target.value;
+  document.getElementById('color_label').textContent = c.toUpperCase();
+  document.getElementById('p_headline').style.color = c;
+  document.getElementById('p_tagline').style.color = c;
+  // If layout 8, apply color to bottom border
+  const infoBar = document.getElementById('p_info_bar');
+  const anchorLine = document.getElementById('p_layout8_line');
+  if (currentLayout === 8) {
+    infoBar.style.borderBottom = `3px solid ${c}`;
+    if (anchorLine) {
+      anchorLine.style.backgroundColor = c;
+    }
+  }
+});
+
+// File uploads
+function setupUpload(dropId, fileId, labelId, onLoad) {
+  const drop = document.getElementById(dropId);
+  const file = document.getElementById(fileId);
+  const label = document.getElementById(labelId);
+  drop.addEventListener('click', () => file.click());
+  file.addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      label.textContent = f.name.slice(0, 20);
+      onLoad(ev.target.result);
+    };
+    reader.readAsDataURL(f);
+  });
+}
+
+setupUpload('drop_visual', 'file_visual', 'visual_label', (dataUrl) => {
+  lastUploadedImage = dataUrl;
+  const hero = document.getElementById('p_hero');
+  hero.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+  
+  // For Layout 6: populate left and right images
+  if (currentLayout === 6) {
+    document.getElementById('p_side_image_left').src = dataUrl;
+    document.getElementById('p_side_image_left').style.display = 'block';
+    document.getElementById('p_side_image_right').src = dataUrl;
+    document.getElementById('p_side_image_right').style.display = 'block';
+  }
+  
+  // For Layout 7: populate left and right circular images
+  if (currentLayout === 7) {
+    document.getElementById('p_side_image_left').src = dataUrl;
+    document.getElementById('p_side_image_left').style.display = 'block';
+    document.getElementById('p_side_image_right').src = dataUrl;
+    document.getElementById('p_side_image_right').style.display = 'block';
+  }
+});
+
+setupUpload('drop_logo', 'file_logo', 'logo_label', (dataUrl) => {
+  const brand = document.getElementById('p_brand');
+  brand.innerHTML = `<img src="${dataUrl}" style="height:36px;width:auto;">`;
+});
+
+// --- Poster scaling ---
+function scalePoster() {
+  const wrapper = document.getElementById('posterWrapper');
+  const available = Math.min(window.innerWidth - 48, 900);
+  const scale = Math.min(available / 1080, 0.55);
+  wrapper.style.transform = `scale(${scale})`;
+  wrapper.style.width = '1080px';
+  wrapper.style.height = `${1350 * scale}px`;
+}
+
+window.addEventListener('resize', scalePoster);
+scalePoster();
+
+// Init icons
+lucide.createIcons();
+```
+
   </script>
 </body>
 </html>
