@@ -3,276 +3,342 @@
 <html class="dark" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>LayoutEngine Pro | Social Layout Engine</title>
+<title>LayoutEngine Pro - Social Layout Engine</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          "colors": {
-            "error": "#ffb4ab",
-            "surface-dim": "#0b1326",
-            "secondary-container": "#571bc1",
-            "primary-container": "#4d8eff",
-            "on-secondary-fixed": "#23005c",
-            "surface": "#0b1326",
-            "on-tertiary-fixed-variant": "#005236",
-            "inverse-surface": "#dae2fd",
-            "surface-container-low": "#131b2e",
-            "surface-tint": "#adc6ff",
-            "tertiary-container": "#00a572",
-            "on-secondary": "#3c0091",
-            "on-secondary-fixed-variant": "#5516be",
-            "secondary-fixed": "#e9ddff",
-            "on-tertiary-fixed": "#002113",
-            "on-primary-fixed-variant": "#004395",
-            "secondary": "#d0bcff",
-            "on-tertiary": "#003824",
-            "on-error": "#690005",
-            "surface-container": "#171f33",
-            "on-surface-variant": "#c2c6d6",
-            "on-background": "#dae2fd",
-            "background": "#0b1326",
-            "primary-fixed-dim": "#adc6ff",
-            "outline-variant": "#424754",
-            "primary-fixed": "#d8e2ff",
-            "on-surface": "#dae2fd",
-            "on-tertiary-container": "#00311f",
-            "surface-bright": "#31394d",
-            "primary": "#adc6ff",
-            "on-primary-fixed": "#001a42",
-            "surface-container-lowest": "#060e20",
-            "inverse-primary": "#005ac2",
-            "surface-variant": "#2d3449",
-            "secondary-fixed-dim": "#d0bcff",
-            "on-secondary-container": "#c4abff",
-            "tertiary-fixed-dim": "#4edea3",
-            "on-primary-container": "#00285d",
-            "error-container": "#93000a",
-            "surface-container-highest": "#2d3449",
-            "surface-container-high": "#222a3d",
-            "on-primary": "#002e6a",
-            "inverse-on-surface": "#283044",
-            "tertiary-fixed": "#6ffbbe",
-            "outline": "#8c909f",
-            "on-error-container": "#ffdad6",
-            "tertiary": "#4edea3"
-          },
-          "borderRadius": {
-            "DEFAULT": "0.25rem",
-            "lg": "0.5rem",
-            "xl": "0.75rem",
-            "full": "9999px"
-          },
-          "spacing": {
-            "gutter": "12px",
-            "sm": "8px",
-            "panel-width": "280px",
-            "lg": "24px",
-            "xs": "4px",
-            "xl": "48px",
-            "unit": "4px",
-            "md": "16px"
-          },
-          "fontFamily": {
-            "body-main": ["Inter"],
-            "label-caps": ["Space Grotesk"],
-            "body-mono": ["Space Grotesk"],
-            "ui-small": ["Inter"],
-            "h2": ["Inter"],
-            "h1": ["Inter"]
-          },
-          "fontSize": {
-            "body-main": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-            "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-            "body-mono": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
-            "ui-small": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
-            "h2": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-            "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
-          }
-        },
-      },
-    }
-  </script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "surface-dim": "#0b1326",
+                        "secondary-container": "#571bc1",
+                        "primary-container": "#4d8eff",
+                        "on-secondary-fixed": "#23005c",
+                        "surface": "#0b1326",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-surface": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "surface-tint": "#adc6ff",
+                        "tertiary-container": "#00a572",
+                        "on-secondary": "#3c0091",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary-fixed": "#002113",
+                        "on-primary-fixed-variant": "#004395",
+                        "secondary": "#d0bcff",
+                        "on-tertiary": "#003824",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-background": "#dae2fd",
+                        "background": "#0b1326",
+                        "primary-fixed-dim": "#adc6ff",
+                        "outline-variant": "#424754",
+                        "primary-fixed": "#d8e2ff",
+                        "on-surface": "#dae2fd",
+                        "on-tertiary-container": "#00311f",
+                        "surface-bright": "#31394d",
+                        "primary": "#adc6ff",
+                        "on-primary-fixed": "#001a42",
+                        "surface-container-lowest": "#060e20",
+                        "inverse-primary": "#005ac2",
+                        "surface-variant": "#2d3449",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-secondary-container": "#c4abff",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-primary-container": "#00285d",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#2d3449",
+                        "surface-container-high": "#222a3d",
+                        "on-primary": "#002e6a",
+                        "inverse-on-surface": "#283044",
+                        "tertiary-fixed": "#6ffbbe",
+                        "outline": "#8c909f",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#4edea3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "12px",
+                        "sm": "8px",
+                        "panel-width": "280px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "48px",
+                        "unit": "4px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-main": ["Inter"],
+                        "label-caps": ["Space Grotesk"],
+                        "body-mono": ["Space Grotesk"],
+                        "ui-small": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-main": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-mono": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "ui-small": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "h2": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
 <style>
-    body {
-      background-color: #0b1326;
-      color: #dae2fd;
-      overflow: hidden;
-    }
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-    .canvas-bg {
-      background-image: radial-gradient(#171f33 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
-    .floating-inspector {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    }
-  </style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 20px;
+        }
+        .canvas-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        /* Mobile Specific Controls */
+        #properties-sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 1024px) {
+            #properties-sidebar {
+                position: fixed;
+                right: 0;
+                top: 48px;
+                bottom: 0;
+                z-index: 50;
+                transform: translateX(100%);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            }
+            #properties-sidebar.open {
+                transform: translateX(0);
+            }
+            .canvas-container {
+                padding: 24px 12px;
+            }
+        }
+    </style>
 </head>
-<body class="font-body-main text-body-main">
-<nav class="bg-slate-950 font-inter text-sm antialiased tracking-tight docked full-width top-0 border-b border-white/10 border-b border-white/10 flat no shadows flex justify-between items-center w-full px-4 h-12 z-50 fixed">
-<div class="flex items-center gap-6">
-<span class="text-lg font-black text-slate-50 tracking-tighter uppercase">LayoutEngine Pro</span>
-<div class="flex gap-4 h-full items-center ml-4">
-<a class="text-slate-500 hover:text-slate-300 transition-colors" href="#">Editor</a>
-<a class="text-blue-400 border-b-2 border-blue-500 pb-3 mt-3" href="#">Logic</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors" href="#">Assets</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors" href="#">History</a>
-</div>
-</div>
-<div class="flex items-center gap-3">
-<button class="px-3 py-1.5 text-ui-small font-label-caps bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors">Preview</button>
-<button class="px-3 py-1.5 text-ui-small font-label-caps bg-primary text-on-primary rounded-lg font-bold hover:brightness-110 active:scale-95 transition-all">Deploy</button>
-<div class="flex gap-1 ml-2">
-<button class="p-1.5 text-slate-500 hover:bg-white/5 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">settings</span></button>
-<button class="p-1.5 text-slate-500 hover:bg-white/5 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">help</span></button>
-</div>
-</div>
+<body class="bg-background text-on-background font-body-main selection:bg-primary-container selection:text-on-primary-container h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-4 h-12 z-[60] fixed top-0 bg-slate-950 font-inter text-sm antialiased tracking-tight border-b border-white/10">
+<div class="flex items-center gap-4 lg:gap-6 overflow-hidden">
+<span class="text-base lg:text-lg font-black text-slate-50 tracking-tighter uppercase whitespace-nowrap">LayoutEngine</span>
+<nav class="flex items-center gap-4 lg:gap-6 h-12 overflow-x-auto no-scrollbar scroll-smooth">
+<a class="text-blue-400 border-b-2 border-blue-500 pb-3 mt-3 active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">Editor</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">Logic</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">Assets</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">History</a>
 </nav>
-<aside class="bg-slate-950 font-inter text-xs font-medium uppercase tracking-widest docked left-0 h-full w-16 border-r border-white/10 border-r border-white/10 flat no shadows tonal-layering fixed left-0 top-12 bottom-0 flex flex-col items-center z-40 py-4">
-<div class="flex flex-col gap-2 w-full">
-<button class="flex flex-col items-center justify-center bg-blue-500/10 text-blue-400 border-l-2 border-blue-500 w-full py-4 transition-all duration-200 ease-in-out">
+</div>
+<div class="flex items-center gap-2 lg:gap-3 shrink-0">
+<button class="hidden sm:block material-symbols-outlined text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="help">help</button>
+<button class="material-symbols-outlined lg:hidden text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="tune" onclick="document.getElementById('properties-sidebar').classList.toggle('open')">tune</button>
+<div class="hidden sm:block h-4 w-px bg-white/10 mx-1"></div>
+<button class="hidden xs:block px-3 py-1 text-ui-small font-medium text-slate-300 hover:bg-white/5 rounded border border-white/10 transition-all">Preview</button>
+<button class="px-3 py-1 text-ui-small font-bold text-on-primary-container bg-primary-container rounded shadow-sm hover:opacity-90 active:scale-95 transition-all">Deploy</button>
+</div>
+</header>
+<!-- SideNavBar (Left) - Hidden on Mobile, Visible from Small up -->
+<aside class="hidden sm:flex fixed left-0 top-12 bottom-0 flex-col items-center z-40 bg-slate-950 w-16 border-r border-white/10 font-inter text-xs font-medium uppercase tracking-widest">
+<div class="flex flex-col items-center w-full py-4 gap-2">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="token" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<button class="flex flex-col items-center justify-center bg-blue-500/10 text-blue-400 border-l-2 border-blue-500 w-full py-4 transition-all duration-200">
 <span class="material-symbols-outlined mb-1" data-icon="layers">layers</span>
 </button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all duration-200 ease-in-out">
+<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
 <span class="material-symbols-outlined mb-1" data-icon="widgets">widgets</span>
 </button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all duration-200 ease-in-out">
+<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
 <span class="material-symbols-outlined mb-1" data-icon="database">database</span>
 </button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all duration-200 ease-in-out">
+<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
 <span class="material-symbols-outlined mb-1" data-icon="palette">palette</span>
 </button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all duration-200 ease-in-out">
+<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
 <span class="material-symbols-outlined mb-1" data-icon="bolt">bolt</span>
 </button>
 </div>
-<div class="mt-auto w-full border-t border-white/5 pt-4">
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all duration-200 ease-in-out">
-<span class="material-symbols-outlined mb-1" data-icon="manage_accounts">manage_accounts</span>
+<div class="mt-auto w-full border-t border-white/10 pt-4 pb-6">
+<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
 </button>
 </div>
 </aside>
-<main class="ml-16 mt-12 h-[calc(100vh-48px)] flex flex-col relative">
-<div class="h-14 bg-surface-container-low border-b border-white/5 flex items-center px-6 gap-8 z-30">
-<div class="flex items-center gap-4">
-<span class="text-label-caps text-on-surface-variant font-body-mono uppercase">Focal Mode</span>
-<div class="flex bg-surface-container-highest rounded-lg p-0.5 border border-white/5">
-<button class="px-3 py-1 text-ui-small bg-primary text-on-primary rounded-md font-bold">Dynamic</button>
-<button class="px-3 py-1 text-ui-small text-on-surface-variant hover:text-white">Static</button>
-<button class="px-3 py-1 text-ui-small text-on-surface-variant hover:text-white">Flow</button>
+<!-- Main Content Area -->
+<main class="sm:ml-16 mr-0 transition-all duration-300 relative h-screen pt-12 flex flex-col lg:flex-row">
+<!-- Central Canvas -->
+<div class="flex-grow bg-surface-dim canvas-bg flex items-center justify-center p-4 lg:p-xl overflow-auto relative canvas-container">
+<!-- Scale Container to maintain aspect ratio responsiveness -->
+<div class="relative w-full max-w-[390px] aspect-[390/844] bg-slate-900 rounded-xl shadow-2xl border border-white/5 overflow-hidden flex flex-col group origin-center transition-transform duration-300">
+<!-- Status Bar Simulation -->
+<div class="px-6 py-3 flex justify-between items-center text-[10px] font-bold text-white/40">
+<span>9:41</span>
+<div class="flex gap-1.5">
+<span class="material-symbols-outlined text-[12px]" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[12px]" data-icon="wifi">wifi</span>
+<span class="material-symbols-outlined text-[12px]" data-icon="battery_full">battery_full</span>
 </div>
 </div>
-<div class="h-6 w-[1px] bg-white/10"></div>
-<div class="flex items-center gap-4">
-<span class="text-label-caps text-on-surface-variant font-body-mono uppercase">Aspect Ratio</span>
-<select class="bg-surface-container-highest border-white/5 text-ui-small rounded-lg px-2 py-1 outline-none ring-0 focus:border-primary">
-<option>9:16 Vertical (Stories)</option>
-<option>1:1 Square (Feed)</option>
-<option>4:5 Portrait</option>
-<option>16:9 Landscape</option>
-</select>
+<!-- Canvas Content -->
+<div class="flex-grow flex flex-col p-6 space-y-6 overflow-hidden">
+<div class="aspect-square w-full rounded-lg overflow-hidden border border-white/10 bg-slate-800 shrink-0">
+<img alt="Abstract 3D Shape" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNHxPgr140pGhq3cvqyBylJhUMmm16tgM9QZsRbsSCzs668aiTNYc8HaV4WwL3Ethr_0AqDdxik-5m5ZymooCC1U4bbEAQo_GstULspNqyQkUXEkN_78SBwH0FZ4SLSXwBp0Nxot6c1VeIyX3eKM2talNSfBylGHczUttycF0Jlg9D1WU-gJjvH_bffCC-93_CPo4gjvUyjpbG7Uj-jvLQflvTbzWWHoc0Uu1NQc5o3wX8KNMCY6s85ijwEh4WyDIJiQL_v72v"/>
 </div>
-<div class="h-6 w-[1px] bg-white/10"></div>
-<div class="flex items-center gap-4">
-<span class="text-label-caps text-on-surface-variant font-body-mono uppercase">Preset Engine</span>
+<div class="space-y-4 overflow-y-auto no-scrollbar">
+<h1 class="font-h1 text-h1 text-on-surface text-lg sm:text-h1">Architecting Tomorrow’s Digital Landscapes</h1>
+<p class="font-body-main text-body-main text-on-surface-variant text-sm">Unleash the power of high-performance design systems. Precision, speed, and absolute control at your fingertips.</p>
+</div>
+<div class="pt-4 mt-auto">
+<button class="w-full py-3 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-opacity">
+                        Get Started
+                    </button>
+</div>
+</div>
+<!-- Selection Overlays -->
+<div class="absolute inset-0 border-2 border-primary/40 pointer-events-none rounded-xl"></div>
+<div class="absolute top-6 right-6 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-on-primary shadow-lg cursor-move pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="drag_indicator">drag_indicator</span>
+</div>
+</div>
+<!-- Floating Engine Logic Bar (Top Center) - Adaptive sizing -->
+<div class="absolute top-4 lg:top-8 left-1/2 -translate-x-1/2 bg-surface-container/90 backdrop-blur-md border border-white/10 rounded-full px-2 py-1.5 flex items-center gap-1 shadow-xl z-20 whitespace-nowrap">
+<div class="hidden xs:flex items-center gap-1 px-2 border-r border-white/10 mr-1">
+<span class="text-label-caps font-label-caps text-slate-500">ZOOM</span>
+<span class="text-body-mono font-body-mono text-primary px-1">75%</span>
+</div>
+<button class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="center_focus_weak">center_focus_weak</span>
+<span class="text-ui-small font-ui-small hidden sm:inline">Focal Mode</span>
+</button>
+<div class="w-px h-4 bg-white/10 mx-1"></div>
+<button class="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="aspect_ratio">aspect_ratio</span>
+<span class="text-ui-small font-ui-small">9:16</span>
+</button>
+</div>
+</div>
+<!-- Properties Panel (Right Sidebar) -->
+<aside class="w-full lg:w-panel-width h-full bg-surface-container-low border-l border-white/10 flex flex-col shrink-0" id="properties-sidebar">
+<header class="h-10 border-b border-white/10 px-4 flex items-center justify-between bg-surface-container shrink-0">
+<span class="text-label-caps font-label-caps text-on-surface">Properties</span>
 <div class="flex gap-2">
-<button class="px-3 py-1 text-ui-small border border-white/10 rounded-lg hover:bg-white/5">Social Pro v4</button>
-<button class="px-3 py-1 text-ui-small border border-white/10 rounded-lg hover:bg-white/5">Cinematic</button>
-<button class="px-3 py-1 text-ui-small border border-white/10 rounded-lg hover:bg-white/5">Minimalist</button>
+<button class="lg:hidden material-symbols-outlined text-slate-400 hover:text-white" data-icon="close" onclick="document.getElementById('properties-sidebar').classList.remove('open')">close</button>
+<button class="hidden lg:block material-symbols-outlined text-slate-500 hover:text-slate-300" data-icon="close_fullscreen">close_fullscreen</button>
+</div>
+</header>
+<div class="flex-grow overflow-y-auto custom-scrollbar pb-20 lg:pb-0">
+<!-- Alignment Section -->
+<div class="p-4 border-b border-white/10">
+<span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Alignment</span>
+<div class="grid grid-cols-6 gap-1 bg-surface-container-lowest p-1 rounded-lg border border-white/5">
+<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_horizontal_left">align_horizontal_left</span></button>
+<button class="aspect-square flex items-center justify-center rounded bg-primary/20 text-primary"><span class="material-symbols-outlined text-sm" data-icon="align_horizontal_center">align_horizontal_center</span></button>
+<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_horizontal_right">align_horizontal_right</span></button>
+<div class="w-px h-4 bg-white/10 self-center mx-auto"></div>
+<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_vertical_top">align_vertical_top</span></button>
+<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_vertical_bottom">align_vertical_bottom</span></button>
 </div>
 </div>
-<div class="ml-auto flex items-center gap-3">
-<span class="text-ui-small text-on-surface-variant font-body-mono">ZOOM: 82%</span>
-<button class="p-1.5 text-slate-500 hover:text-white transition-colors"><span class="material-symbols-outlined text-[18px]">fit_screen</span></button>
-</div>
-</div>
-<div class="flex-1 canvas-bg relative overflow-hidden flex items-center justify-center">
-<div class="relative w-[340px] h-[600px] bg-black rounded-[2rem] border-[8px] border-surface-container-highest shadow-2xl overflow-hidden ring-1 ring-white/10">
-<div class="absolute inset-0 z-0">
-<img alt="abstract" class="w-full h-full object-cover opacity-80" data-alt="abstract flowing 3D organic shapes with glossy texture in deep violet and electric blue lighting on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_69PGSftt0BXCUNTomWdMnRz_4etigOXz7SUvkZXr8dp9-MaqdPAtNf5BD3zhJQPoeqGXzn_CZzR68LcZ2BqwGw-1EtpGQ8S7kWCzFRs3EWzKt5szVf_yTc4fOXyQvavpXTasVJOb5jwcAvht7h_rKkqguvRdUhGY7cNRjZXGKS5-2SaC3G_gtG4RehGg45auPMcNqZJjAPo7LjPk0h54VPs07JYCe5wJsp6x_o9_0IjkLMxTEmCBxJP2tv5UBNX6tTQW31lJ"/>
-</div>
-<div class="absolute inset-x-0 bottom-0 p-6 z-10 bg-gradient-to-t from-black/80 to-transparent">
-<div class="w-12 h-12 rounded-full border-2 border-primary overflow-hidden mb-4 ring-2 ring-primary/20">
-<img alt="user" class="w-full h-full object-cover" data-alt="portrait of a confident creative professional woman with neon studio lighting highlight on her face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkPpBG-Fgdc0vDoypLtM5H5C-X7jmuzyi1qye1L3eXY0Eu_IzWJASQ-wh42sN90HU_4_-O_MdCxtbkqVOFhVPQ3KwG9TGHmgeSsMR0lUP8fWrUQnM3GYJr_Hi6ucnOZ1w6Tw6Mjzq0ZSYBtKkAhW4UBTKiVnC7wQRSVJok7NAtPR6DyK0KVskujAqneemgTWaCEMW4i_IV7F__klaUz16N9IQxn5JGWv3lZGd3iNve9AG_yCfWzy0dtKlMXio71glM9agH8E8d"/>
-</div>
-<h3 class="text-h2 font-bold text-white mb-1">Architectural Flow</h3>
-<p class="text-ui-small text-white/70">Social Campaign v2.4 • Active</p>
-<div class="mt-6 flex gap-2">
-<div class="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold uppercase tracking-widest text-white">#DESIGN</div>
-<div class="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-bold uppercase tracking-widest text-white">#TECH</div>
-</div>
-</div>
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-primary w-full h-full pointer-events-none opacity-40"></div>
-</div>
-<div class="absolute top-[15%] left-[62%] w-[240px] bg-surface-container rounded-xl border border-white/10 floating-inspector backdrop-blur-xl z-50">
-<div class="px-4 py-3 border-b border-white/10 flex justify-between items-center bg-white/5 rounded-t-xl">
-<span class="text-label-caps text-primary font-bold">INSPECTOR</span>
-<span class="material-symbols-outlined text-[16px] text-on-surface-variant">drag_indicator</span>
-</div>
-<div class="p-4 space-y-4">
+<!-- Geometry Section -->
+<div class="p-4 border-b border-white/10">
+<span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Layout Geometry</span>
+<div class="grid grid-cols-2 gap-4">
 <div class="space-y-1.5">
-<label class="text-label-caps text-on-surface-variant uppercase font-body-mono">Element Position</label>
-<div class="grid grid-cols-2 gap-2">
-<div class="bg-surface-container-lowest border border-white/5 rounded-lg p-2 flex flex-col">
-<span class="text-[9px] text-on-tertiary-container uppercase mb-1">X-Axis</span>
-<span class="text-body-mono text-primary font-bold">142.0</span>
-</div>
-<div class="bg-surface-container-lowest border border-white/5 rounded-lg p-2 flex flex-col">
-<span class="text-[9px] text-on-tertiary-container uppercase mb-1">Y-Axis</span>
-<span class="text-body-mono text-primary font-bold">398.5</span>
-</div>
+<label class="text-[10px] text-slate-500 font-bold">WIDTH</label>
+<div class="flex items-center bg-surface-container-lowest border border-white/5 rounded px-2 h-7">
+<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" type="text" value="390"/>
+<span class="text-[10px] text-slate-600 ml-1">PX</span>
 </div>
 </div>
 <div class="space-y-1.5">
-<label class="text-label-caps text-on-surface-variant uppercase font-body-mono">Blend Mode</label>
-<div class="flex items-center justify-between bg-surface-container-lowest border border-white/5 rounded-lg px-3 py-2">
-<span class="text-body-mono">Luminosity</span>
-<span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span>
+<label class="text-[10px] text-slate-500 font-bold">HEIGHT</label>
+<div class="flex items-center bg-surface-container-lowest border border-white/5 rounded px-2 h-7">
+<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" type="text" value="844"/>
+<span class="text-[10px] text-slate-600 ml-1">PX</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Layout Engine Controls -->
+<div class="p-4 border-b border-white/10 space-y-4">
+<span class="text-label-caps font-label-caps text-slate-500 block uppercase">Engine Logic</span>
+<div class="flex justify-between items-center group">
+<span class="text-ui-small text-on-surface-variant">Auto-Responsive</span>
+<div class="w-8 h-4 bg-primary/20 rounded-full relative cursor-pointer border border-primary/30">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-ui-small text-on-surface-variant">Focal Snap</span>
+<div class="w-8 h-4 bg-slate-800 rounded-full relative cursor-pointer border border-white/10">
+<div class="absolute left-0.5 top-0.5 w-3 h-3 bg-slate-500 rounded-full"></div>
 </div>
 </div>
 <div class="space-y-2">
-<div class="flex justify-between items-center">
-<label class="text-label-caps text-on-surface-variant uppercase font-body-mono">Opacity</label>
-<span class="text-body-mono text-white">85%</span>
-</div>
-<div class="h-1 bg-surface-container-lowest rounded-full overflow-hidden">
-<div class="h-full bg-primary w-[85%]"></div>
-</div>
-</div>
-<div class="pt-2">
-<button class="w-full py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg text-ui-small font-bold hover:bg-primary/20 transition-all">Add Interaction</button>
+<span class="text-ui-small text-slate-500 font-bold block">RATIO PRESET</span>
+<div class="flex flex-wrap gap-2">
+<button class="px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface">1:1</button>
+<button class="px-2 py-1 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary">9:16</button>
+<button class="px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface">4:5</button>
+<button class="px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface">16:9</button>
 </div>
 </div>
 </div>
-<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 p-2 bg-surface-container-low/80 backdrop-blur-md rounded-2xl border border-white/10">
-<button class="p-3 text-on-surface-variant hover:text-white hover:bg-white/5 rounded-xl transition-all"><span class="material-symbols-outlined">undo</span></button>
-<button class="p-3 text-on-surface-variant hover:text-white hover:bg-white/5 rounded-xl transition-all"><span class="material-symbols-outlined">redo</span></button>
-<div class="w-[1px] bg-white/10 mx-1"></div>
-<button class="p-3 text-on-surface-variant hover:text-white hover:bg-white/5 rounded-xl transition-all"><span class="material-symbols-outlined">pan_tool</span></button>
-<button class="p-3 text-primary bg-primary/10 rounded-xl transition-all"><span class="material-symbols-outlined" data-weight="fill">near_me</span></button>
-<button class="p-3 text-on-surface-variant hover:text-white hover:bg-white/5 rounded-xl transition-all"><span class="material-symbols-outlined">crop</span></button>
-<div class="w-[1px] bg-white/10 mx-1"></div>
-<button class="p-3 text-on-surface-variant hover:text-white hover:bg-white/5 rounded-xl transition-all"><span class="material-symbols-outlined">play_arrow</span></button>
+<!-- Appearance Section -->
+<div class="p-4">
+<span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Appearance</span>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded bg-[#0b1326] border border-white/10"></div>
+<span class="text-body-mono font-body-mono text-on-surface-variant">#0B1326</span>
+<span class="text-[10px] text-slate-600 ml-auto font-bold">100%</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-xs" data-icon="add">add</span>
+</div>
+<span class="text-ui-small text-slate-500 italic">Add Layer Style...</span>
 </div>
 </div>
-<div class="h-10 bg-slate-950 border-t border-white/10 flex items-center justify-between px-4 z-40">
-<div class="flex items-center gap-4 text-[10px] font-body-mono text-slate-500">
-<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span> Engine Live</div>
-<div>FPS: 60</div>
-<div>Lat: 12ms</div>
-</div>
-<div class="flex items-center gap-4 text-[10px] font-body-mono text-slate-500">
-<span>v4.1.2-stable</span>
-<span class="text-blue-500">Auto-save: 2m ago</span>
 </div>
 </div>
+<!-- Footer Action -->
+<div class="p-4 bg-surface-container border-t border-white/10 mt-auto shrink-0">
+<button class="w-full py-2 bg-secondary-container text-on-surface font-bold text-ui-small rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+                Generate Layout
+            </button>
+</div>
+</aside>
 </main>
+<!-- Context Menu Trigger -->
+<div class="fixed bottom-6 right-6 lg:right-[292px] flex flex-col gap-2 z-50">
+<div class="bg-primary shadow-lg shadow-primary/20 w-12 h-12 lg:w-10 lg:h-10 rounded-full flex items-center justify-center text-on-primary cursor-pointer hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</div>
+</div>
 </body></html>
