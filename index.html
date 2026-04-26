@@ -1628,37 +1628,153 @@ async function captureDataUrl(){
   return dataUrl;
 }
 
+// ══════════════════════════════════════════════════════════
+// iOS EXPORT — buka tab baru DULU (sinkron, dalam user gesture),
+// lalu tulis dataUrl langsung setelah render selesai.
+// Blob URL TIDAK bisa diakses dari window.open() di Safari
+// karena sandbox — harus pakai data: URI langsung.
+// ══════════════════════════════════════════════════════════
+function isIOS(){
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+function iosOpenTab(loading=true){
+  // Harus dipanggil SYNCHRONOUS dalam user gesture agar Safari izinkan popup
+  const w = window.open('about:blank','_blank');
+  if(!w) return null;
+  // Tulis loading screen dulu
+  if(loading){
+    w.document.write(`<!DOCTYPE html><html><head>
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#0c0c0f;display:flex;flex-direction:column;align-items:center;
+             justify-content:center;min-height:100vh;font-family:-apple-system,sans-serif;color:#e4e4f0}
+        .spinner{width:40px;height:40px;border:3px solid #252530;border-top-color:#7c6dfa;
+                 border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        p{font-size:14px;color:#6a6a80;margin-top:8px}
+        small{font-size:11px;color:#323240;margin-top:6px;font-family:monospace}
+      </style>
+    </head><body>
+      <div class="spinner"></div>
+      <p>Rendering poster…</p>
+      <small>Please wait</small>
+    </body></html>`);
+    w.document.close();
+  }
+  return w;
+}
+
+function iosWriteImage(w, dataUrl, filename){
+  if(!w) return;
+  w.document.open();
+  w.document.write(`<!DOCTYPE html><html><head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>${filename}</title>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{background:#0c0c0f;min-height:100vh;display:flex;flex-direction:column;
+           align-items:center;font-family:-apple-system,sans-serif}
+      .top-bar{
+        width:100%;padding:16px 20px 12px;
+        background:#141418;border-bottom:1px solid #252530;
+        display:flex;align-items:center;gap:10px;
+      }
+      .logo{font-size:18px;font-weight:900;
+            background:linear-gradient(135deg,#7c6dfa,#fa6d7c);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+      .hint-box{
+        width:100%;max-width:480px;
+        margin:20px auto 0;padding:14px 20px;
+        background:#141418;border:1px solid #252530;border-radius:14px;
+        text-align:center;
+      }
+      .hint-icon{font-size:28px;margin-bottom:8px}
+      .hint-title{font-size:15px;font-weight:600;color:#e4e4f0;margin-bottom:4px}
+      .hint-sub{font-size:12px;color:#6a6a80;line-height:1.6}
+      .hint-step{
+        display:inline-flex;align-items:center;gap:6px;
+        margin-top:10px;padding:8px 16px;
+        background:#1c1c22;border-radius:20px;
+        font-size:11px;color:#7c6dfa;font-family:monospace;
+      }
+      .img-wrap{
+        width:100%;max-width:480px;
+        margin:16px auto 24px;
+        border-radius:16px;overflow:hidden;
+        box-shadow:0 20px 60px rgba(0,0,0,.6);
+      }
+      img{width:100%;height:auto;display:block}
+      .fn{font-size:10px;color:#323240;font-family:monospace;
+          text-align:center;margin-bottom:40px}
+    </style>
+  </head><body>
+    <div class="top-bar">
+      <div class="logo">Forma</div>
+      <span style="font-size:11px;color:#6a6a80;font-family:monospace">Poster Studio</span>
+    </div>
+    <div style="width:100%;max-width:480px;margin:0 auto;padding:0 16px">
+      <div class="hint-box">
+        <div class="hint-icon">📥</div>
+        <div class="hint-title">Simpan Gambar</div>
+        <div class="hint-sub">Tap & tahan gambar di bawah, lalu pilih<br><strong style="color:#e4e4f0">"Save to Photos"</strong></div>
+        <div class="hint-step">☝️ Tap &amp; Hold → Save to Photos</div>
+      </div>
+      <div class="img-wrap">
+        <img src="${dataUrl}" alt="${filename}">
+      </div>
+      <div class="fn">${filename}.png</div>
+    </div>
+  </body></html>`);
+  w.document.close();
+}
+
 async function exportPNG(){
   const btn=document.getElementById('btn-png');
-  if(btn){ btn.disabled=true; btn.textContent='Exporting…'; }
+  const fn=document.getElementById('inp-filename').value||'forma-poster';
+
+  // iOS: buka tab dulu SINKRON dalam user gesture, sebelum await apapun
+  let iosTab = null;
+  if(isIOS()){
+    iosTab = iosOpenTab(true);
+  }
+
+  if(btn){ btn.disabled=true; btn.textContent='Rendering…'; }
   showToast('Preparing PNG…');
+
   try{
-    const dataUrl=await captureDataUrl();
-    const fn=document.getElementById('inp-filename').value||'forma-poster';
-    const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
-    if(isIOS){
-      try{
-        const blob=await (await fetch(dataUrl)).blob();
-        const file=new File([blob],fn+'.png',{type:'image/png'});
-        if(navigator.canShare&&navigator.canShare({files:[file]})){
-          await navigator.share({files:[file],title:'Poster'});
-        } else {
-          const blobUrl=URL.createObjectURL(blob);
-          const w=window.open();
-          if(w){ w.document.write(`<img src="${blobUrl}" style="max-width:100%"><p style="text-align:center;font-family:sans-serif;color:#aaa;padding:16px">Tap & hold → Save Image</p>`); w.document.close(); }
-        }
-      }catch(e){
-        const w=window.open();
-        if(w){ w.document.write(`<img src="${dataUrl}" style="max-width:100%"><p style="text-align:center;font-family:sans-serif;color:#aaa;padding:16px">Tap & hold → Save Image</p>`); w.document.close(); }
-      }
+    const dataUrl = await captureDataUrl();
+
+    if(isIOS()){
+      // Tulis gambar ke tab yang sudah terbuka
+      iosWriteImage(iosTab, dataUrl, fn);
+      showToast('✓ Tap & hold gambar → Save to Photos');
     } else {
       const a=document.createElement('a');
       a.href=dataUrl; a.download=fn+'.png';
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      showToast('PNG exported!');
     }
-    showToast('PNG exported!');
-  }catch(e){ console.error(e); showToast('Export failed. Try again.'); }
-  if(btn){ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG'; }
+  } catch(e){
+    console.error(e);
+    // Kalau gagal tapi tab sudah terbuka, tulis pesan error
+    if(iosTab && !iosTab.closed){
+      iosTab.document.open();
+      iosTab.document.write(`<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>body{background:#0c0c0f;display:flex;align-items:center;justify-content:center;
+        min-height:100vh;font-family:-apple-system,sans-serif;color:#e4e4f0;text-align:center;padding:20px}
+        h2{font-size:18px;margin-bottom:8px}p{font-size:13px;color:#6a6a80}</style></head>
+        <body><div><h2>Export gagal</h2><p>Coba lagi dari Forma</p></div></body></html>`);
+      iosTab.document.close();
+    }
+    showToast('Export failed. Coba lagi.');
+  }
+
+  if(btn){
+    btn.disabled=false;
+    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
+  }
 }
 
 async function exportPDF(){
