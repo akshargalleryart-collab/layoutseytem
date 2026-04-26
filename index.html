@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -30,57 +29,57 @@
   --font-mono:'JetBrains Mono',monospace;
 }
 
-html,body{height:100%;overflow:hidden;font-family:var(–font-ui);background:var(–bg);color:var(–text);font-size:14px}
+html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(--bg);color:var(--text);font-size:14px}
 
 /* iOS Safari: real viewport height (excludes browser chrome) */
-:root { –vh: 1vh; }
+:root { --vh: 1vh; }
 
 /* ═══════════════════════════════
-APP SHELL
+   APP SHELL
 ═══════════════════════════════ */
-#app{display:flex;flex-direction:column;height:100vh;height:calc(var(–vh,1vh)*100);overflow:hidden}
+#app{display:flex;flex-direction:column;height:100vh;height:calc(var(--vh,1vh)*100);overflow:hidden}
 
 /* TOP HEADER */
 #top-header{
-height:var(–header);
-background:var(–surface);
-border-bottom:1px solid var(–border);
-display:flex;align-items:center;
-padding:0 12px;
-gap:10px;
-flex-shrink:0;
-z-index:100;
-position:relative;
+  height:var(--header);
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 12px;
+  gap:10px;
+  flex-shrink:0;
+  z-index:100;
+  position:relative;
 }
 .logo{
-font-family:var(–font-display);
-font-size:20px;font-weight:900;
-letter-spacing:-1px;
-background:linear-gradient(135deg,var(–accent),var(–accent2));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;
-white-space:nowrap;
+  font-family:var(--font-display);
+  font-size:20px;font-weight:900;
+  letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  white-space:nowrap;
 }
-.logo-dot{width:6px;height:6px;border-radius:50%;background:var(–accent);flex-shrink:0;box-shadow:0 0 8px var(–accent)}
+.logo-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;box-shadow:0 0 8px var(--accent)}
 #layout-badge-header{
-font-size:10px;font-family:var(–font-mono);
-color:var(–accent);
-background:var(–accent-glow);
-border:1px solid rgba(124,109,250,.3);
-padding:3px 8px;border-radius:20px;
-white-space:nowrap;
+  font-size:10px;font-family:var(--font-mono);
+  color:var(--accent);
+  background:var(--accent-glow);
+  border:1px solid rgba(124,109,250,.3);
+  padding:3px 8px;border-radius:20px;
+  white-space:nowrap;
 }
 .spacer{flex:1}
 
 /* HEADER ICON BTNS */
 .hbtn{
-width:34px;height:34px;border-radius:9px;
-background:var(–surface2);border:1px solid var(–border);
-display:flex;align-items:center;justify-content:center;
-cursor:pointer;transition:all .15s;color:var(–muted);flex-shrink:0;
+  width:34px;height:34px;border-radius:9px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;color:var(--muted);flex-shrink:0;
 }
-.hbtn:hover,.hbtn:active{background:var(–border);color:var(–text)}
+.hbtn:hover,.hbtn:active{background:var(--border);color:var(--text)}
 .hbtn svg{width:16px;height:16px}
-.hbtn.accent-btn{background:var(–accent);border-color:var(–accent);color:#fff}
+.hbtn.accent-btn{background:var(--accent);border-color:var(--accent);color:#fff}
 .hbtn.accent-btn:hover{background:#6b5ce7}
 
 /* MAIN BODY */
@@ -88,143 +87,143 @@ cursor:pointer;transition:all .15s;color:var(–muted);flex-shrink:0;
 
 /* LEFT SIDEBAR */
 #sidebar{
-width:var(–panel);min-width:var(–panel);
-background:var(–surface);
-border-right:1px solid var(–border);
-display:flex;flex-direction:column;
-overflow:hidden;
-transition:transform .3s cubic-bezier(.4,0,.2,1);
-z-index:50;
+  width:var(--panel);min-width:var(--panel);
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  z-index:50;
 }
 
 /* CANVAS AREA */
 #canvas-area{
-flex:1;display:flex;flex-direction:column;
-overflow:hidden;background:#08080b;
-min-width:0;
-/* Ensure canvas area doesn’t overflow into bottom-nav on mobile */
-min-height:0;
+  flex:1;display:flex;flex-direction:column;
+  overflow:hidden;background:#08080b;
+  min-width:0;
+  /* Ensure canvas area doesn't overflow into bottom-nav on mobile */
+  min-height:0;
 }
 #canvas-toolbar{
-padding:8px 12px;
-background:var(–surface);
-border-bottom:1px solid var(–border);
-display:flex;align-items:center;gap:6px;
-flex-shrink:0;
+  padding:8px 12px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:6px;
+  flex-shrink:0;
 }
 .tbtn{
-height:30px;padding:0 10px;
-background:var(–surface2);border:1px solid var(–border);
-border-radius:7px;color:var(–text);font-size:11px;
-cursor:pointer;display:flex;align-items:center;gap:5px;
-transition:all .15s;white-space:nowrap;font-family:var(–font-ui);
+  height:30px;padding:0 10px;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:7px;color:var(--text);font-size:11px;
+  cursor:pointer;display:flex;align-items:center;gap:5px;
+  transition:all .15s;white-space:nowrap;font-family:var(--font-ui);
 }
-.tbtn:hover{border-color:var(–border2);background:var(–border)}
+.tbtn:hover{border-color:var(--border2);background:var(--border)}
 .tbtn svg{width:12px;height:12px}
 #zoom-val{
-font-size:11px;font-family:var(–font-mono);
-color:var(–muted);min-width:38px;text-align:center;
+  font-size:11px;font-family:var(--font-mono);
+  color:var(--muted);min-width:38px;text-align:center;
 }
 
 #canvas-viewport{
-flex:1;overflow:auto;
-display:flex;align-items:center;justify-content:center;
-padding:24px;position:relative;
-/* Critical for Safari: flex child must declare min-height */
-min-height:0;
-min-width:0;
-/* Ensure viewport actually shows content */
--webkit-overflow-scrolling:touch;
+  flex:1;overflow:auto;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;position:relative;
+  /* Critical for Safari: flex child must declare min-height */
+  min-height:0;
+  min-width:0;
+  /* Ensure viewport actually shows content */
+  -webkit-overflow-scrolling:touch;
 }
 #canvas-viewport::-webkit-scrollbar{width:4px;height:4px}
-#canvas-viewport::-webkit-scrollbar-thumb{background:var(–border2);border-radius:2px}
+#canvas-viewport::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
 #poster-wrap{
-transform-origin:center center;
-position:relative;
-/* Kunci: wrap harus shrink ke 0 agar flex centering benar */
-flex-shrink:0;
+  transform-origin:center center;
+  position:relative;
+  /* Kunci: wrap harus shrink ke 0 agar flex centering benar */
+  flex-shrink:0;
 }
 #poster{
-width:1080px;height:1350px;
-background:#fff;position:relative;overflow:hidden;
-box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05);
+  width:1080px;height:1350px;
+  background:#fff;position:relative;overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.05);
 }
 
 /* RIGHT PANEL */
 #right-panel{
-width:var(–panel);min-width:var(–panel);
-background:var(–surface);
-border-left:1px solid var(–border);
-display:flex;flex-direction:column;
-overflow:hidden;
-transition:transform .3s cubic-bezier(.4,0,.2,1);
-z-index:50;
+  width:var(--panel);min-width:var(--panel);
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  z-index:50;
 }
 
 /* PANEL TABS */
 #panel-tabs{
-display:flex;padding:0;
-border-bottom:1px solid var(–border);
-flex-shrink:0;overflow-x:auto;
-scrollbar-width:none;
+  display:flex;padding:0;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow-x:auto;
+  scrollbar-width:none;
 }
 #panel-tabs::-webkit-scrollbar{display:none}
 .ptab{
-padding:12px 14px;font-size:11px;
-color:var(–muted);cursor:pointer;
-border-bottom:2px solid transparent;
-transition:all .15s;white-space:nowrap;
-font-weight:500;letter-spacing:.3px;
-flex-shrink:0;
+  padding:12px 14px;font-size:11px;
+  color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .15s;white-space:nowrap;
+  font-weight:500;letter-spacing:.3px;
+  flex-shrink:0;
 }
-.ptab:hover{color:var(–text)}
-.ptab.active{color:var(–accent);border-bottom-color:var(–accent)}
+.ptab:hover{color:var(--text)}
+.ptab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
 /* LAYOUT GRID */
 #sidebar-top{
-padding:10px 10px 6px;
-border-bottom:1px solid var(–border);
-flex-shrink:0;
+  padding:10px 10px 6px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
 }
 #search-input{
-width:100%;background:var(–surface2);
-border:1px solid var(–border);border-radius:8px;
-padding:8px 12px;color:var(–text);font-size:12px;
-outline:none;font-family:var(–font-ui);
-transition:border .15s;
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;color:var(--text);font-size:12px;
+  outline:none;font-family:var(--font-ui);
+  transition:border .15s;
 }
-#search-input:focus{border-color:var(–accent)}
-#search-input::placeholder{color:var(–muted)}
+#search-input:focus{border-color:var(--accent)}
+#search-input::placeholder{color:var(--muted)}
 
 #layout-grid{
-flex:1;overflow-y:auto;padding:8px;
-display:grid;grid-template-columns:1fr 1fr;gap:6px;
-scrollbar-width:thin;scrollbar-color:var(–border2) transparent;
+  flex:1;overflow-y:auto;padding:8px;
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+  scrollbar-width:thin;scrollbar-color:var(--border2) transparent;
 }
 #layout-grid::-webkit-scrollbar{width:3px}
-#layout-grid::-webkit-scrollbar-thumb{background:var(–border2)}
+#layout-grid::-webkit-scrollbar-thumb{background:var(--border2)}
 
 .layout-thumb{
-aspect-ratio:4/5;background:var(–bg);
-border:1.5px solid var(–border);border-radius:9px;
-cursor:pointer;position:relative;overflow:hidden;
-transition:all .2s;display:flex;flex-direction:column;
+  aspect-ratio:4/5;background:var(--bg);
+  border:1.5px solid var(--border);border-radius:9px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:all .2s;display:flex;flex-direction:column;
 }
-.layout-thumb:hover{border-color:var(–accent);transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,109,250,.2)}
-.layout-thumb.active{border-color:var(–accent);box-shadow:0 0 0 2px var(–accent-glow),0 6px 20px rgba(124,109,250,.2)}
+.layout-thumb:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,109,250,.2)}
+.layout-thumb.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow),0 6px 20px rgba(124,109,250,.2)}
 .lth-preview{flex:1;padding:5px;display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden}
 .lth-label{
-padding:3px 7px;font-size:8px;font-family:var(–font-mono);
-color:var(–muted);border-top:1px solid var(–border);
-text-transform:uppercase;letter-spacing:1px;
+  padding:3px 7px;font-size:8px;font-family:var(--font-mono);
+  color:var(--muted);border-top:1px solid var(--border);
+  text-transform:uppercase;letter-spacing:1px;
 }
-.layout-thumb.active .lth-label{color:var(–accent)}
+.layout-thumb.active .lth-label{color:var(--accent)}
 
 /* Thumb elements */
 .tp-img{background:linear-gradient(135deg,#252535,#1a1a28);border-radius:3px;flex-shrink:0}
-.tp-line{background:var(–border2);border-radius:2px;height:3px}
-.tp-line.acc{background:linear-gradient(90deg,var(–accent),var(–accent2));height:2px}
+.tp-line{background:var(--border2);border-radius:2px;height:3px}
+.tp-line.acc{background:linear-gradient(90deg,var(--accent),var(--accent2));height:2px}
 .tp-line.thick{height:8px;border-radius:2px}
 .tp-circle{background:linear-gradient(135deg,#252535,#1a1a28);border-radius:50%;flex-shrink:0}
 .tp-split{display:flex;gap:2px;flex:1}
@@ -232,120 +231,120 @@ text-transform:uppercase;letter-spacing:1px;
 .tp-rows{display:flex;flex-direction:column;gap:2px;flex:1}
 
 /* ═══════════════════════════════
-PANEL CONTENT CONTROLS
+   PANEL CONTENT CONTROLS
 ═══════════════════════════════ */
-#panel-content{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(–border2) transparent}
+#panel-content{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 #panel-content::-webkit-scrollbar{width:3px}
-#panel-content::-webkit-scrollbar-thumb{background:var(–border2)}
+#panel-content::-webkit-scrollbar-thumb{background:var(--border2)}
 
 .section{margin-bottom:16px}
 .sec-label{
-font-size:9px;font-family:var(–font-mono);
-color:var(–muted);text-transform:uppercase;
-letter-spacing:2px;margin-bottom:7px;display:block;
+  font-size:9px;font-family:var(--font-mono);
+  color:var(--muted);text-transform:uppercase;
+  letter-spacing:2px;margin-bottom:7px;display:block;
 }
 .ctrl-input{
-width:100%;background:var(–surface2);
-border:1px solid var(–border);border-radius:8px;
-padding:9px 12px;color:var(–text);font-size:12px;
-outline:none;transition:border .15s;
-font-family:var(–font-ui);resize:vertical;
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;color:var(--text);font-size:12px;
+  outline:none;transition:border .15s;
+  font-family:var(--font-ui);resize:vertical;
 }
-.ctrl-input:focus{border-color:var(–accent)}
-.ctrl-input::placeholder{color:var(–muted)}
+.ctrl-input:focus{border-color:var(--accent)}
+.ctrl-input::placeholder{color:var(--muted)}
 .ctrl-select{
-width:100%;background:var(–surface2);
-border:1px solid var(–border);border-radius:8px;
-padding:9px 12px;color:var(–text);font-size:12px;
-outline:none;cursor:pointer;
-font-family:var(–font-ui);appearance:none;
-background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ viewBox=‘0 0 24 24’ fill=‘none’ stroke=’%236a6a80’ stroke-width=‘2’%3E%3Cpolyline points=‘6 9 12 15 18 9’/%3E%3C/svg%3E”);
-background-repeat:no-repeat;background-position:right 12px center;
-padding-right:32px;
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;color:var(--text);font-size:12px;
+  outline:none;cursor:pointer;
+  font-family:var(--font-ui);appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236a6a80' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  padding-right:32px;
 }
-.ctrl-select:focus{border-color:var(–accent)}
+.ctrl-select:focus{border-color:var(--accent)}
 
 .ctrl-row{display:flex;gap:8px;align-items:center}
 .ctrl-row .ctrl-input{flex:1}
 
 .color-swatch{
-width:36px;height:36px;border-radius:8px;
-border:1px solid var(–border);cursor:pointer;
-overflow:hidden;flex-shrink:0;position:relative;
+  width:36px;height:36px;border-radius:8px;
+  border:1px solid var(--border);cursor:pointer;
+  overflow:hidden;flex-shrink:0;position:relative;
 }
 .color-swatch input[type=color]{
-position:absolute;inset:-4px;opacity:0;cursor:pointer;width:calc(100%+8px);height:calc(100%+8px);
+  position:absolute;inset:-4px;opacity:0;cursor:pointer;width:calc(100%+8px);height:calc(100%+8px);
 }
 .csw-preview{position:absolute;inset:0;border-radius:7px}
 
 .slider-wrap{display:flex;align-items:center;gap:10px}
 .ctrl-slider{
-flex:1;-webkit-appearance:none;height:4px;
-border-radius:2px;background:var(–border2);
-outline:none;cursor:pointer;
+  flex:1;-webkit-appearance:none;height:4px;
+  border-radius:2px;background:var(--border2);
+  outline:none;cursor:pointer;
 }
 .ctrl-slider::-webkit-slider-thumb{
--webkit-appearance:none;width:16px;height:16px;
-border-radius:50%;background:var(–accent);
-cursor:pointer;border:2px solid var(–bg);
-box-shadow:0 0 6px rgba(124,109,250,.4);
+  -webkit-appearance:none;width:16px;height:16px;
+  border-radius:50%;background:var(--accent);
+  cursor:pointer;border:2px solid var(--bg);
+  box-shadow:0 0 6px rgba(124,109,250,.4);
 }
 .ctrl-slider::-moz-range-thumb{
-width:16px;height:16px;border-radius:50%;
-background:var(–accent);cursor:pointer;
-border:2px solid var(–bg);box-shadow:0 0 6px rgba(124,109,250,.4);
+  width:16px;height:16px;border-radius:50%;
+  background:var(--accent);cursor:pointer;
+  border:2px solid var(--bg);box-shadow:0 0 6px rgba(124,109,250,.4);
 }
 .slider-val{
-font-size:10px;font-family:var(–font-mono);
-color:var(–muted);min-width:32px;text-align:right;
+  font-size:10px;font-family:var(--font-mono);
+  color:var(--muted);min-width:32px;text-align:right;
 }
 
 .upload-zone{
-border:1.5px dashed var(–border2);border-radius:9px;
-padding:16px;text-align:center;cursor:pointer;
-transition:all .2s;background:var(–surface2);
+  border:1.5px dashed var(--border2);border-radius:9px;
+  padding:16px;text-align:center;cursor:pointer;
+  transition:all .2s;background:var(--surface2);
 }
-.upload-zone:hover{border-color:var(–accent);background:var(–accent-glow)}
-.upload-zone-text{font-size:11px;color:var(–muted);margin-top:6px}
-.upload-zone-sub{font-size:9px;color:var(–border2);margin-top:2px;font-family:var(–font-mono)}
-.upload-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:7px;display:block;margin-top:8px;border:1px solid var(–border)}
+.upload-zone:hover{border-color:var(--accent);background:var(--accent-glow)}
+.upload-zone-text{font-size:11px;color:var(--muted);margin-top:6px}
+.upload-zone-sub{font-size:9px;color:var(--border2);margin-top:2px;font-family:var(--font-mono)}
+.upload-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:7px;display:block;margin-top:8px;border:1px solid var(--border)}
 
 /* Gradient */
 .grad-stops{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .grad-stop{display:flex;align-items:center;gap:8px}
 .grad-dir{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
 .grad-dir-btn{
-padding:5px;background:var(–surface2);
-border:1px solid var(–border);border-radius:6px;
-cursor:pointer;text-align:center;font-size:9px;
-color:var(–muted);transition:all .15s;font-family:var(–font-mono);
+  padding:5px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:6px;
+  cursor:pointer;text-align:center;font-size:9px;
+  color:var(--muted);transition:all .15s;font-family:var(--font-mono);
 }
-.grad-dir-btn:hover,.grad-dir-btn.active{border-color:var(–accent);color:var(–accent);background:var(–accent-glow)}
-.grad-preview{height:32px;border-radius:8px;border:1px solid var(–border);margin-top:8px}
+.grad-dir-btn:hover,.grad-dir-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.grad-preview{height:32px;border-radius:8px;border:1px solid var(--border);margin-top:8px}
 
 /* Font grid */
 .font-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
 .font-pill{
-padding:8px;background:var(–surface2);
-border:1px solid var(–border);border-radius:8px;
-cursor:pointer;transition:all .15s;text-align:center;
+  padding:8px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;
+  cursor:pointer;transition:all .15s;text-align:center;
 }
-.font-pill:hover{border-color:var(–border2)}
-.font-pill.active{border-color:var(–accent);background:var(–accent-glow)}
+.font-pill:hover{border-color:var(--border2)}
+.font-pill.active{border-color:var(--accent);background:var(--accent-glow)}
 .font-pill-name{font-size:13px;line-height:1.2}
-.font-pill-label{font-size:8px;color:var(–muted);font-family:var(–font-mono);margin-top:2px;letter-spacing:1px}
+.font-pill-label{font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px;letter-spacing:1px}
 
 /* Export */
 .export-btn{
-width:100%;padding:12px;border-radius:10px;
-font-size:13px;font-weight:600;cursor:pointer;
-display:flex;align-items:center;justify-content:center;
-gap:8px;transition:all .2s;border:none;margin-bottom:8px;
-font-family:var(–font-ui);
+  width:100%;padding:12px;border-radius:10px;
+  font-size:13px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;transition:all .2s;border:none;margin-bottom:8px;
+  font-family:var(--font-ui);
 }
-.exp-png{background:linear-gradient(135deg,var(–accent),#9b8eff);color:#fff}
+.exp-png{background:linear-gradient(135deg,var(--accent),#9b8eff);color:#fff}
 .exp-png:hover{background:linear-gradient(135deg,#6b5ce7,#8a7aee);transform:translateY(-1px)}
-.exp-pdf{background:linear-gradient(135deg,var(–accent2),#ff9b6d);color:#fff}
+.exp-pdf{background:linear-gradient(135deg,var(--accent2),#ff9b6d);color:#fff}
 .exp-pdf:hover{background:linear-gradient(135deg,#e55a6a,#ee8a5a);transform:translateY(-1px)}
 .export-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .export-btn svg{width:15px;height:15px}
@@ -353,27 +352,27 @@ font-family:var(–font-ui);
 /* Size chips */
 .size-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 .size-chip{
-padding:5px 10px;background:var(–surface2);
-border:1px solid var(–border);border-radius:6px;
-font-size:9px;cursor:pointer;font-family:var(–font-mono);
-color:var(–muted);transition:all .15s;text-align:center;
+  padding:5px 10px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:6px;
+  font-size:9px;cursor:pointer;font-family:var(--font-mono);
+  color:var(--muted);transition:all .15s;text-align:center;
 }
-.size-chip:hover{border-color:var(–border2);color:var(–text)}
-.size-chip.active{border-color:var(–accent);color:var(–accent);background:var(–accent-glow)}
+.size-chip:hover{border-color:var(--border2);color:var(--text)}
+.size-chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
 
 /* Toggle row */
 .toggle-row{display:flex;gap:6px}
 .toggle-btn{
-flex:1;padding:7px;background:var(–surface2);
-border:1px solid var(–border);border-radius:7px;
-color:var(–muted);font-size:11px;cursor:pointer;
-text-align:center;transition:all .15s;font-family:var(–font-ui);
+  flex:1;padding:7px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:7px;
+  color:var(--muted);font-size:11px;cursor:pointer;
+  text-align:center;transition:all .15s;font-family:var(--font-ui);
 }
-.toggle-btn:hover{border-color:var(–border2)}
-.toggle-btn.active{background:var(–accent-glow);border-color:var(–accent);color:var(–accent)}
+.toggle-btn:hover{border-color:var(--border2)}
+.toggle-btn.active{background:var(--accent-glow);border-color:var(--accent);color:var(--accent)}
 
-.divider{height:1px;background:var(–border);margin:12px 0}
-.hint{font-size:10px;color:var(–muted);font-family:var(–font-mono);line-height:1.6}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.hint{font-size:10px;color:var(--muted);font-family:var(--font-mono);line-height:1.6}
 
 /* Fade classes */
 .fade-bottom{-webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 60%,transparent 100%)}
@@ -382,170 +381,168 @@ text-align:center;transition:all .15s;font-family:var(–font-ui);
 .fade-left{-webkit-mask-image:linear-gradient(to left,#000 50%,transparent 100%);mask-image:linear-gradient(to left,#000 50%,transparent 100%)}
 
 /* ═══════════════════════════════
-MOBILE BOTTOM NAV
+   MOBILE BOTTOM NAV
 ═══════════════════════════════ */
 #bottom-nav{
-display:none;
-flex-shrink:0;
-height:calc(var(–bottom-nav) + env(safe-area-inset-bottom, 0px));
-min-height:var(–bottom-nav);
-background:var(–surface);
-border-top:1px solid var(–border);
-z-index:150;
-position:relative;
-padding-bottom:env(safe-area-inset-bottom, 0px);
+  display:none;
+  flex-shrink:0;
+  height:calc(var(--bottom-nav) + env(safe-area-inset-bottom, 0px));
+  min-height:var(--bottom-nav);
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  z-index:150;
+  position:relative;
+  padding-bottom:env(safe-area-inset-bottom, 0px);
 }
 .bnav-items{
-display:flex;height:100%;
+  display:flex;height:100%;
 }
 .bnav-item{
-flex:1;display:flex;flex-direction:column;align-items:center;
-justify-content:center;gap:3px;cursor:pointer;
-color:var(–muted);transition:all .15s;
-font-size:9px;font-family:var(–font-mono);letter-spacing:.5px;
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;cursor:pointer;
+  color:var(--muted);transition:all .15s;
+  font-size:9px;font-family:var(--font-mono);letter-spacing:.5px;
 }
-.bnav-item:active,.bnav-item.active{color:var(–accent)}
+.bnav-item:active,.bnav-item.active{color:var(--accent)}
 .bnav-item svg{width:18px;height:18px}
-.bnav-item.active svg{filter:drop-shadow(0 0 6px var(–accent))}
+.bnav-item.active svg{filter:drop-shadow(0 0 6px var(--accent))}
 
 /* DRAWER OVERLAY */
 #drawer-overlay{
-display:none;position:fixed;inset:0;
-background:rgba(0,0,0,.6);z-index:49;
-backdrop-filter:blur(2px);
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.6);z-index:49;
+  backdrop-filter:blur(2px);
 }
 #drawer-overlay.visible{display:block}
 
 /* MOBILE DRAWER */
 .drawer{
-position:fixed;bottom:0;left:0;right:0;
-background:var(–surface);
-border-top:1px solid var(–border);
-border-radius:16px 16px 0 0;
-max-height:72vh;display:flex;flex-direction:column;
-transform:translateY(calc(100% + 120px)); /* extra offset so it’s truly offscreen */
-transition:transform .3s cubic-bezier(.4,0,.2,1);
-z-index:200;
-overflow:hidden;
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-radius:16px 16px 0 0;
+  max-height:72vh;display:flex;flex-direction:column;
+  transform:translateY(calc(100% + 120px)); /* extra offset so it's truly offscreen */
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  z-index:200;
+  overflow:hidden;
 }
 .drawer.open{transform:translateY(0)}
 .drawer-handle{
-width:36px;height:4px;background:var(–border2);
-border-radius:2px;margin:10px auto 6px;flex-shrink:0;
+  width:36px;height:4px;background:var(--border2);
+  border-radius:2px;margin:10px auto 6px;flex-shrink:0;
 }
 .drawer-title{
-font-size:11px;font-family:var(–font-mono);
-color:var(–muted);text-transform:uppercase;
-letter-spacing:2px;padding:0 16px 10px;flex-shrink:0;
-border-bottom:1px solid var(–border);
+  font-size:11px;font-family:var(--font-mono);
+  color:var(--muted);text-transform:uppercase;
+  letter-spacing:2px;padding:0 16px 10px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
 }
 .drawer-content{flex:1;overflow-y:auto;padding:12px 16px;scrollbar-width:none}
 .drawer-content::-webkit-scrollbar{display:none}
 
 /* LAYOUT DRAWER (mobile) */
 #layout-drawer-grid{
-display:grid;grid-template-columns:repeat(4,1fr);
-gap:8px;padding:12px;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:8px;padding:12px;
 }
 @media(max-width:400px){
-#layout-drawer-grid{grid-template-columns:repeat(3,1fr)}
+  #layout-drawer-grid{grid-template-columns:repeat(3,1fr)}
 }
 
 /* ZOOM INDICATOR */
 #zoom-pill{
-position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
-background:var(–surface);border:1px solid var(–border2);
-border-radius:20px;padding:4px 14px;
-font-size:11px;font-family:var(–font-mono);color:var(–muted);
-pointer-events:none;opacity:0;transition:opacity .3s;z-index:10;
-white-space:nowrap;
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px;padding:4px 14px;
+  font-size:11px;font-family:var(--font-mono);color:var(--muted);
+  pointer-events:none;opacity:0;transition:opacity .3s;z-index:10;
+  white-space:nowrap;
 }
 #zoom-pill.show{opacity:1}
 
 /* ═══════════════════════════════
-RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS
 ═══════════════════════════════ */
 
 /* TABLET: hide right panel, show as drawer */
 @media(max-width:1024px){
-#right-panel{
-position:fixed;top:0;right:0;bottom:0;
-transform:translateX(100%);
-box-shadow:-8px 0 32px rgba(0,0,0,.4);
-}
-#right-panel.open{transform:translateX(0)}
-.panel-toggle-btn{display:flex!important}
+  #right-panel{
+    position:fixed;top:0;right:0;bottom:0;
+    transform:translateX(100%);
+    box-shadow:-8px 0 32px rgba(0,0,0,.4);
+  }
+  #right-panel.open{transform:translateX(0)}
+  .panel-toggle-btn{display:flex!important}
 }
 
 /* MOBILE: hide sidebar, hide right panel, show bottom nav */
 @media(max-width:768px){
-#sidebar{
-position:fixed;top:0;left:0;bottom:0;
-transform:translateX(-100%);
-box-shadow:8px 0 32px rgba(0,0,0,.4);
-}
-#sidebar.open{transform:translateX(0)}
-#right-panel{display:none!important}
-#bottom-nav{display:flex!important;flex-direction:column;flex-shrink:0;}
-#canvas-toolbar{padding:6px 10px;gap:4px}
-.tbtn-label{display:none}
-#canvas-viewport{padding:10px}
-.hbtn.desktop-only{display:none!important}
-/* Drawer sits above bottom nav */
-.drawer{
-bottom:calc(var(–bottom-nav) + env(safe-area-inset-bottom,0px));
-max-height:calc(100vh - var(–header) - var(–bottom-nav) - 20px);
-}
-#drawer-overlay{
-bottom:calc(var(–bottom-nav) + env(safe-area-inset-bottom,0px));
-top:0;left:0;right:0;
-}
-/* Toast above bottom nav */
-#toast{bottom:calc(var(–bottom-nav) + env(safe-area-inset-bottom,0px) + 12px)!important}
+  #sidebar{
+    position:fixed;top:0;left:0;bottom:0;
+    transform:translateX(-100%);
+    box-shadow:8px 0 32px rgba(0,0,0,.4);
+  }
+  #sidebar.open{transform:translateX(0)}
+  #right-panel{display:none!important}
+  #bottom-nav{display:flex!important;flex-direction:column;flex-shrink:0;}
+  #canvas-toolbar{padding:6px 10px;gap:4px}
+  .tbtn-label{display:none}
+  #canvas-viewport{padding:10px}
+  .hbtn.desktop-only{display:none!important}
+  /* Drawer sits above bottom nav */
+  .drawer{
+    bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom,0px));
+    max-height:calc(100vh - var(--header) - var(--bottom-nav) - 20px);
+  }
+  #drawer-overlay{
+    bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom,0px));
+    top:0;left:0;right:0;
+  }
+  /* Toast above bottom nav */
+  #toast{bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom,0px) + 12px)!important}
 }
 
 /* SMALL MOBILE */
 @media(max-width:480px){
-:root{–panel:260px}
-.logo{font-size:18px}
-#layout-badge-header{display:none}
+  :root{--panel:260px}
+  .logo{font-size:18px}
+  #layout-badge-header{display:none}
 }
 
 /* DESKTOP SPECIFIC */
 @media(min-width:1025px){
-#bottom-nav{display:none}
-.mobile-only{display:none!important}
+  #bottom-nav{display:none}
+  .mobile-only{display:none!important}
 }
 
 /* PANEL TOGGLE (tablet) */
 .panel-toggle-btn{
-display:none;
-width:34px;height:34px;border-radius:9px;
-background:var(–surface2);border:1px solid var(–border);
-align-items:center;justify-content:center;
-cursor:pointer;transition:all .15s;color:var(–muted);flex-shrink:0;
+  display:none;
+  width:34px;height:34px;border-radius:9px;
+  background:var(--surface2);border:1px solid var(--border);
+  align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;color:var(--muted);flex-shrink:0;
 }
-.panel-toggle-btn:hover{background:var(–border);color:var(–text)}
+.panel-toggle-btn:hover{background:var(--border);color:var(--text)}
 .panel-toggle-btn svg{width:16px;height:16px}
 
 /* Toast */
 #toast{
-position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
-background:var(–surface2);border:1px solid var(–border2);
-color:var(–text);font-size:12px;font-family:var(–font-mono);
-padding:8px 16px;border-radius:20px;
-opacity:0;transition:all .3s;z-index:999;white-space:nowrap;
-pointer-events:none;
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text);font-size:12px;font-family:var(--font-mono);
+  padding:8px 16px;border-radius:20px;
+  opacity:0;transition:all .3s;z-index:999;white-space:nowrap;
+  pointer-events:none;
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
-
 </head>
 <body>
 <div id="app">
 
 <!-- ══ TOP HEADER ══ -->
-
 <div id="top-header">
   <!-- Mobile: layouts toggle -->
   <div class="hbtn mobile-only" id="mob-layout-btn" onclick="toggleDrawer('layout')">
@@ -557,7 +554,6 @@ pointer-events:none;
   <div class="spacer"></div>
 
   <!-- Zoom controls (desktop) -->
-
   <div class="hbtn desktop-only" onclick="zoom(-0.1)" title="Zoom out">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </div>
@@ -568,24 +564,20 @@ pointer-events:none;
   <div class="hbtn desktop-only" onclick="resetZoom()" title="Fit to view" style="font-size:10px;font-family:var(--font-mono);color:var(--muted);width:auto;padding:0 10px">Fit</div>
 
   <!-- Tablet: right panel toggle -->
-
   <div class="panel-toggle-btn" id="panel-toggle-btn" onclick="toggleRightPanel()" title="Properties">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"/><line x1="17" y1="12" x2="7" y2="12"/><line x1="19" y1="18" x2="5" y2="18"/></svg>
   </div>
 
   <!-- Export button -->
-
   <div class="hbtn accent-btn" onclick="showExportMenu()" title="Export">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
   </div>
 </div>
 
 <!-- ══ MAIN BODY ══ -->
-
 <div id="main-body">
 
   <!-- SIDEBAR: Layout Gallery -->
-
   <div id="sidebar">
     <div id="sidebar-top">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 2px">
@@ -598,7 +590,6 @@ pointer-events:none;
   </div>
 
   <!-- CANVAS -->
-
   <div id="canvas-area">
     <div id="canvas-toolbar">
       <div class="tbtn desktop-only" onclick="zoom(-0.1)">
@@ -620,19 +611,15 @@ pointer-events:none;
       </div>
     </div>
 
-```
-<div id="canvas-viewport" onwheel="handleWheel(event)">
-  <div id="poster-wrap">
-    <div id="poster"></div>
-  </div>
-  <div id="zoom-pill">50%</div>
-</div>
-```
-
+    <div id="canvas-viewport" onwheel="handleWheel(event)">
+      <div id="poster-wrap">
+        <div id="poster"></div>
+      </div>
+      <div id="zoom-pill">50%</div>
+    </div>
   </div>
 
   <!-- RIGHT PANEL: Properties -->
-
   <div id="right-panel">
     <div id="panel-tabs">
       <div class="ptab active" onclick="switchTab('text')">Text</div>
@@ -641,238 +628,234 @@ pointer-events:none;
       <div class="ptab" onclick="switchTab('export')">Export</div>
     </div>
 
-```
-<div id="panel-content">
+    <div id="panel-content">
 
-  <!-- TEXT TAB -->
-  <div id="tab-text">
-    <div class="section">
-      <span class="sec-label">Headline</span>
-      <textarea class="ctrl-input" id="inp-headline" rows="2" oninput="updatePoster()">BEYOND THE EDGE</textarea>
-    </div>
-    <div class="section">
-      <span class="sec-label">Sub Headline</span>
-      <textarea class="ctrl-input" id="inp-sub" rows="2" oninput="updatePoster()">Exploring the invisible boundaries of modern creative culture</textarea>
-    </div>
-    <div class="section">
-      <span class="sec-label">Tagline</span>
-      <input class="ctrl-input" id="inp-tagline" type="text" value="FORM FOLLOWS FEELING" oninput="updatePoster()">
-    </div>
-    <div class="section">
-      <span class="sec-label">Info / Edition</span>
-      <input class="ctrl-input" id="inp-info" type="text" value="VOL. 03 — 2025" oninput="updatePoster()">
-    </div>
-    <div class="section">
-      <span class="sec-label">Description</span>
-      <textarea class="ctrl-input" id="inp-desc1" rows="3" oninput="updatePoster()">A visual essay on the tension between minimalism and expression. We strip away the unnecessary to reveal what truly matters.</textarea>
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <span class="sec-label">Font Family</span>
-      <div class="font-grid" id="font-grid"></div>
-    </div>
-    <div class="section">
-      <span class="sec-label">Headline Size</span>
-      <div class="slider-wrap">
-        <input type="range" class="ctrl-slider" id="sl-headline-size" min="60" max="200" value="138" oninput="updatePoster()">
-        <span class="slider-val" id="lbl-headline-size">138</span>
-      </div>
-    </div>
-    <div class="section">
-      <span class="sec-label">Letter Spacing</span>
-      <div class="slider-wrap">
-        <input type="range" class="ctrl-slider" id="sl-tracking" min="-10" max="20" value="-4" oninput="updatePoster()">
-        <span class="slider-val" id="lbl-tracking">-4</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- DESIGN TAB -->
-  <div id="tab-design" style="display:none">
-    <div class="section">
-      <span class="sec-label">Background</span>
-      <div class="toggle-row" style="margin-bottom:10px">
-        <div class="toggle-btn active" id="bg-solid-btn" onclick="setBgMode('solid')">Solid</div>
-        <div class="toggle-btn" id="bg-grad-btn" onclick="setBgMode('gradient')">Gradient</div>
-      </div>
-      <div id="bg-solid-ctrl">
-        <div class="ctrl-row">
-          <div class="color-swatch"><div class="csw-preview" id="bg-color-preview" style="background:#ffffff"></div><input type="color" id="inp-bg-color" value="#ffffff" oninput="updatePoster()"></div>
-          <input class="ctrl-input" id="inp-bg-hex" type="text" value="#ffffff" oninput="bgHexInput(this.value)" placeholder="#ffffff">
+      <!-- TEXT TAB -->
+      <div id="tab-text">
+        <div class="section">
+          <span class="sec-label">Headline</span>
+          <textarea class="ctrl-input" id="inp-headline" rows="2" oninput="updatePoster()">BEYOND THE EDGE</textarea>
         </div>
-      </div>
-      <div id="bg-grad-ctrl" style="display:none">
-        <div class="grad-stops">
-          <div class="grad-stop">
-            <div class="color-swatch" style="width:28px;height:28px;border-radius:6px"><div class="csw-preview" id="gs1-prev" style="background:#6c63ff"></div><input type="color" id="gs1" value="#6c63ff" oninput="updatePoster()"></div>
-            <span style="font-size:10px;font-family:var(--font-mono);color:var(--muted)">0%</span>
-          </div>
-          <div class="grad-stop">
-            <div class="color-swatch" style="width:28px;height:28px;border-radius:6px"><div class="csw-preview" id="gs2-prev" style="background:#ff6b6b"></div><input type="color" id="gs2" value="#ff6b6b" oninput="updatePoster()"></div>
-            <span style="font-size:10px;font-family:var(--font-mono);color:var(--muted)">100%</span>
+        <div class="section">
+          <span class="sec-label">Sub Headline</span>
+          <textarea class="ctrl-input" id="inp-sub" rows="2" oninput="updatePoster()">Exploring the invisible boundaries of modern creative culture</textarea>
+        </div>
+        <div class="section">
+          <span class="sec-label">Tagline</span>
+          <input class="ctrl-input" id="inp-tagline" type="text" value="FORM FOLLOWS FEELING" oninput="updatePoster()">
+        </div>
+        <div class="section">
+          <span class="sec-label">Info / Edition</span>
+          <input class="ctrl-input" id="inp-info" type="text" value="VOL. 03 — 2025" oninput="updatePoster()">
+        </div>
+        <div class="section">
+          <span class="sec-label">Description</span>
+          <textarea class="ctrl-input" id="inp-desc1" rows="3" oninput="updatePoster()">A visual essay on the tension between minimalism and expression. We strip away the unnecessary to reveal what truly matters.</textarea>
+        </div>
+        <div class="divider"></div>
+        <div class="section">
+          <span class="sec-label">Font Family</span>
+          <div class="font-grid" id="font-grid"></div>
+        </div>
+        <div class="section">
+          <span class="sec-label">Headline Size</span>
+          <div class="slider-wrap">
+            <input type="range" class="ctrl-slider" id="sl-headline-size" min="60" max="200" value="138" oninput="updatePoster()">
+            <span class="slider-val" id="lbl-headline-size">138</span>
           </div>
         </div>
-        <div class="grad-dir">
-          <div class="grad-dir-btn active" data-deg="135" onclick="setGradDir(this)">↘</div>
-          <div class="grad-dir-btn" data-deg="180" onclick="setGradDir(this)">↓</div>
-          <div class="grad-dir-btn" data-deg="90" onclick="setGradDir(this)">→</div>
-          <div class="grad-dir-btn" data-deg="45" onclick="setGradDir(this)">↗</div>
+        <div class="section">
+          <span class="sec-label">Letter Spacing</span>
+          <div class="slider-wrap">
+            <input type="range" class="ctrl-slider" id="sl-tracking" min="-10" max="20" value="-4" oninput="updatePoster()">
+            <span class="slider-val" id="lbl-tracking">-4</span>
+          </div>
         </div>
-        <div class="grad-preview" id="grad-preview"></div>
       </div>
-    </div>
 
-    <div class="section">
-      <span class="sec-label">Accent Color</span>
-      <div class="ctrl-row">
-        <div class="color-swatch"><div class="csw-preview" id="acc-color-preview" style="background:#C8553D"></div><input type="color" id="inp-accent" value="#C8553D" oninput="updatePoster()"></div>
-        <input class="ctrl-input" id="inp-acc-hex" type="text" value="#C8553D" oninput="accHexInput(this.value)" placeholder="#C8553D">
-      </div>
-    </div>
+      <!-- DESIGN TAB -->
+      <div id="tab-design" style="display:none">
+        <div class="section">
+          <span class="sec-label">Background</span>
+          <div class="toggle-row" style="margin-bottom:10px">
+            <div class="toggle-btn active" id="bg-solid-btn" onclick="setBgMode('solid')">Solid</div>
+            <div class="toggle-btn" id="bg-grad-btn" onclick="setBgMode('gradient')">Gradient</div>
+          </div>
+          <div id="bg-solid-ctrl">
+            <div class="ctrl-row">
+              <div class="color-swatch"><div class="csw-preview" id="bg-color-preview" style="background:#ffffff"></div><input type="color" id="inp-bg-color" value="#ffffff" oninput="updatePoster()"></div>
+              <input class="ctrl-input" id="inp-bg-hex" type="text" value="#ffffff" oninput="bgHexInput(this.value)" placeholder="#ffffff">
+            </div>
+          </div>
+          <div id="bg-grad-ctrl" style="display:none">
+            <div class="grad-stops">
+              <div class="grad-stop">
+                <div class="color-swatch" style="width:28px;height:28px;border-radius:6px"><div class="csw-preview" id="gs1-prev" style="background:#6c63ff"></div><input type="color" id="gs1" value="#6c63ff" oninput="updatePoster()"></div>
+                <span style="font-size:10px;font-family:var(--font-mono);color:var(--muted)">0%</span>
+              </div>
+              <div class="grad-stop">
+                <div class="color-swatch" style="width:28px;height:28px;border-radius:6px"><div class="csw-preview" id="gs2-prev" style="background:#ff6b6b"></div><input type="color" id="gs2" value="#ff6b6b" oninput="updatePoster()"></div>
+                <span style="font-size:10px;font-family:var(--font-mono);color:var(--muted)">100%</span>
+              </div>
+            </div>
+            <div class="grad-dir">
+              <div class="grad-dir-btn active" data-deg="135" onclick="setGradDir(this)">↘</div>
+              <div class="grad-dir-btn" data-deg="180" onclick="setGradDir(this)">↓</div>
+              <div class="grad-dir-btn" data-deg="90" onclick="setGradDir(this)">→</div>
+              <div class="grad-dir-btn" data-deg="45" onclick="setGradDir(this)">↗</div>
+            </div>
+            <div class="grad-preview" id="grad-preview"></div>
+          </div>
+        </div>
 
-    <div class="section">
-      <span class="sec-label">Text Color</span>
-      <div class="ctrl-row">
-        <div class="color-swatch"><div class="csw-preview" id="txt-color-preview" style="background:#1a1a1a"></div><input type="color" id="inp-text-color" value="#1a1a1a" oninput="updatePoster()"></div>
-        <input class="ctrl-input" id="inp-txt-hex" type="text" value="#1a1a1a" oninput="txtHexInput(this.value)" placeholder="#1a1a1a">
-      </div>
-    </div>
+        <div class="section">
+          <span class="sec-label">Accent Color</span>
+          <div class="ctrl-row">
+            <div class="color-swatch"><div class="csw-preview" id="acc-color-preview" style="background:#C8553D"></div><input type="color" id="inp-accent" value="#C8553D" oninput="updatePoster()"></div>
+            <input class="ctrl-input" id="inp-acc-hex" type="text" value="#C8553D" oninput="accHexInput(this.value)" placeholder="#C8553D">
+          </div>
+        </div>
 
-    <div class="divider"></div>
+        <div class="section">
+          <span class="sec-label">Text Color</span>
+          <div class="ctrl-row">
+            <div class="color-swatch"><div class="csw-preview" id="txt-color-preview" style="background:#1a1a1a"></div><input type="color" id="inp-text-color" value="#1a1a1a" oninput="updatePoster()"></div>
+            <input class="ctrl-input" id="inp-txt-hex" type="text" value="#1a1a1a" oninput="txtHexInput(this.value)" placeholder="#1a1a1a">
+          </div>
+        </div>
 
-    <div class="section">
-      <span class="sec-label">Overlay Opacity</span>
-      <div class="slider-wrap">
-        <input type="range" class="ctrl-slider" id="sl-overlay" min="0" max="100" value="0" oninput="updatePoster()">
-        <span class="slider-val" id="lbl-overlay">0%</span>
-      </div>
-    </div>
-    <div class="section">
-      <span class="sec-label">Border Radius</span>
-      <div class="slider-wrap">
-        <input type="range" class="ctrl-slider" id="sl-radius" min="0" max="60" value="0" oninput="updatePoster()">
-        <span class="slider-val" id="lbl-radius">0px</span>
-      </div>
-    </div>
+        <div class="divider"></div>
 
-    <div class="section">
-      <span class="sec-label">Poster Size</span>
-      <div class="size-chips">
-        <div class="size-chip active" data-w="1080" data-h="1350" onclick="setSize(this)">1:1.25<br><span style="font-size:8px;color:var(--muted)">Post</span></div>
-        <div class="size-chip" data-w="1080" data-h="1080" onclick="setSize(this)">1:1<br><span style="font-size:8px;color:var(--muted)">Square</span></div>
-        <div class="size-chip" data-w="1080" data-h="1920" onclick="setSize(this)">9:16<br><span style="font-size:8px;color:var(--muted)">Story</span></div>
-        <div class="size-chip" data-w="1200" data-h="628" onclick="setSize(this)">1.9:1<br><span style="font-size:8px;color:var(--muted)">Banner</span></div>
-      </div>
-    </div>
-  </div>
+        <div class="section">
+          <span class="sec-label">Overlay Opacity</span>
+          <div class="slider-wrap">
+            <input type="range" class="ctrl-slider" id="sl-overlay" min="0" max="100" value="0" oninput="updatePoster()">
+            <span class="slider-val" id="lbl-overlay">0%</span>
+          </div>
+        </div>
+        <div class="section">
+          <span class="sec-label">Border Radius</span>
+          <div class="slider-wrap">
+            <input type="range" class="ctrl-slider" id="sl-radius" min="0" max="60" value="0" oninput="updatePoster()">
+            <span class="slider-val" id="lbl-radius">0px</span>
+          </div>
+        </div>
 
-  <!-- MEDIA TAB -->
-  <div id="tab-media" style="display:none">
-    <div class="section">
-      <span class="sec-label">Main Image</span>
-      <div class="upload-zone" onclick="document.getElementById('fi-main').click()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="28" height="28"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-        <div class="upload-zone-text">Tap to upload image</div>
-        <div class="upload-zone-sub">PNG · JPG · WEBP</div>
+        <div class="section">
+          <span class="sec-label">Poster Size</span>
+          <div class="size-chips">
+            <div class="size-chip active" data-w="1080" data-h="1350" onclick="setSize(this)">1:1.25<br><span style="font-size:8px;color:var(--muted)">Post</span></div>
+            <div class="size-chip" data-w="1080" data-h="1080" onclick="setSize(this)">1:1<br><span style="font-size:8px;color:var(--muted)">Square</span></div>
+            <div class="size-chip" data-w="1080" data-h="1920" onclick="setSize(this)">9:16<br><span style="font-size:8px;color:var(--muted)">Story</span></div>
+            <div class="size-chip" data-w="1200" data-h="628" onclick="setSize(this)">1.9:1<br><span style="font-size:8px;color:var(--muted)">Banner</span></div>
+          </div>
+        </div>
       </div>
-      <input type="file" id="fi-main" accept="image/*" style="display:none" onchange="loadImage(this,'main')">
-      <img id="prev-main" class="upload-thumb" style="display:none">
-    </div>
-    <div class="section">
-      <span class="sec-label">Secondary Image</span>
-      <div class="upload-zone" onclick="document.getElementById('fi-sec').click()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="24" height="24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-        <div class="upload-zone-text">Secondary image</div>
-        <div class="upload-zone-sub">For split layouts</div>
-      </div>
-      <input type="file" id="fi-sec" accept="image/*" style="display:none" onchange="loadImage(this,'sec')">
-      <img id="prev-sec" class="upload-thumb" style="display:none">
-    </div>
-    <div class="section">
-      <span class="sec-label">Logo / Brand Mark</span>
-      <div class="upload-zone" onclick="document.getElementById('fi-logo').click()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        <div class="upload-zone-text">Brand logo</div>
-        <div class="upload-zone-sub">PNG with transparency</div>
-      </div>
-      <input type="file" id="fi-logo" accept="image/*" style="display:none" onchange="loadImage(this,'logo')">
-      <img id="prev-logo" class="upload-thumb" style="display:none">
-    </div>
-    <div class="divider"></div>
-    <div class="section">
-      <span class="sec-label">Image Fit</span>
-      <select class="ctrl-select" id="sel-fit" onchange="updatePoster()">
-        <option value="cover">Cover (fill)</option>
-        <option value="contain">Contain (fit)</option>
-        <option value="fill">Stretch</option>
-      </select>
-    </div>
-    <div class="section">
-      <span class="sec-label">Image Opacity</span>
-      <div class="slider-wrap">
-        <input type="range" class="ctrl-slider" id="sl-img-opacity" min="10" max="100" value="100" oninput="updatePoster()">
-        <span class="slider-val" id="lbl-img-opacity">100%</span>
-      </div>
-    </div>
-    <div class="section">
-      <span class="sec-label">Image Filter</span>
-      <select class="ctrl-select" id="sel-filter" onchange="updatePoster()">
-        <option value="none">None</option>
-        <option value="grayscale(100%)">Grayscale</option>
-        <option value="sepia(80%)">Sepia</option>
-        <option value="contrast(1.3) saturate(1.2)">Vivid</option>
-        <option value="brightness(0.85) contrast(1.1)">Matte</option>
-        <option value="hue-rotate(180deg)">Hue Shift</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- EXPORT TAB -->
-  <div id="tab-export" style="display:none">
-    <div class="section">
-      <span class="sec-label">Export Quality</span>
-      <select class="ctrl-select" id="sel-scale">
-        <option value="1">1× — Screen (1080px)</option>
-        <option value="2" selected>2× — Print ready (2160px)</option>
-        <option value="3">3× — Ultra HD (3240px)</option>
-      </select>
-      <div id="ios-scale-note" style="display:none;margin-top:8px;padding:8px 10px;background:#fa6d7c18;border:1px solid #fa6d7c44;border-radius:8px;font-size:10px;font-family:var(--font-mono);color:#fa6d7c;line-height:1.6">
-        ⚠️ iOS: otomatis 1× (1080px)<br>Safari tidak support render skala besar
+      <!-- MEDIA TAB -->
+      <div id="tab-media" style="display:none">
+        <div class="section">
+          <span class="sec-label">Main Image</span>
+          <div class="upload-zone" onclick="document.getElementById('fi-main').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="28" height="28"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <div class="upload-zone-text">Tap to upload image</div>
+            <div class="upload-zone-sub">PNG · JPG · WEBP</div>
+          </div>
+          <input type="file" id="fi-main" accept="image/*" style="display:none" onchange="loadImage(this,'main')">
+          <img id="prev-main" class="upload-thumb" style="display:none">
+        </div>
+        <div class="section">
+          <span class="sec-label">Secondary Image</span>
+          <div class="upload-zone" onclick="document.getElementById('fi-sec').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="24" height="24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <div class="upload-zone-text">Secondary image</div>
+            <div class="upload-zone-sub">For split layouts</div>
+          </div>
+          <input type="file" id="fi-sec" accept="image/*" style="display:none" onchange="loadImage(this,'sec')">
+          <img id="prev-sec" class="upload-thumb" style="display:none">
+        </div>
+        <div class="section">
+          <span class="sec-label">Logo / Brand Mark</span>
+          <div class="upload-zone" onclick="document.getElementById('fi-logo').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div class="upload-zone-text">Brand logo</div>
+            <div class="upload-zone-sub">PNG with transparency</div>
+          </div>
+          <input type="file" id="fi-logo" accept="image/*" style="display:none" onchange="loadImage(this,'logo')">
+          <img id="prev-logo" class="upload-thumb" style="display:none">
+        </div>
+        <div class="divider"></div>
+        <div class="section">
+          <span class="sec-label">Image Fit</span>
+          <select class="ctrl-select" id="sel-fit" onchange="updatePoster()">
+            <option value="cover">Cover (fill)</option>
+            <option value="contain">Contain (fit)</option>
+            <option value="fill">Stretch</option>
+          </select>
+        </div>
+        <div class="section">
+          <span class="sec-label">Image Opacity</span>
+          <div class="slider-wrap">
+            <input type="range" class="ctrl-slider" id="sl-img-opacity" min="10" max="100" value="100" oninput="updatePoster()">
+            <span class="slider-val" id="lbl-img-opacity">100%</span>
+          </div>
+        </div>
+        <div class="section">
+          <span class="sec-label">Image Filter</span>
+          <select class="ctrl-select" id="sel-filter" onchange="updatePoster()">
+            <option value="none">None</option>
+            <option value="grayscale(100%)">Grayscale</option>
+            <option value="sepia(80%)">Sepia</option>
+            <option value="contrast(1.3) saturate(1.2)">Vivid</option>
+            <option value="brightness(0.85) contrast(1.1)">Matte</option>
+            <option value="hue-rotate(180deg)">Hue Shift</option>
+          </select>
+        </div>
       </div>
-    </div>
-    <div class="section">
-      <span class="sec-label">Filename</span>
-      <input class="ctrl-input" id="inp-filename" type="text" value="forma-poster" placeholder="forma-poster">
-    </div>
-    <div class="divider"></div>
-    <button class="export-btn exp-png" id="btn-png" onclick="exportPNG()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Export PNG
-    </button>
-    <button class="export-btn exp-pdf" id="btn-pdf" onclick="exportPDF()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      Export PDF
-    </button>
-    <div class="hint" style="margin-top:8px">
-      PNG supports transparent background<br>
-      PDF: press-ready, RGB color
-    </div>
-    <div class="divider"></div>
-    <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">
-      <div id="export-layout-name" style="color:var(--text);margin-bottom:4px">Classic Hero</div>
-      <div id="export-size-info">1080 × 1350 px</div>
-    </div>
-  </div>
 
-</div><!-- /panel-content -->
-```
+      <!-- EXPORT TAB -->
+      <div id="tab-export" style="display:none">
+        <div class="section">
+          <span class="sec-label">Export Quality</span>
+          <select class="ctrl-select" id="sel-scale">
+            <option value="1">1× — Screen (1080px)</option>
+            <option value="2" selected>2× — Print ready (2160px)</option>
+            <option value="3">3× — Ultra HD (3240px)</option>
+          </select>
+          <div id="ios-scale-note" style="display:none;margin-top:8px;padding:8px 10px;background:#fa6d7c18;border:1px solid #fa6d7c44;border-radius:8px;font-size:10px;font-family:var(--font-mono);color:#fa6d7c;line-height:1.6">
+            ⚠️ iOS: otomatis 1× (1080px)<br>Safari tidak support render skala besar
+          </div>
+        </div>
+        <div class="section">
+          <span class="sec-label">Filename</span>
+          <input class="ctrl-input" id="inp-filename" type="text" value="forma-poster" placeholder="forma-poster">
+        </div>
+        <div class="divider"></div>
+        <button class="export-btn exp-png" id="btn-png" onclick="exportPNG()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export PNG
+        </button>
+        <button class="export-btn exp-pdf" id="btn-pdf" onclick="exportPDF()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Export PDF
+        </button>
+        <div class="hint" style="margin-top:8px">
+          PNG supports transparent background<br>
+          PDF: press-ready, RGB color
+        </div>
+        <div class="divider"></div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">
+          <div id="export-layout-name" style="color:var(--text);margin-bottom:4px">Classic Hero</div>
+          <div id="export-size-info">1080 × 1350 px</div>
+        </div>
+      </div>
 
+    </div><!-- /panel-content -->
   </div><!-- /right-panel -->
 
 </div><!-- /main-body -->
 
 <!-- MOBILE BOTTOM NAV -->
-
 <div id="bottom-nav">
   <div class="bnav-items">
     <div class="bnav-item" id="bnav-layouts" onclick="toggleDrawer('layout')">
@@ -899,11 +882,9 @@ pointer-events:none;
 </div>
 
 <!-- DRAWER OVERLAY -->
-
 <div id="drawer-overlay" onclick="closeAllDrawers()"></div>
 
 <!-- LAYOUT DRAWER (mobile) -->
-
 <div class="drawer" id="layout-drawer">
   <div class="drawer-handle"></div>
   <div class="drawer-title">Choose Layout</div>
@@ -913,7 +894,6 @@ pointer-events:none;
 </div>
 
 <!-- PROPERTIES DRAWER (mobile) -->
-
 <div class="drawer" id="props-drawer">
   <div class="drawer-handle"></div>
   <div id="drawer-tabs" style="display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none">
@@ -926,7 +906,6 @@ pointer-events:none;
 </div>
 
 <!-- TOAST -->
-
 <div id="toast"></div>
 
 <script>
@@ -1685,64 +1664,59 @@ function iosOpenTab(loading=true){
         p{font-size:14px;color:#6a6a80;margin-top:8px}
         small{font-size:11px;color:#323240;margin-top:6px;font-family:monospace}
       </style>
-
-```
-</head><body>
-  <div class="spinner"></div>
-  <p>Rendering poster…</p>
-  <small>Please wait</small>
-</body></html>`);
-w.document.close();
-```
-
-}
-return w;
+    </head><body>
+      <div class="spinner"></div>
+      <p>Rendering poster…</p>
+      <small>Please wait</small>
+    </body></html>`);
+    w.document.close();
+  }
+  return w;
 }
 
 function iosWriteImage(w, dataUrl, filename){
-if(!w) return;
-w.document.open();
-w.document.write(`<!DOCTYPE html><html><head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${filename}</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0c0c0f;min-height:100vh;display:flex;flex-direction:column;
-align-items:center;font-family:-apple-system,sans-serif}
-.top-bar{
-width:100%;padding:16px 20px 12px;
-background:#141418;border-bottom:1px solid #252530;
-display:flex;align-items:center;gap:10px;
-}
-.logo{font-size:18px;font-weight:900;
-background:linear-gradient(135deg,#7c6dfa,#fa6d7c);
--webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hint-box{
-width:100%;max-width:480px;
-margin:20px auto 0;padding:14px 20px;
-background:#141418;border:1px solid #252530;border-radius:14px;
-text-align:center;
-}
-.hint-icon{font-size:28px;margin-bottom:8px}
-.hint-title{font-size:15px;font-weight:600;color:#e4e4f0;margin-bottom:4px}
-.hint-sub{font-size:12px;color:#6a6a80;line-height:1.6}
-.hint-step{
-display:inline-flex;align-items:center;gap:6px;
-margin-top:10px;padding:8px 16px;
-background:#1c1c22;border-radius:20px;
-font-size:11px;color:#7c6dfa;font-family:monospace;
-}
-.img-wrap{
-width:100%;max-width:480px;
-margin:16px auto 24px;
-border-radius:16px;overflow:hidden;
-box-shadow:0 20px 60px rgba(0,0,0,.6);
-}
-img{width:100%;height:auto;display:block}
-.fn{font-size:10px;color:#323240;font-family:monospace;
-text-align:center;margin-bottom:40px}
-</style>
-
+  if(!w) return;
+  w.document.open();
+  w.document.write(`<!DOCTYPE html><html><head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>${filename}</title>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{background:#0c0c0f;min-height:100vh;display:flex;flex-direction:column;
+           align-items:center;font-family:-apple-system,sans-serif}
+      .top-bar{
+        width:100%;padding:16px 20px 12px;
+        background:#141418;border-bottom:1px solid #252530;
+        display:flex;align-items:center;gap:10px;
+      }
+      .logo{font-size:18px;font-weight:900;
+            background:linear-gradient(135deg,#7c6dfa,#fa6d7c);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+      .hint-box{
+        width:100%;max-width:480px;
+        margin:20px auto 0;padding:14px 20px;
+        background:#141418;border:1px solid #252530;border-radius:14px;
+        text-align:center;
+      }
+      .hint-icon{font-size:28px;margin-bottom:8px}
+      .hint-title{font-size:15px;font-weight:600;color:#e4e4f0;margin-bottom:4px}
+      .hint-sub{font-size:12px;color:#6a6a80;line-height:1.6}
+      .hint-step{
+        display:inline-flex;align-items:center;gap:6px;
+        margin-top:10px;padding:8px 16px;
+        background:#1c1c22;border-radius:20px;
+        font-size:11px;color:#7c6dfa;font-family:monospace;
+      }
+      .img-wrap{
+        width:100%;max-width:480px;
+        margin:16px auto 24px;
+        border-radius:16px;overflow:hidden;
+        box-shadow:0 20px 60px rgba(0,0,0,.6);
+      }
+      img{width:100%;height:auto;display:block}
+      .fn{font-size:10px;color:#323240;font-family:monospace;
+          text-align:center;margin-bottom:40px}
+    </style>
   </head><body>
     <div class="top-bar">
       <div class="logo">Forma</div>
@@ -1765,186 +1739,182 @@ text-align:center;margin-bottom:40px}
 }
 
 async function exportPNG(){
-const btn=document.getElementById(‘btn-png’);
-const fn=document.getElementById(‘inp-filename’).value||‘forma-poster’;
+  const btn=document.getElementById('btn-png');
+  const fn=document.getElementById('inp-filename').value||'forma-poster';
 
-// iOS → langsung export PDF 1× (lebih reliable di Safari)
-if(isIOS()){ exportPDF(); return; }
+  // iOS → langsung export PDF 1× (lebih reliable di Safari)
+  if(isIOS()){ exportPDF(); return; }
 
-if(btn){ btn.disabled=true; btn.textContent=‘Rendering…’; }
-showToast(‘Preparing PNG…’);
-try{
-const dataUrl=await captureDataUrl();
-const a=document.createElement(‘a’);
-a.href=dataUrl; a.download=fn+’.png’;
-document.body.appendChild(a); a.click(); document.body.removeChild(a);
-showToast(‘PNG exported!’);
-}catch(e){ console.error(e); showToast(‘Export failed. Try again.’); }
-if(btn){
-btn.disabled=false;
-btn.innerHTML=’<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG’;
-}
+  if(btn){ btn.disabled=true; btn.textContent='Rendering…'; }
+  showToast('Preparing PNG…');
+  try{
+    const dataUrl=await captureDataUrl();
+    const a=document.createElement('a');
+    a.href=dataUrl; a.download=fn+'.png';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    showToast('PNG exported!');
+  }catch(e){ console.error(e); showToast('Export failed. Try again.'); }
+  if(btn){
+    btn.disabled=false;
+    btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
+  }
 }
 
 async function exportPDF(){
-const btn=document.getElementById(‘btn-pdf’);
-const fn=document.getElementById(‘inp-filename’).value||‘forma-poster’;
+  const btn=document.getElementById('btn-pdf');
+  const fn=document.getElementById('inp-filename').value||'forma-poster';
 
-// iOS: buka tab SINKRON dulu dalam user gesture sebelum async apapun
-let iosTab=null;
-if(isIOS()) iosTab=iosOpenTab(true);
+  // iOS: buka tab SINKRON dulu dalam user gesture sebelum async apapun
+  let iosTab=null;
+  if(isIOS()) iosTab=iosOpenTab(true);
 
-if(btn){ btn.disabled=true; btn.textContent=‘Rendering…’; }
-showToast(‘Preparing PDF…’);
-try{
-const dataUrl=await captureDataUrl(); // sudah paksa 1× di iOS
-const{jsPDF}=window.jspdf;
-const mmW=S.posterW*0.2646, mmH=S.posterH*0.2646;
-const pdf=new jsPDF({orientation:mmW>mmH?‘landscape’:‘portrait’,unit:‘mm’,format:[mmW,mmH]});
-pdf.addImage(dataUrl,‘PNG’,0,0,mmW,mmH);
+  if(btn){ btn.disabled=true; btn.textContent='Rendering…'; }
+  showToast('Preparing PDF…');
+  try{
+    const dataUrl=await captureDataUrl(); // sudah paksa 1× di iOS
+    const{jsPDF}=window.jspdf;
+    const mmW=S.posterW*0.2646, mmH=S.posterH*0.2646;
+    const pdf=new jsPDF({orientation:mmW>mmH?'landscape':'portrait',unit:'mm',format:[mmW,mmH]});
+    pdf.addImage(dataUrl,'PNG',0,0,mmW,mmH);
 
-```
-if(isIOS()){
-  // iOS: embed PDF sebagai data URI di tab yang sudah terbuka
-  const pdfDataUri=pdf.output('datauristring');
-  if(iosTab && !iosTab.closed){
-    iosTab.document.open();
-    iosTab.document.write(`<!DOCTYPE html><html><head>
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>${fn}</title>
-      <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#0c0c0f;font-family:-apple-system,sans-serif;min-height:100vh;
-             display:flex;flex-direction:column;align-items:center}
-        .bar{width:100%;padding:14px 20px;background:#141418;
-             border-bottom:1px solid #252530;display:flex;align-items:center;gap:10px;flex-shrink:0}
-        .logo{font-size:18px;font-weight:900;
-              background:linear-gradient(135deg,#7c6dfa,#fa6d7c);
-              -webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .info{font-size:11px;color:#6a6a80;font-family:monospace}
-        embed,iframe{width:100%;flex:1;min-height:calc(100vh - 53px);border:none}
-      </style>
-    </head><body>
-      <div class="bar">
-        <div class="logo">Forma</div>
-        <span class="info">${fn}.pdf — tap ⬆ Share → Save to Files</span>
-      </div>
-      <embed src="${pdfDataUri}" type="application/pdf">
-    </body></html>`);
-    iosTab.document.close();
+    if(isIOS()){
+      // iOS: embed PDF sebagai data URI di tab yang sudah terbuka
+      const pdfDataUri=pdf.output('datauristring');
+      if(iosTab && !iosTab.closed){
+        iosTab.document.open();
+        iosTab.document.write(`<!DOCTYPE html><html><head>
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>${fn}</title>
+          <style>
+            *{margin:0;padding:0;box-sizing:border-box}
+            body{background:#0c0c0f;font-family:-apple-system,sans-serif;min-height:100vh;
+                 display:flex;flex-direction:column;align-items:center}
+            .bar{width:100%;padding:14px 20px;background:#141418;
+                 border-bottom:1px solid #252530;display:flex;align-items:center;gap:10px;flex-shrink:0}
+            .logo{font-size:18px;font-weight:900;
+                  background:linear-gradient(135deg,#7c6dfa,#fa6d7c);
+                  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+            .info{font-size:11px;color:#6a6a80;font-family:monospace}
+            embed,iframe{width:100%;flex:1;min-height:calc(100vh - 53px);border:none}
+          </style>
+        </head><body>
+          <div class="bar">
+            <div class="logo">Forma</div>
+            <span class="info">${fn}.pdf — tap ⬆ Share → Save to Files</span>
+          </div>
+          <embed src="${pdfDataUri}" type="application/pdf">
+        </body></html>`);
+        iosTab.document.close();
+      }
+      showToast('✓ Tap Share → Save to Files');
+    } else {
+      pdf.save(fn+'.pdf');
+      showToast('PDF exported!');
+    }
+  }catch(e){
+    console.error(e);
+    if(iosTab && !iosTab.closed){ iosTab.close(); }
+    showToast('PDF export failed.');
   }
-  showToast('✓ Tap Share → Save to Files');
-} else {
-  pdf.save(fn+'.pdf');
-  showToast('PDF exported!');
-}
-```
-
-}catch(e){
-console.error(e);
-if(iosTab && !iosTab.closed){ iosTab.close(); }
-showToast(‘PDF export failed.’);
-}
-if(btn){ btn.disabled=false; btn.innerHTML=’<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Export PDF’; }
+  if(btn){ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Export PDF'; }
 }
 
 // ══════════════════════════════════════════════════════════
 // iOS VIEWPORT FIX
 // ══════════════════════════════════════════════════════════
 function setVh(){
-const vh = window.innerHeight * 0.01;
-document.documentElement.style.setProperty(’–vh’, `${vh}px`);
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 setVh();
-window.addEventListener(‘resize’,()=>{ setVh(); resetZoom(); });
+window.addEventListener('resize',()=>{ setVh(); resetZoom(); });
 
 // ══════════════════════════════════════════════════════════
 // MOBILE LAYOUT - Force bottom nav JS-side (GitHub Pages fix)
 // ══════════════════════════════════════════════════════════
 function applyMobileLayout(){
-const isMob = window.innerWidth <= 768;
-const bottomNav = document.getElementById(‘bottom-nav’);
-const rightPanel = document.getElementById(‘right-panel’);
+  const isMob = window.innerWidth <= 768;
+  const bottomNav = document.getElementById('bottom-nav');
+  const rightPanel = document.getElementById('right-panel');
 
-if(isMob){
-bottomNav.style.cssText=‘display:flex!important;flex-direction:column;flex-shrink:0;’;
-if(rightPanel){ rightPanel.style.display=‘none’; rightPanel.classList.remove(‘open’); }
-} else {
-bottomNav.style.cssText=‘display:none;’;
-if(rightPanel) rightPanel.style.display=’’;
-}
+  if(isMob){
+    bottomNav.style.cssText='display:flex!important;flex-direction:column;flex-shrink:0;';
+    if(rightPanel){ rightPanel.style.display='none'; rightPanel.classList.remove('open'); }
+  } else {
+    bottomNav.style.cssText='display:none;';
+    if(rightPanel) rightPanel.style.display='';
+  }
 
-// iOS: ubah label tombol PNG → PDF (jalankan sekali saja)
-if(isIOS()){
-const btnPng=document.getElementById(‘btn-png’);
-if(btnPng && !btnPng.dataset.iosPatched){
-btnPng.dataset.iosPatched=‘1’;
-btnPng.innerHTML=’<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF (iOS)’;
+  // iOS: ubah label tombol PNG → PDF (jalankan sekali saja)
+  if(isIOS()){
+    const btnPng=document.getElementById('btn-png');
+    if(btnPng && !btnPng.dataset.iosPatched){
+      btnPng.dataset.iosPatched='1';
+      btnPng.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF (iOS)';
+    }
+    // Paksa 1×, disable 2× & 3×
+    const scaleNote = document.getElementById('ios-scale-note');
+    const scaleSelect = document.getElementById('sel-scale');
+    if(scaleSelect && !scaleSelect.dataset.iosPatched){
+      scaleSelect.dataset.iosPatched='1';
+      scaleSelect.value = '1';
+      [...scaleSelect.options].forEach(o => {
+        if(o.value !== '1'){ o.disabled=true; o.text=o.text+' (iOS)'; }
+      });
+      if(scaleNote) scaleNote.style.display='block';
+    }
+  }
 }
-// Paksa 1×, disable 2× & 3×
-const scaleNote = document.getElementById(‘ios-scale-note’);
-const scaleSelect = document.getElementById(‘sel-scale’);
-if(scaleSelect && !scaleSelect.dataset.iosPatched){
-scaleSelect.dataset.iosPatched=‘1’;
-scaleSelect.value = ‘1’;
-[…scaleSelect.options].forEach(o => {
-if(o.value !== ‘1’){ o.disabled=true; o.text=o.text+’ (iOS)’; }
-});
-if(scaleNote) scaleNote.style.display=‘block’;
-}
-}
-}
-window.addEventListener(‘resize’, applyMobileLayout);
+window.addEventListener('resize', applyMobileLayout);
 
 // ══════════════════════════════════════════════════════════
 // INIT — Safari iOS perlu window load, bukan DOMContentLoaded
 // karena font & layout baru siap setelah semua resource load
 // ══════════════════════════════════════════════════════════
 function init(){
-setVh();
-buildFontGrid();
-buildLayoutGrid();
-applyMobileLayout();
-renderPoster();
+  setVh();
+  buildFontGrid();
+  buildLayoutGrid();
+  applyMobileLayout();
+  renderPoster();
 
-// Safari iOS: gunakan multiple fallback untuk pastikan zoom
-// dihitung setelah layout benar-benar selesai di-paint
-function tryZoom(attempts){
-const vp = document.getElementById(‘canvas-viewport’);
-const h = vp ? vp.clientHeight : 0;
-const w = vp ? vp.clientWidth : 0;
-if(h > 50 && w > 50){
-resetZoom();
-} else if(attempts > 0){
-setTimeout(()=>tryZoom(attempts-1), 120);
-} else {
-// Last resort: set zoom manual berdasarkan window size
-const navH = window.innerWidth <= 768 ? 60 : 0;
-const toolbarH = 44;
-const headerH = 52;
-const avH = window.innerHeight - headerH - toolbarH - navH - 48;
-const avW = window.innerWidth - 48;
-S.zoom = Math.min(avW / S.posterW, avH / S.posterH) * 0.88;
-S.zoom = Math.max(0.05, Math.min(3, S.zoom));
-applyZoom();
-}
-}
+  // Safari iOS: gunakan multiple fallback untuk pastikan zoom
+  // dihitung setelah layout benar-benar selesai di-paint
+  function tryZoom(attempts){
+    const vp = document.getElementById('canvas-viewport');
+    const h = vp ? vp.clientHeight : 0;
+    const w = vp ? vp.clientWidth : 0;
+    if(h > 50 && w > 50){
+      resetZoom();
+    } else if(attempts > 0){
+      setTimeout(()=>tryZoom(attempts-1), 120);
+    } else {
+      // Last resort: set zoom manual berdasarkan window size
+      const navH = window.innerWidth <= 768 ? 60 : 0;
+      const toolbarH = 44;
+      const headerH = 52;
+      const avH = window.innerHeight - headerH - toolbarH - navH - 48;
+      const avW = window.innerWidth - 48;
+      S.zoom = Math.min(avW / S.posterW, avH / S.posterH) * 0.88;
+      S.zoom = Math.max(0.05, Math.min(3, S.zoom));
+      applyZoom();
+    }
+  }
 
-// rAF chain → setTimeout fallback
-requestAnimationFrame(()=>{
-requestAnimationFrame(()=>{
-tryZoom(8); // coba 8× dengan interval 120ms = max 960ms tunggu
-});
-});
+  // rAF chain → setTimeout fallback
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      tryZoom(8); // coba 8× dengan interval 120ms = max 960ms tunggu
+    });
+  });
 }
 
 // Pakai window load (semua resource termasuk font sudah siap)
-if(document.readyState === ‘complete’){
-init();
+if(document.readyState === 'complete'){
+  init();
 } else {
-window.addEventListener(‘load’, init);
+  window.addEventListener('load', init);
 }
 </script>
-
 </body>
 </html>
