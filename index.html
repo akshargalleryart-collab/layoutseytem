@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Forma — Poster Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@300;400;600;700;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/src/dom-to-image-more.min.js"></script>
@@ -31,10 +31,13 @@
 
 html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(--bg);color:var(--text);font-size:14px}
 
+/* iOS Safari: real viewport height (excludes browser chrome) */
+:root { --vh: 1vh; }
+
 /* ═══════════════════════════════
    APP SHELL
 ═══════════════════════════════ */
-#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100vh;height:calc(var(--vh,1vh)*100);overflow:hidden}
 
 /* TOP HEADER */
 #top-header{
@@ -80,7 +83,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
 .hbtn.accent-btn:hover{background:#6b5ce7}
 
 /* MAIN BODY */
-#main-body{display:flex;flex:1;overflow:hidden;position:relative}
+#main-body{display:flex;flex:1;overflow:hidden;position:relative;min-height:0}
 
 /* LEFT SIDEBAR */
 #sidebar{
@@ -98,6 +101,8 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
   flex:1;display:flex;flex-direction:column;
   overflow:hidden;background:#08080b;
   min-width:0;
+  /* Ensure canvas area doesn't overflow into bottom-nav on mobile */
+  min-height:0;
 }
 #canvas-toolbar{
   padding:8px 12px;
@@ -371,6 +376,9 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
 #bottom-nav{
   display:none;
   height:var(--bottom-nav);
+  /* Add safe area for iPhone notch/home indicator */
+  padding-bottom:env(safe-area-inset-bottom, 0px);
+  height:calc(var(--bottom-nav) + env(safe-area-inset-bottom, 0px));
   background:var(--surface);
   border-top:1px solid var(--border);
   flex-shrink:0;z-index:100;
@@ -407,6 +415,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
   transition:transform .3s cubic-bezier(.4,0,.2,1);
   z-index:200;
   overflow:hidden;
+  /* Will be overridden in mobile media query to sit above bottom-nav */
 }
 .drawer.open{transform:translateY(0)}
 .drawer-handle{
@@ -465,11 +474,18 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
     box-shadow:8px 0 32px rgba(0,0,0,.4);
   }
   #sidebar.open{transform:translateX(0)}
-  #bottom-nav{display:flex;flex-direction:column}
+  #bottom-nav{display:flex!important;flex-direction:column}
   #canvas-toolbar{padding:6px 10px;gap:4px}
   .tbtn-label{display:none}
-  #canvas-viewport{padding:16px}
+  #canvas-viewport{padding:12px}
   .hbtn.desktop-only{display:none!important}
+  /* Canvas must not be hidden behind bottom-nav */
+  #canvas-area{padding-bottom:0}
+  /* Drawer sits above bottom nav */
+  .drawer{bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom, 0px))}
+  #drawer-overlay{bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom, 0px))}
+  /* Toast above bottom nav */
+  #toast{bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom, 0px) + 12px)}
 }
 
 /* SMALL MOBILE */
@@ -1375,6 +1391,7 @@ function zoom(delta){
 function resetZoom(){
   const vp=document.getElementById('canvas-viewport');
   const avW=vp.clientWidth-48, avH=vp.clientHeight-48;
+  if(avW<=0||avH<=0) return;
   S.zoom=Math.min(avW/S.posterW, avH/S.posterH)*0.92;
   applyZoom();
 }
@@ -1644,7 +1661,36 @@ buildFontGrid();
 buildLayoutGrid();
 renderPoster();
 setTimeout(resetZoom,100);
-window.addEventListener('resize',()=>{ resetZoom(); });
+window.addEventListener('resize',()=>{ resetZoom(); setVh(); });
+
+// ══════════════════════════════════════════════════════════
+// iOS VIEWPORT FIX (Safari address bar eats 100vh)
+// ══════════════════════════════════════════════════════════
+function setVh(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVh();
+
+// ══════════════════════════════════════════════════════════
+// MOBILE DETECTION - Force bottom nav for GitHub Pages / iframe
+// ══════════════════════════════════════════════════════════
+function applyMobileLayout(){
+  const isMobile = window.innerWidth <= 768;
+  const bottomNav = document.getElementById('bottom-nav');
+  const rightPanel = document.getElementById('right-panel');
+  if(isMobile){
+    bottomNav.style.display = 'flex';
+    bottomNav.style.flexDirection = 'column';
+    if(rightPanel) rightPanel.classList.remove('open');
+  } else {
+    bottomNav.style.display = 'none';
+  }
+  // Re-fit poster after layout change
+  setTimeout(resetZoom, 50);
+}
+applyMobileLayout();
+window.addEventListener('resize', applyMobileLayout);
 </script>
 </body>
 </html>
