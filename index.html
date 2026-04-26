@@ -117,7 +117,6 @@
             border-radius: 10px;
         }
         
-        /* Mobile Specific Controls */
         #properties-sidebar {
             transition: transform 0.3s ease-in-out;
         }
@@ -134,33 +133,51 @@
             #properties-sidebar.open {
                 transform: translateX(0);
             }
-            .canvas-container {
-                padding: 24px 12px;
-            }
+        }
+
+        /* Logic Styles */
+        .canvas-item {
+            touch-action: none;
+            cursor: grab;
+        }
+        .canvas-item:active {
+            cursor: grabbing;
+        }
+        .canvas-item.selected {
+            outline: 2px solid #adc6ff;
+            outline-offset: 2px;
+        }
+        .resizing {
+            cursor: nwse-resize !important;
+        }
+        .toggle-active {
+            background-color: #adc6ff;
+        }
+        .toggle-active .toggle-knob {
+            transform: translateX(100%);
+            background-color: #002e6a;
         }
     </style>
 </head>
 <body class="bg-background text-on-background font-body-main selection:bg-primary-container selection:text-on-primary-container h-screen overflow-hidden">
-<!-- TopNavBar -->
 <header class="flex justify-between items-center w-full px-4 h-12 z-[60] fixed top-0 bg-slate-950 font-inter text-sm antialiased tracking-tight border-b border-white/10">
 <div class="flex items-center gap-4 lg:gap-6 overflow-hidden">
 <span class="text-base lg:text-lg font-black text-slate-50 tracking-tighter uppercase whitespace-nowrap">LayoutEngine</span>
 <nav class="flex items-center gap-4 lg:gap-6 h-12 overflow-x-auto no-scrollbar scroll-smooth">
-<a class="text-blue-400 border-b-2 border-blue-500 pb-3 mt-3 active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">Editor</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">Logic</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">Assets</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors active:scale-95 transition-transform duration-100 whitespace-nowrap" href="#">History</a>
+<a class="text-blue-400 border-b-2 border-blue-500 pb-3 mt-3 transition-transform duration-100 whitespace-nowrap" href="#">Editor</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap" href="#">Logic</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap" href="#">Assets</a>
+<a class="text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap" href="#">History</a>
 </nav>
 </div>
 <div class="flex items-center gap-2 lg:gap-3 shrink-0">
 <button class="hidden sm:block material-symbols-outlined text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="help">help</button>
-<button class="material-symbols-outlined lg:hidden text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="tune" onclick="document.getElementById('properties-sidebar').classList.toggle('open')">tune</button>
+<button class="material-symbols-outlined lg:hidden text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="tune" id="mobile-sidebar-toggle">tune</button>
 <div class="hidden sm:block h-4 w-px bg-white/10 mx-1"></div>
 <button class="hidden xs:block px-3 py-1 text-ui-small font-medium text-slate-300 hover:bg-white/5 rounded border border-white/10 transition-all">Preview</button>
 <button class="px-3 py-1 text-ui-small font-bold text-on-primary-container bg-primary-container rounded shadow-sm hover:opacity-90 active:scale-95 transition-all">Deploy</button>
 </div>
 </header>
-<!-- SideNavBar (Left) - Hidden on Mobile, Visible from Small up -->
 <aside class="hidden sm:flex fixed left-0 top-12 bottom-0 flex-col items-center z-40 bg-slate-950 w-16 border-r border-white/10 font-inter text-xs font-medium uppercase tracking-widest">
 <div class="flex flex-col items-center w-full py-4 gap-2">
 <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center mb-4">
@@ -188,14 +205,10 @@
 </button>
 </div>
 </aside>
-<!-- Main Content Area -->
 <main class="sm:ml-16 mr-0 transition-all duration-300 relative h-screen pt-12 flex flex-col lg:flex-row">
-<!-- Central Canvas -->
-<div class="flex-grow bg-surface-dim canvas-bg flex items-center justify-center p-4 lg:p-xl overflow-auto relative canvas-container">
-<!-- Scale Container to maintain aspect ratio responsiveness -->
-<div class="relative w-full max-w-[390px] aspect-[390/844] bg-slate-900 rounded-xl shadow-2xl border border-white/5 overflow-hidden flex flex-col group origin-center transition-transform duration-300">
-<!-- Status Bar Simulation -->
-<div class="px-6 py-3 flex justify-between items-center text-[10px] font-bold text-white/40">
+<div class="flex-grow bg-surface-dim canvas-bg flex items-center justify-center p-4 lg:p-12 overflow-auto relative canvas-container" id="canvas-viewport">
+<div class="relative w-[390px] h-[844px] bg-slate-900 rounded-xl shadow-2xl border border-white/5 overflow-hidden flex flex-col group origin-center transition-transform duration-300" id="device-container">
+<div class="px-6 py-3 flex justify-between items-center text-[10px] font-bold text-white/40 pointer-events-none select-none">
 <span>9:41</span>
 <div class="flex gap-1.5">
 <span class="material-symbols-outlined text-[12px]" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
@@ -203,55 +216,47 @@
 <span class="material-symbols-outlined text-[12px]" data-icon="battery_full">battery_full</span>
 </div>
 </div>
-<!-- Canvas Content -->
-<div class="flex-grow flex flex-col p-6 space-y-6 overflow-hidden">
-<div class="aspect-square w-full rounded-lg overflow-hidden border border-white/10 bg-slate-800 shrink-0">
-<img alt="Abstract 3D Shape" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNHxPgr140pGhq3cvqyBylJhUMmm16tgM9QZsRbsSCzs668aiTNYc8HaV4WwL3Ethr_0AqDdxik-5m5ZymooCC1U4bbEAQo_GstULspNqyQkUXEkN_78SBwH0FZ4SLSXwBp0Nxot6c1VeIyX3eKM2talNSfBylGHczUttycF0Jlg9D1WU-gJjvH_bffCC-93_CPo4gjvUyjpbG7Uj-jvLQflvTbzWWHoc0Uu1NQc5o3wX8KNMCY6s85ijwEh4WyDIJiQL_v72v"/>
+<div class="flex-grow relative flex flex-col p-6 space-y-6 overflow-hidden" id="canvas-content">
+<div class="canvas-item aspect-square w-full rounded-lg overflow-hidden border border-white/10 bg-slate-800 shrink-0" data-id="image-1" id="item-image">
+<img alt="Abstract 3D Shape" class="w-full h-full object-cover pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNHxPgr140pGhq3cvqyBylJhUMmm16tgM9QZsRbsSCzs668aiTNYc8HaV4WwL3Ethr_0AqDdxik-5m5ZymooCC1U4bbEAQo_GstULspNqyQkUXEkN_78SBwH0FZ4SLSXwBp0Nxot6c1VeIyX3eKM2talNSfBylGHczUttycF0Jlg9D1WU-gJjvH_bffCC-93_CPo4gjvUyjpbG7Uj-jvLQflvTbzWWHoc0Uu1NQc5o3wX8KNMCY6s85ijwEh4WyDIJiQL_v72v"/>
 </div>
-<div class="space-y-4 overflow-y-auto no-scrollbar">
+<div class="canvas-item space-y-4 overflow-visible" data-id="text-1" id="item-text">
 <h1 class="font-h1 text-h1 text-on-surface text-lg sm:text-h1">Architecting Tomorrow’s Digital Landscapes</h1>
 <p class="font-body-main text-body-main text-on-surface-variant text-sm">Unleash the power of high-performance design systems. Precision, speed, and absolute control at your fingertips.</p>
 </div>
-<div class="pt-4 mt-auto">
+<div class="canvas-item pt-4 mt-auto" data-id="button-1" id="item-button">
 <button class="w-full py-3 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-opacity">
                         Get Started
                     </button>
 </div>
 </div>
-<!-- Selection Overlays -->
-<div class="absolute inset-0 border-2 border-primary/40 pointer-events-none rounded-xl"></div>
-<div class="absolute top-6 right-6 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-on-primary shadow-lg cursor-move pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity">
-<span class="material-symbols-outlined text-sm" data-icon="drag_indicator">drag_indicator</span>
+<div class="absolute inset-0 border-2 border-primary/20 pointer-events-none rounded-xl"></div>
 </div>
-</div>
-<!-- Floating Engine Logic Bar (Top Center) - Adaptive sizing -->
 <div class="absolute top-4 lg:top-8 left-1/2 -translate-x-1/2 bg-surface-container/90 backdrop-blur-md border border-white/10 rounded-full px-2 py-1.5 flex items-center gap-1 shadow-xl z-20 whitespace-nowrap">
 <div class="hidden xs:flex items-center gap-1 px-2 border-r border-white/10 mr-1">
 <span class="text-label-caps font-label-caps text-slate-500">ZOOM</span>
-<span class="text-body-mono font-body-mono text-primary px-1">75%</span>
+<span class="text-body-mono font-body-mono text-primary px-1" id="zoom-label">100%</span>
 </div>
-<button class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary transition-colors">
+<button class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary transition-colors" id="focal-mode-btn">
 <span class="material-symbols-outlined text-[18px]" data-icon="center_focus_weak">center_focus_weak</span>
 <span class="text-ui-small font-ui-small hidden sm:inline">Focal Mode</span>
 </button>
 <div class="w-px h-4 bg-white/10 mx-1"></div>
-<button class="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-white/5 text-slate-400 transition-colors">
+<button class="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-white/5 text-slate-400 transition-colors" id="ratio-btn">
 <span class="material-symbols-outlined text-[18px]" data-icon="aspect_ratio">aspect_ratio</span>
-<span class="text-ui-small font-ui-small">9:16</span>
+<span class="text-ui-small font-ui-small" id="ratio-label">9:16</span>
 </button>
 </div>
 </div>
-<!-- Properties Panel (Right Sidebar) -->
 <aside class="w-full lg:w-panel-width h-full bg-surface-container-low border-l border-white/10 flex flex-col shrink-0" id="properties-sidebar">
 <header class="h-10 border-b border-white/10 px-4 flex items-center justify-between bg-surface-container shrink-0">
 <span class="text-label-caps font-label-caps text-on-surface">Properties</span>
 <div class="flex gap-2">
-<button class="lg:hidden material-symbols-outlined text-slate-400 hover:text-white" data-icon="close" onclick="document.getElementById('properties-sidebar').classList.remove('open')">close</button>
+<button class="lg:hidden material-symbols-outlined text-slate-400 hover:text-white" data-icon="close" id="mobile-sidebar-close">close</button>
 <button class="hidden lg:block material-symbols-outlined text-slate-500 hover:text-slate-300" data-icon="close_fullscreen">close_fullscreen</button>
 </div>
 </header>
 <div class="flex-grow overflow-y-auto custom-scrollbar pb-20 lg:pb-0">
-<!-- Alignment Section -->
 <div class="p-4 border-b border-white/10">
 <span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Alignment</span>
 <div class="grid grid-cols-6 gap-1 bg-surface-container-lowest p-1 rounded-lg border border-white/5">
@@ -263,52 +268,49 @@
 <button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_vertical_bottom">align_vertical_bottom</span></button>
 </div>
 </div>
-<!-- Geometry Section -->
 <div class="p-4 border-b border-white/10">
 <span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Layout Geometry</span>
 <div class="grid grid-cols-2 gap-4">
 <div class="space-y-1.5">
 <label class="text-[10px] text-slate-500 font-bold">WIDTH</label>
 <div class="flex items-center bg-surface-container-lowest border border-white/5 rounded px-2 h-7">
-<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" type="text" value="390"/>
+<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" id="width-input" type="text" value="390"/>
 <span class="text-[10px] text-slate-600 ml-1">PX</span>
 </div>
 </div>
 <div class="space-y-1.5">
 <label class="text-[10px] text-slate-500 font-bold">HEIGHT</label>
 <div class="flex items-center bg-surface-container-lowest border border-white/5 rounded px-2 h-7">
-<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" type="text" value="844"/>
+<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" id="height-input" type="text" value="844"/>
 <span class="text-[10px] text-slate-600 ml-1">PX</span>
 </div>
 </div>
 </div>
 </div>
-<!-- Layout Engine Controls -->
 <div class="p-4 border-b border-white/10 space-y-4">
 <span class="text-label-caps font-label-caps text-slate-500 block uppercase">Engine Logic</span>
 <div class="flex justify-between items-center group">
 <span class="text-ui-small text-on-surface-variant">Auto-Responsive</span>
-<div class="w-8 h-4 bg-primary/20 rounded-full relative cursor-pointer border border-primary/30">
-<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-primary rounded-full"></div>
+<div class="toggle-switch w-8 h-4 bg-primary/20 rounded-full relative cursor-pointer border border-primary/30 transition-colors toggle-active" id="auto-responsive-toggle">
+<div class="toggle-knob absolute right-0.5 top-0.5 w-3 h-3 bg-primary rounded-full transition-transform" style="transform: translateX(0);"></div>
 </div>
 </div>
 <div class="flex justify-between items-center group">
 <span class="text-ui-small text-on-surface-variant">Focal Snap</span>
-<div class="w-8 h-4 bg-slate-800 rounded-full relative cursor-pointer border border-white/10">
-<div class="absolute left-0.5 top-0.5 w-3 h-3 bg-slate-500 rounded-full"></div>
+<div class="toggle-switch w-8 h-4 bg-slate-800 rounded-full relative cursor-pointer border border-white/10 transition-colors" id="focal-snap-toggle">
+<div class="toggle-knob absolute left-0.5 top-0.5 w-3 h-3 bg-slate-500 rounded-full transition-transform"></div>
 </div>
 </div>
 <div class="space-y-2">
 <span class="text-ui-small text-slate-500 font-bold block">RATIO PRESET</span>
-<div class="flex flex-wrap gap-2">
-<button class="px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface">1:1</button>
-<button class="px-2 py-1 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary">9:16</button>
-<button class="px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface">4:5</button>
-<button class="px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface">16:9</button>
+<div class="flex flex-wrap gap-2" id="ratio-presets">
+<button class="preset-btn px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface" data-ratio="1:1">1:1</button>
+<button class="preset-btn px-2 py-1 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary" data-ratio="9:16">9:16</button>
+<button class="preset-btn px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface" data-ratio="4:5">4:5</button>
+<button class="preset-btn px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface" data-ratio="16:9">16:9</button>
 </div>
 </div>
 </div>
-<!-- Appearance Section -->
 <div class="p-4">
 <span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Appearance</span>
 <div class="space-y-4">
@@ -326,19 +328,174 @@
 </div>
 </div>
 </div>
-<!-- Footer Action -->
 <div class="p-4 bg-surface-container border-t border-white/10 mt-auto shrink-0">
-<button class="w-full py-2 bg-secondary-container text-on-surface font-bold text-ui-small rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all">
+<button class="w-full py-2 bg-secondary-container text-on-surface font-bold text-ui-small rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all" id="generate-btn">
 <span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
                 Generate Layout
             </button>
 </div>
 </aside>
 </main>
-<!-- Context Menu Trigger -->
 <div class="fixed bottom-6 right-6 lg:right-[292px] flex flex-col gap-2 z-50">
 <div class="bg-primary shadow-lg shadow-primary/20 w-12 h-12 lg:w-10 lg:h-10 rounded-full flex items-center justify-center text-on-primary cursor-pointer hover:scale-110 active:scale-95 transition-all">
 <span class="material-symbols-outlined" data-icon="add">add</span>
 </div>
 </div>
+<script>
+    // --- State Management ---
+    const state = {
+        zoom: 1,
+        autoResponsive: true,
+        focalSnap: false,
+        activeRatio: '9:16',
+        deviceSize: { width: 390, height: 844 },
+        selectedItemId: null
+    };
+
+    // --- DOM Elements ---
+    const deviceContainer = document.getElementById('device-container');
+    const zoomLabel = document.getElementById('zoom-label');
+    const widthInput = document.getElementById('width-input');
+    const heightInput = document.getElementById('height-input');
+    const ratioLabel = document.getElementById('ratio-label');
+    const canvasViewport = document.getElementById('canvas-viewport');
+    const sidebar = document.getElementById('properties-sidebar');
+
+    // --- Core Logic: Focal Point Engine (Canvas Scaling) ---
+    function updateCanvasScaling() {
+        const viewportWidth = canvasViewport.clientWidth - 48; // Padding
+        const viewportHeight = canvasViewport.clientHeight - 48;
+        
+        const scaleX = viewportWidth / state.deviceSize.width;
+        const scaleY = viewportHeight / state.deviceSize.height;
+        const scale = Math.min(scaleX, scaleY, 1); // Max scale 100% for editor precision
+        
+        state.zoom = scale;
+        deviceContainer.style.transform = `scale(${scale})`;
+        zoomLabel.textContent = `${Math.round(scale * 100)}%`;
+    }
+
+    // --- UI Interactions ---
+    function toggleMobileSidebar() {
+        sidebar.classList.toggle('open');
+    }
+
+    // Toggles
+    function setupToggles() {
+        const autoToggle = document.getElementById('auto-responsive-toggle');
+        autoToggle.addEventListener('click', () => {
+            state.autoResponsive = !state.autoResponsive;
+            autoToggle.classList.toggle('toggle-active');
+            const knob = autoToggle.querySelector('.toggle-knob');
+            knob.style.transform = state.autoResponsive ? 'translateX(100%)' : 'translateX(0)';
+            knob.style.right = state.autoResponsive ? '2px' : 'auto';
+            knob.style.left = state.autoResponsive ? 'auto' : '2px';
+        });
+
+        const snapToggle = document.getElementById('focal-snap-toggle');
+        snapToggle.addEventListener('click', () => {
+            state.focalSnap = !state.focalSnap;
+            snapToggle.classList.toggle('toggle-active');
+            const knob = snapToggle.querySelector('.toggle-knob');
+            knob.style.transform = state.focalSnap ? 'translateX(100%)' : 'translateX(0)';
+            knob.style.right = state.focalSnap ? '2px' : 'auto';
+            knob.style.left = state.focalSnap ? 'auto' : '2px';
+            if (state.focalSnap) knob.classList.add('bg-primary');
+            else knob.classList.remove('bg-primary');
+        });
+    }
+
+    // Ratio Presets
+    function setupRatios() {
+        const presets = {
+            '1:1': [400, 400],
+            '9:16': [390, 844],
+            '4:5': [400, 500],
+            '16:9': [844, 475]
+        };
+
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const ratio = btn.dataset.ratio;
+                state.activeRatio = ratio;
+                const [w, h] = presets[ratio];
+                
+                state.deviceSize.width = w;
+                state.deviceSize.height = h;
+                
+                widthInput.value = w;
+                heightInput.value = h;
+                deviceContainer.style.width = `${w}px`;
+                deviceContainer.style.height = `${h}px`;
+                ratioLabel.textContent = ratio;
+                
+                // Highlight active preset
+                document.querySelectorAll('.preset-btn').forEach(b => {
+                    b.classList.remove('bg-primary/10', 'border-primary/30', 'text-primary');
+                    b.classList.add('bg-surface-container-highest', 'border-white/10', 'text-on-surface');
+                });
+                btn.classList.add('bg-primary/10', 'border-primary/30', 'text-primary');
+                btn.classList.remove('bg-surface-container-highest', 'border-white/10', 'text-on-surface');
+                
+                updateCanvasScaling();
+            });
+        });
+    }
+
+    // --- Interaction System: Selection & Simulated Drag ---
+    function setupInteractions() {
+        const items = document.querySelectorAll('.canvas-item');
+        
+        items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                items.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                state.selectedItemId = item.dataset.id;
+            });
+        });
+
+        canvasViewport.addEventListener('click', () => {
+            items.forEach(i => i.classList.remove('selected'));
+            state.selectedItemId = null;
+        });
+
+        // Basic Resize simulation via inputs
+        widthInput.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value) || 0;
+            state.deviceSize.width = val;
+            deviceContainer.style.width = `${val}px`;
+            updateCanvasScaling();
+        });
+
+        heightInput.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value) || 0;
+            state.deviceSize.height = val;
+            deviceContainer.style.height = `${val}px`;
+            updateCanvasScaling();
+        });
+    }
+
+    // --- Initialize ---
+    window.addEventListener('resize', updateCanvasScaling);
+    document.getElementById('mobile-sidebar-toggle').addEventListener('click', toggleMobileSidebar);
+    document.getElementById('mobile-sidebar-close').addEventListener('click', toggleMobileSidebar);
+    
+    document.getElementById('generate-btn').addEventListener('click', () => {
+        const btn = document.getElementById('generate-btn');
+        const icon = btn.querySelector('.material-symbols-outlined');
+        icon.textContent = 'refresh';
+        icon.classList.add('animate-spin');
+        setTimeout(() => {
+            icon.textContent = 'auto_awesome';
+            icon.classList.remove('animate-spin');
+        }, 1500);
+    });
+
+    setupToggles();
+    setupRatios();
+    setupInteractions();
+    updateCanvasScaling();
+
+</script>
 </body></html>
