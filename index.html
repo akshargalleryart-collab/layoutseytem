@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Forma — Poster Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@300;400;600;700;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/src/dom-to-image-more.min.js"></script>
@@ -31,10 +31,13 @@
 
 html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(--bg);color:var(--text);font-size:14px}
 
+/* iOS Safari: real viewport height (excludes browser chrome) */
+:root { --vh: 1vh; }
+
 /* ═══════════════════════════════
    APP SHELL
 ═══════════════════════════════ */
-#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100vh;height:calc(var(--vh,1vh)*100);overflow:hidden}
 
 /* TOP HEADER */
 #top-header{
@@ -80,7 +83,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
 .hbtn.accent-btn:hover{background:#6b5ce7}
 
 /* MAIN BODY */
-#main-body{display:flex;flex:1;overflow:hidden;position:relative}
+#main-body{display:flex;flex:1;overflow:hidden;position:relative;min-height:0}
 
 /* LEFT SIDEBAR */
 #sidebar{
@@ -98,6 +101,8 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
   flex:1;display:flex;flex-direction:column;
   overflow:hidden;background:#08080b;
   min-width:0;
+  /* Ensure canvas area doesn't overflow into bottom-nav on mobile */
+  min-height:0;
 }
 #canvas-toolbar{
   padding:8px 12px;
@@ -124,11 +129,21 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
   flex:1;overflow:auto;
   display:flex;align-items:center;justify-content:center;
   padding:24px;position:relative;
+  /* Critical for Safari: flex child must declare min-height */
+  min-height:0;
+  min-width:0;
+  /* Ensure viewport actually shows content */
+  -webkit-overflow-scrolling:touch;
 }
 #canvas-viewport::-webkit-scrollbar{width:4px;height:4px}
 #canvas-viewport::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
-#poster-wrap{transform-origin:top center;position:relative}
+#poster-wrap{
+  transform-origin:center center;
+  position:relative;
+  /* Kunci: wrap harus shrink ke 0 agar flex centering benar */
+  flex-shrink:0;
+}
 #poster{
   width:1080px;height:1350px;
   background:#fff;position:relative;overflow:hidden;
@@ -370,10 +385,14 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
 ═══════════════════════════════ */
 #bottom-nav{
   display:none;
-  height:var(--bottom-nav);
+  flex-shrink:0;
+  height:calc(var(--bottom-nav) + env(safe-area-inset-bottom, 0px));
+  min-height:var(--bottom-nav);
   background:var(--surface);
   border-top:1px solid var(--border);
-  flex-shrink:0;z-index:100;
+  z-index:150;
+  position:relative;
+  padding-bottom:env(safe-area-inset-bottom, 0px);
 }
 .bnav-items{
   display:flex;height:100%;
@@ -402,8 +421,8 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
   background:var(--surface);
   border-top:1px solid var(--border);
   border-radius:16px 16px 0 0;
-  max-height:75vh;display:flex;flex-direction:column;
-  transform:translateY(100%);
+  max-height:72vh;display:flex;flex-direction:column;
+  transform:translateY(calc(100% + 120px)); /* extra offset so it's truly offscreen */
   transition:transform .3s cubic-bezier(.4,0,.2,1);
   z-index:200;
   overflow:hidden;
@@ -465,11 +484,22 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(
     box-shadow:8px 0 32px rgba(0,0,0,.4);
   }
   #sidebar.open{transform:translateX(0)}
-  #bottom-nav{display:flex;flex-direction:column}
+  #bottom-nav{display:flex!important;flex-direction:column;flex-shrink:0;}
   #canvas-toolbar{padding:6px 10px;gap:4px}
   .tbtn-label{display:none}
-  #canvas-viewport{padding:16px}
+  #canvas-viewport{padding:10px}
   .hbtn.desktop-only{display:none!important}
+  /* Drawer sits above bottom nav */
+  .drawer{
+    bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom,0px));
+    max-height:calc(100vh - var(--header) - var(--bottom-nav) - 20px);
+  }
+  #drawer-overlay{
+    bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom,0px));
+    top:0;left:0;right:0;
+  }
+  /* Toast above bottom nav */
+  #toast{bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom,0px) + 12px)!important}
 }
 
 /* SMALL MOBILE */
@@ -1354,14 +1384,21 @@ function switchDrawerTab(name){
 let zoomTimer;
 function applyZoom(){
   const wrap=document.getElementById('poster-wrap');
+  const scaledW = Math.round(S.posterW * S.zoom);
+  const scaledH = Math.round(S.posterH * S.zoom);
   wrap.style.transform=`scale(${S.zoom})`;
+  // Set the element's layout size to the scaled size so flex centering works
   wrap.style.width=S.posterW+'px';
   wrap.style.height=S.posterH+'px';
+  // Use margin trick to account for the scale transform offset
+  const marginH = (scaledH - S.posterH) / 2;
+  const marginW = (scaledW - S.posterW) / 2;
+  wrap.style.margin = `${marginH}px ${marginW}px`;
   const pct=Math.round(S.zoom*100)+'%';
   document.getElementById('zoom-val').textContent=pct;
-  document.getElementById('zoom-val-canvas').textContent=pct;
+  if(document.getElementById('zoom-val-canvas'))
+    document.getElementById('zoom-val-canvas').textContent=pct;
 
-  // Show zoom pill
   const pill=document.getElementById('zoom-pill');
   pill.textContent=pct;
   pill.classList.add('show');
@@ -1373,10 +1410,14 @@ function zoom(delta){
   applyZoom();
 }
 function resetZoom(){
-  const vp=document.getElementById('canvas-viewport');
-  const avW=vp.clientWidth-48, avH=vp.clientHeight-48;
-  S.zoom=Math.min(avW/S.posterW, avH/S.posterH)*0.92;
-  applyZoom();
+  requestAnimationFrame(()=>{
+    const vp=document.getElementById('canvas-viewport');
+    const avW=vp.clientWidth-48, avH=vp.clientHeight-48;
+    if(avW<=0||avH<=0) return;
+    S.zoom=Math.min(avW/S.posterW, avH/S.posterH)*0.9;
+    S.zoom=Math.max(0.05,Math.min(3,S.zoom));
+    applyZoom();
+  });
 }
 
 // Pinch-to-zoom & wheel zoom
@@ -1638,13 +1679,43 @@ async function exportPDF(){
 }
 
 // ══════════════════════════════════════════════════════════
+// iOS VIEWPORT FIX
+// ══════════════════════════════════════════════════════════
+function setVh(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVh();
+window.addEventListener('resize',()=>{ setVh(); resetZoom(); });
+
+// ══════════════════════════════════════════════════════════
+// MOBILE LAYOUT - Force bottom nav JS-side (GitHub Pages fix)
+// ══════════════════════════════════════════════════════════
+function applyMobileLayout(){
+  const isMobile = window.innerWidth <= 768;
+  const bottomNav = document.getElementById('bottom-nav');
+  const rightPanel = document.getElementById('right-panel');
+  if(isMobile){
+    bottomNav.style.cssText='display:flex!important;flex-direction:column;flex-shrink:0;';
+    if(rightPanel) rightPanel.classList.remove('open');
+  } else {
+    bottomNav.style.cssText='display:none;';
+  }
+}
+window.addEventListener('resize', applyMobileLayout);
+
+// ══════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════
 buildFontGrid();
 buildLayoutGrid();
+applyMobileLayout();
 renderPoster();
-setTimeout(resetZoom,100);
-window.addEventListener('resize',()=>{ resetZoom(); });
+// Double rAF ensures layout paint complete before zoom calc
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  setVh();
+  resetZoom();
+}));
 </script>
 </body>
 </html>
