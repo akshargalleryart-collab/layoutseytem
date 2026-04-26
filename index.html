@@ -1,1413 +1,1241 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forma — Poster Studio</title>
+<script>
+window.tailwind={config:{theme:{extend:{fontFamily:{display:['Fraunces','serif'],ui:['DM Sans','sans-serif'],mono:['JetBrains Mono','monospace']}}}}};
+</script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/src/dom-to-image-more.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Unbounded:wght@300;400;600;700;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-<html lang="en" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Layout System Generator</title>
-  <script>
-    /* tailwind.config MUST be defined before the CDN script loads */
-    window.tailwind = window.tailwind || {};
-    window.tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            'display': ['Playfair Display', 'serif'],
-            'body':    ['DM Sans', 'sans-serif'],
-            'mono':    ['Space Mono', 'monospace']
-          }
-        }
-      }
-    };
-  </script>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@3.4.0/src/dom-to-image-more.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    html, body { height: 100%; margin: 0; }
-    .poster-canvas {
-      width: 1080px;
-      height: 1350px;
-      position: relative;
-      overflow: hidden;
-    }
-    .poster-wrapper {
-      transform-origin: top center;
-    }
-    .headline-bg {
-      position: absolute;
-      top: 50px;
-      left: 40px;
-      right: 40px;
-      z-index: 1;
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-size: 138px;
-      line-height: 0.9;
-      text-transform: uppercase;
-      letter-spacing: -4px;
-      word-break: break-word;
-      text-align: center;
-    }
-    .sub-headline {
-      position: absolute;
-      top: 360px;
-      left: 40px;
-      right: 40px;
-      z-index: 3;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 28px;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      text-align: center;
-    }
-    .hero-image-area {
-      position: absolute;
-      top: 490px;
-      left: 40px;
-      right: 40px;
-      height: 520px;
-      z-index: 2;
-      overflow: hidden;
-      border-radius: 16px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
-      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
-    }
-    .hero-image-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .hero-image-area::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(to bottom, transparent 0%, transparent 70%, rgba(255,255,255,1) 100%);
-      pointer-events: none;
-      z-index: 10;
-    }
-    .tagline-area {
-      position: absolute;
-      bottom: 50px;
-      left: 40px;
-      z-index: 3;
-      font-family: 'Space Mono', monospace;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      text-align: left;
-    }
-    .info-bar {
-      position: absolute;
-      top: 1080px;
-      left: 40px;
-      right: 40px;
-      z-index: 3;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      white-space: nowrap;
-    }
-    .info-bar .line {
-      flex: 1;
-      height: 1px;
-    }
-    .two-col-text {
-      position: absolute;
-      top: 1130px;
-      left: 40px;
-      right: 40px;
-      z-index: 3;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 50px;
-    }
-    .two-col-text .col-text {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      font-size: 17px;
-      line-height: 1.65;
-      letter-spacing: 0.2px;
-    }
-    .two-col-text .col-text:first-child {
-      text-align: left;
-    }
-    .two-col-text .col-text:last-child {
-      text-align: right;
-    }
-    .brand-area {
-      position: absolute;
-      bottom: 50px;
-      right: 40px;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .brand-area img {
-      height: 36px;
-      width: auto;
-    }
-    .framing-text {
-      position: absolute;
-      bottom: 50px;
-      right: 40px;
-      z-index: 3;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      opacity: 0.5;
-    }
-    /* Layout 2: 50-50 split with image on right */
-    .poster-canvas.layout-2 .headline-bg {
-      top: 750px;
-      left: 40px;
-      right: 50%;
-      font-size: 88px;
-      text-align: left;
-      z-index: 2;
-    }
-    .poster-canvas.layout-2 .hero-image-area {
-      position: absolute;
-      top: 40px;
-      right: 40px;
-      left: auto;
-      width: calc(50% - 60px);
-      height: 1270px;
-      border-radius: 12px;
-    }
-    .poster-canvas.layout-2 .sub-headline {
-      top: 950px;
-      left: 40px;
-      right: 50%;
-      font-size: 20px;
-      text-align: left;
-    }
-    .poster-canvas.layout-2 .tagline-area {
-      top: 40px;
-      bottom: auto;
-      left: 40px;
-      right: auto;
-      font-size: 12px;
-    }
-    .poster-canvas.layout-2 .info-bar {
-      top: auto;
-      bottom: 50px;
-      right: 40px;
-      left: auto;
-      width: auto;
-      max-width: none;
-      transform: none;
-      flex-direction: row;
-      align-items: center;
-      gap: 8px;
-    }
-    .poster-canvas.layout-2 .info-bar .line {
-      display: none;
-    }
-    .poster-canvas.layout-2 .two-col-text {
-      top: 1020px;
-      left: 40px;
-      right: 50%;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    .poster-canvas.layout-2 .two-col-text .col-text {
-      text-align: left;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    .poster-canvas.layout-2 .two-col-text .col-text:last-child {
-      text-align: left;
-    }
-    .poster-canvas.layout-2 .brand-area {
-      bottom: 40px;
-      right: auto;
-      left: 40px;
-      top: auto;
-    }
-    .poster-canvas.layout-2 .framing-text {
-      display: none;
-    }
-    /* Layout 3: Full-width image top, text bottom */
-    .poster-canvas.layout-3 .hero-image-area {
-      top: 20px;
-      left: 40px;
-      right: 40px;
-      height: 600px;
-    }
-    .poster-canvas.layout-3 .headline-bg {
-      top: 700px;
-      left: 40px;
-      right: 40px;
-      font-size: 120px;
-    }
-    .poster-canvas.layout-3 .sub-headline {
-      top: 970px;
-      left: 40px;
-      right: 40px;
-      font-size: 20px;
-    }
-    .poster-canvas.layout-3 .tagline-area {
-      bottom: 40px;
-      top: auto;
-      left: 40px;
-      font-size: 11px;
-    }
-    .poster-canvas.layout-3 .info-bar {
-      top: 650px;
-      left: 40px;
-      transform: none;
-      width: calc(100% - 80px);
-      max-width: none;
-    }
-    .poster-canvas.layout-3 .two-col-text {
-      top: 1060px;
-      left: 40px;
-      right: 40px;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    .poster-canvas.layout-3 .two-col-text .col-text {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-    .poster-canvas.layout-3 .brand-area {
-      bottom: 40px;
-      right: 40px;
-    }
-    .poster-canvas.layout-3 .framing-text {
-      display: none;
-    }
-    /* Layout 4: Diagonal split with image */
-    .poster-canvas.layout-4 .hero-image-area {
-      top: 40px;
-      left: 40px;
-      right: auto;
-      width: 45%;
-      height: 800px;
-      border-radius: 20px;
-    }
-    .poster-canvas.layout-4 .headline-bg {
-      top: 400px;
-      left: 55%;
-      right: 40px;
-      font-size: 96px;
-      text-align: left;
-      z-index: 2;
-    }
-    .poster-canvas.layout-4 .sub-headline {
-      top: 700px;
-      left: 55%;
-      right: 40px;
-      font-size: 18px;
-      text-align: left;
-    }
-    .poster-canvas.layout-4 .tagline-area {
-      top: 40px;
-      bottom: auto;
-      left: 55%;
-      font-size: 12px;
-    }
-    .poster-canvas.layout-4 .info-bar {
-      top: auto;
-      bottom: 300px;
-      left: 55%;
-      right: 40px;
-      width: auto;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .poster-canvas.layout-4 .info-bar .line {
-      display: none;
-    }
-    .poster-canvas.layout-4 .two-col-text {
-      top: 800px;
-      left: 55%;
-      right: 40px;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    .poster-canvas.layout-4 .two-col-text .col-text {
-      text-align: left;
-      font-size: 13px;
-      margin-bottom: 16px;
-    }
-    .poster-canvas.layout-4 .brand-area {
-      bottom: 40px;
-      right: 40px;
-    }
-    /* Layout 5: Image centered with text wrap */
-    .poster-canvas.layout-5 .hero-image-area {
-      top: 50px;
-      left: 50%;
-      right: auto;
-      width: 600px;
-      height: 500px;
-      border-radius: 24px;
-      margin-left: -300px;
-    }
-    .poster-canvas.layout-5 .headline-bg {
-      top: 590px;
-      left: 40px;
-      right: 40px;
-      font-size: 110px;
-      text-align: center;
-      z-index: 2;
-      line-height: 0.95;
-    }
-    .poster-canvas.layout-5 .sub-headline {
-      top: 827px;
-      left: 40px;
-      right: 40px;
-      font-size: 19px;
-      text-align: center;
-    }
-    .poster-canvas.layout-5 .tagline-area {
-      top: 20px;
-      bottom: auto;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px;
-      text-align: center;
-    }
-    .poster-canvas.layout-5 .info-bar {
-      top: 550px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: auto;
-      justify-content: center;
-      padding: 0;
-    }
-    .poster-canvas.layout-5 .two-col-text {
-      top: 888px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: 600px;
-      grid-template-columns: 1fr;
-      gap: 0;
-      padding: 0 40px;
-    }
-    .poster-canvas.layout-5 .two-col-text .col-text {
-      text-align: center;
-      font-size: 20px;
-      margin-bottom: 45px;
-      line-height: 1.6;
-      color: #4b5563;
-    }
-    .poster-canvas.layout-5 .two-col-text .col-text:last-child {
-      text-align: center;
-    }
-    .poster-canvas.layout-5 .brand-area {
-      bottom: 40px;
-      right: 40px;
-    }
-    /* Layout 6: Left and right images with center text overlay */
-    .poster-canvas.layout-6 .hero-image-area {
-      display: none;
-    }
-    .poster-canvas.layout-6 .hero-image-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .poster-canvas.layout-6 .hero-image-area::after {
-      display: none;
-    }
-    /* Layout 6: Center image - HIDDEN */
-    .poster-canvas.layout-6 .side-image-center {
-      display: none;
-    }
-    /* Layout 6: Left side image */
-    .poster-canvas.layout-6 .side-image-left {
-      position: absolute;
-      top: 40px;
-      left: 40px;
-      width: 30%;
-      height: 1270px;
-      object-fit: cover;
-      z-index: 1;
-      display: block;
-      opacity: 0.35;
-      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-      mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-    }
-    /* Layout 6: Right side image */
-    .poster-canvas.layout-6 .side-image-right {
-      position: absolute;
-      top: 40px;
-      right: 40px;
-      width: 30%;
-      height: 1270px;
-      object-fit: cover;
-      z-index: 1;
-      display: block;
-      opacity: 0.35;
-      -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-      mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-    }
-    .poster-canvas.layout-6 .sub-headline {
-      top: 400px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: 600px;
-      font-size: 20px;
-      text-align: center;
-      position: absolute;
-      z-index: 3;
-      margin-bottom: 0;
-    }
-    .poster-canvas.layout-6 .headline-bg {
-      top: 440px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: 600px;
-      font-size: 140px;
-      font-weight: 500;
-      line-height: 0.95;
-      text-align: center;
-      z-index: 2;
-      position: absolute;
-      word-break: break-word;
-    }
-    .poster-canvas.layout-6 .tagline-area {
-      top: 80px;
-      bottom: auto;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      font-size: 12px;
-      position: absolute;
-      z-index: 3;
-      text-align: center;
-    }
-    .poster-canvas.layout-6 .info-bar {
-      top: 880px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: 600px;
-      justify-content: center;
-      flex-direction: row;
-      position: absolute;
-      z-index: 3;
-    }
-    .poster-canvas.layout-6 .info-bar .line {
-      display: none;
-    }
-    .poster-canvas.layout-6 .two-col-text {
-      top: 950px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: 600px;
-      grid-template-columns: 1fr;
-      gap: 0;
-      position: absolute;
-      z-index: 3;
-    }
-    .poster-canvas.layout-6 .two-col-text .col-text {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    .poster-canvas.layout-6 .brand-area {
-      bottom: 40px;
-      right: 40px;
-      position: relative;
-      z-index: 3;
-    }
-    /* Layout 7: Center text with circular images - top right (small) and bottom left (large) */
-    .poster-canvas.layout-7 .hero-image-area {
-      display: none;
-    }
-    .poster-canvas.layout-7 .hero-image-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-    .poster-canvas.layout-7 .hero-image-area::after {
-      display: none;
-    }
-    /* Layout 7: Right image (smaller, top-right) */
-    .poster-canvas.layout-7 .side-image-right {
-      position: absolute;
-      top: 420px;
-      right: 40px;
-      width: 280px;
-      height: 280px;
-      object-fit: cover;
-      z-index: 1;
-      display: block;
-      opacity: 1;
-      border-radius: 50%;
-      mask-image: none;
-      -webkit-mask-image: none;
-    }
-    /* Layout 7: Left image (larger, bottom-left, aligned with right) */
-    .poster-canvas.layout-7 .side-image-left {
-      position: absolute;
-      bottom: 150px;
-      left: 40px;
-      width: 380px;
-      height: 380px;
-      object-fit: cover;
-      z-index: 1;
-      display: block;
-      opacity: 1;
-      border-radius: 50%;
-      mask-image: none;
-      -webkit-mask-image: none;
-    }
-    /* Layout 7: Hide center image */
-    .poster-canvas.layout-7 .side-image-center {
-      display: none;
-    }
-    .poster-canvas.layout-7 .sub-headline {
-      top: 645px;
-      left: 40px;
-      transform: none;
-      right: auto;
-      width: 500px;
-      font-size: 28px;
-      text-align: left;
-      position: absolute;
-      z-index: 3;
-      margin-bottom: 0;
-    }
-    .poster-canvas.layout-7 .headline-bg {
-      top: 80px;
-      left: 40px;
-      transform: none;
-      right: 220px;
-      width: auto;
-      font-size: 160px;
-      font-weight: 500;
-      line-height: 1.1;
-      text-align: left;
-      z-index: 2;
-      position: absolute;
-      word-break: break-word;
-      max-height: 528px;
-      overflow: hidden;
-      word-spacing: 9999px;
-    }
-    .poster-canvas.layout-7 .tagline-area {
-      top: 60px;
-      bottom: auto;
-      left: 40px;
-      transform: none;
-      right: auto;
-      font-size: 13.2px;
-      position: absolute;
-      z-index: 3;
-      text-align: left;
-    }
-    .poster-canvas.layout-7 .info-bar {
-      top: auto;
-      bottom: 50px;
-      left: 40px;
-      transform: none;
-      right: auto;
-      width: auto;
-      justify-content: flex-start;
-      flex-direction: row;
-      position: absolute;
-      z-index: 3;
-    }
-    .poster-canvas.layout-7 .info-bar .line {
-      display: none;
-    }
-    .poster-canvas.layout-7 .two-col-text {
-      top: auto;
-      bottom: 120px;
-      left: auto;
-      transform: none;
-      right: 40px;
-      width: 420px;
-      grid-template-columns: 1fr;
-      gap: 0;
-      position: absolute;
-      z-index: 3;
-    }
-    .poster-canvas.layout-7 .two-col-text .col-text {
-      text-align: right;
-      font-size: 22.1px;
-      margin-bottom: 20px;
-      line-height: 1.7;
-    }
-    .poster-canvas.layout-7 .brand-area {
-      bottom: 40px;
-      right: 40px;
-      position: relative;
-      z-index: 3;
-    }
-    /* Layout 7: Top right horizontal line */
-    .poster-canvas.layout-7 .top-right-line {
-      position: absolute;
-      top: 60px;
-      right: 40px;
-      width: 120px;
-      height: 2px;
-      background: #374151;
-      z-index: 3;
-    }
-    /* Layout 8: Right image, left text stacked */
-    .poster-canvas.layout-8 .hero-image-area {
-      top: 150px;
-      left: 340px;
-      right: auto;
-      width: 744px;
-      height: 432px;
-      border-radius: 0px;
-    }
-    /* Layout 8: Bottom anchor line */
-    .poster-canvas.layout-8 .layout-8-anchor-line {
-      position: absolute;
-      top: 1230px;
-      left: 100px;
-      width: 680px;
-      height: 10px;
-      z-index: 3;
-    }
-    .poster-canvas.layout-8 .headline-bg {
-      top: 567.5px;
-      left: 100px;
-      right: auto;
-      width: 780px;
-      height: auto;
-      font-size: 149.5px;
-      font-weight: 700;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      text-align: left;
-      z-index: 2;
-      word-break: break-word;
-      overflow: visible;
-      white-space: normal;
-      word-spacing: 9999px;
-      display: flex;
-      align-items: flex-end;
-    }
-    .poster-canvas.layout-8 .sub-headline {
-      top: 1029px;
-      left: 100px;
-      right: auto;
-      width: 600px;
-      height: 60px;
-      font-size: 26px;
-      font-weight: 500;
-      line-height: 1.2;
-      text-align: left;
-    }
-    .poster-canvas.layout-8 .tagline-area {
-      top: 60px;
-      bottom: auto;
-      left: 40px;
-      font-size: 33px;
-      font-weight: 400;
-      max-width: 400px;
-      line-height: 1.3;
-    }
-    .poster-canvas.layout-8 .info-bar {
-      top: 1180px;
-      left: 100px;
-      right: auto;
-      width: 780px;
-      height: auto;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 21px;
-      font-weight: 500;
-      max-width: none;
-      padding: 0;
-      border: none;
-      border-bottom: none !important;
-      padding-bottom: 24px;
-      position: relative;
-    }
-    .poster-canvas.layout-8 .info-bar::after {
-      display: none;
-    }
-    .poster-canvas.layout-8 .info-bar::before {
-      display: none;
-    }
-    .poster-canvas.layout-8 .info-bar .line {
-      display: none;
-    }
-    .poster-canvas.layout-8 .two-col-text {
-      top: auto;
-      bottom: 310px;
-      left: auto;
-      right: 40px;
-      width: 200px;
-      height: 180px;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    .poster-canvas.layout-8 .two-col-text .col-text {
-      text-align: right;
-      font-size: 13px;
-      font-weight: 300;
-      margin-bottom: 20px;
-    }
-    .poster-canvas.layout-8 .brand-area {
-      bottom: 40px;
-      left: 40px;
-      right: auto;
-    }
-    /* Layout 9: Image bottom, text top */
-    .poster-canvas.layout-9 .hero-image-area {
-      top: auto;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 900px;
-      border-radius: 0;
-      mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-    }
-    .poster-canvas.layout-9 .hero-image-area::after {
-      display: none;
-    }
-    .poster-canvas.layout-9 .headline-bg {
-      top: 167.5px;
-      left: 40px;
-      right: 40px;
-      width: calc(100% - 80px);
-      font-size: 99.2px;
-      font-weight: 500;
-      text-align: center;
-      z-index: 2;
-      word-spacing: normal;
-      line-height: 1.1;
-      max-height: none;
-      overflow: visible;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    .poster-canvas.layout-9 .sub-headline {
-      top: 386px;
-      left: 40px;
-      right: 40px;
-      font-size: 19px;
-      text-align: center;
-    }
-    .poster-canvas.layout-9 .tagline-area {
-      top: 40px;
-      bottom: auto;
-      left: 40px;
-      transform: none;
-      font-size: 11px;
-      text-align: left;
-    }
-    .poster-canvas.layout-9 .info-bar {
-      top: 145px;
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: auto;
-      justify-content: center;
-    }
-    .poster-canvas.layout-9 .two-col-text {
-      top: 470px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-    .poster-canvas.layout-9 .two-col-text .col-text {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-    .poster-canvas.layout-9 .brand-area {
-      top: 50px;
-      bottom: auto;
-      right: 40px;
-    }
-    #posterWrapper {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      position: relative;
-    }
-    .swipe-indicator {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      opacity: 0.4;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-    }
-    .swipe-indicator.left {
-      left: 12px;
-    }
-    .swipe-indicator.right {
-      right: 12px;
-    }
-    #posterWrapper:hover .swipe-indicator {
-      opacity: 0.7;
-    }
-    .swipe-indicator i {
-      width: 32px;
-      height: 32px;
-      color: #9ca3af;
-    }
-    .drop-zone {
-      border: 2px dashed #e5e7eb;
-      transition: all 0.2s;
-      cursor: pointer;
-      background: #f9fafb;
-    }
-    .drop-zone:hover {
-      border-color: #d1d5db;
-      background: #f3f4f6;
-    }
-    input[type="text"], textarea {
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      transition: border-color 0.2s;
-    }
-    input[type="text"]:focus, textarea:focus {
-      border-color: #9ca3af;
-      outline: none;
-      background: #f9fafb;
-    }
-    input[type="color"] {
-      -webkit-appearance: none;
-      border: none;
-      cursor: pointer;
-      background: transparent;
-    }
-    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-    input[type="color"]::-webkit-color-swatch { border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; }
-  </style>
-  <style>body { box-sizing: border-box; }</style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ui-bg:#0f0f11;
+  --ui-surface:#18181c;
+  --ui-border:#2a2a30;
+  --ui-border2:#3a3a42;
+  --ui-text:#e8e8f0;
+  --ui-muted:#7a7a8c;
+  --ui-accent:#6c63ff;
+  --ui-accent2:#ff6b6b;
+  --panel-w:320px;
+}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--ui-bg);color:var(--ui-text)}
 
- </head>
- <body class="h-full bg-neutral-50 text-neutral-900 font-body overflow-auto">
-  <div id="app" class="w-full min-h-full"><!-- Header -->
-   <div class="px-6 py-5 border-b border-neutral-200 flex items-center justify-between">
-    <div>
-     <p class="text-neutral-400 text-[10px] font-mono tracking-wider mb-2">By Akshardesign.id</p>
-     <h1 id="app-title" class="font-display text-xl font-bold tracking-tight text-neutral-900">Layout System</h1>
-     <p class="text-neutral-400 text-[10px] font-mono mt-1 tracking-wider uppercase whitespace-nowrap">Fixed Composition System</p>
-    </div>
-   </div><!-- Input Fields -->
-   <div class="px-6 py-6 border-b border-white/5">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-[1200px] mx-auto">
-     <div class="col-span-full"><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Judul (Headline)</label> <input type="text" id="inp_judul" value="BEYOND THE EDGE" class="w-full px-3 py-2 rounded-lg text-xs text-neutral-900 bg-white border border-neutral-300">
-     </div>
-     <div class="col-span-full"><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Sub Judul</label> <input type="text" id="inp_sub_judul" value="Exploring the invisible boundaries of modern creative culture" class="w-full px-3 py-2 rounded-lg text-xs text-neutral-900 bg-white border border-neutral-300">
-     </div>
-     <div class="col-span-full"><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Deskripsi 1</label> <textarea id="inp_desc1" rows="2" class="w-full px-3 py-2 rounded-lg text-xs text-neutral-900 bg-white border border-neutral-300 resize-none">A visual essay on the tension between minimalism and expression. We strip away the unnecessary to reveal what truly matters in design.</textarea>
-     </div>
-     <div class="col-span-full"><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Deskripsi 2</label> <textarea id="inp_desc2" rows="2" class="w-full px-3 py-2 rounded-lg text-xs text-neutral-900 bg-white border border-neutral-300 resize-none">Through careful composition and deliberate restraint, each element finds its purpose. Nothing is accidental — every pixel is intentional.</textarea>
-     </div>
-     <div><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Info Tambahan</label> <input type="text" id="inp_info" value="VOL. 03 — 2025 EDITION" class="w-full px-3 py-2 rounded-lg text-xs text-neutral-900 bg-white border border-neutral-300">
-     </div>
-     <div><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Tagline</label> <input type="text" id="inp_tagline" value="FORM FOLLOWS FEELING" class="w-full px-3 py-2 rounded-lg text-xs text-neutral-900 bg-white border border-neutral-300">
-     </div>
-     <div><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Theme Color</label>
-      <div class="flex items-center gap-2"><input type="color" id="inp_color" value="#C8553D" class="w-8 h-8 rounded-lg"> <span id="color_label" class="text-[10px] font-mono text-neutral-500">#C8553D</span>
-      </div>
-     </div>
-     <div><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Visual Hook</label>
-      <div id="drop_visual" class="drop-zone rounded-lg h-14 flex items-center justify-center gap-2 text-neutral-400 text-[10px] font-mono"><i data-lucide="image" style="width:12px;height:12px"></i> <span id="visual_label">Click to upload</span>
-      </div><input type="file" id="file_visual" accept="image/*" class="hidden">
-     </div>
-     <div><label class="block text-[9px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Brand Logo</label>
-      <div id="drop_logo" class="drop-zone rounded-lg h-14 flex items-center justify-center gap-2 text-neutral-400 text-[10px] font-mono"><i data-lucide="shapes" style="width:12px;height:12px"></i> <span id="logo_label">Click to upload</span>
-      </div><input type="file" id="file_logo" accept="image/*" class="hidden">
-     </div>
-    </div>
-   </div><!-- Layout Selector -->
-   <div class="px-6 py-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
-    <div class="flex items-center gap-3">
-     <button id="prevBtn" class="p-2 rounded-lg border border-neutral-300 hover:bg-neutral-100 transition-colors"><i data-lucide="chevron-left" style="width:16px;height:16px;"></i></button>
-     <div class="text-center min-w-20">
-      <p id="layoutIndicator" class="text-[12px] font-semibold text-neutral-900">Layout 1</p>
-      <p class="text-[10px] text-neutral-400 font-mono">1 / 9</p>
-     </div><button id="nextBtn" class="p-2 rounded-lg border border-neutral-300 hover:bg-neutral-100 transition-colors"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i></button>
-    </div><button id="downloadPdfBtn" class="px-4 py-2 rounded-lg bg-neutral-900 text-white text-xs font-semibold hover:bg-neutral-800 transition-colors flex items-center gap-2"><i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG</button>
-   </div><!-- Live Preview -->
-   <div class="py-10 flex justify-center">
-    <div class="poster-wrapper" id="posterWrapper">
-     <div class="poster-canvas rounded-2xl shadow-2xl" id="posterCanvas" style="background:#FFFFFF;"><!-- Headline BG -->
-      <div class="headline-bg" id="p_headline" style="color:#C8553D;">
-       BEYOND THE EDGE
-      </div><!-- Hero Image -->
-      <div class="hero-image-area" id="p_hero">
-       <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);" id="p_hero_placeholder">
-        <div class="text-center text-neutral-300"><i data-lucide="image" style="width:48px;height:48px;margin:0 auto;display:block"></i>
-         <p class="text-xs font-mono mt-3 tracking-wider uppercase">Upload Visual Hook</p>
-        </div>
-       </div>
-      </div><!-- Side Images for Layout 6 --> <img id="p_side_image_left" class="side-image-left" style="display:none;" alt="Side Image Left"> <img id="p_side_image_center" class="side-image-center" style="display:none;" alt="Center Image"> <img id="p_side_image_right" class="side-image-right" style="display:none;" alt="Side Image Right"> <!-- Sub Headline -->
-      <div class="sub-headline" id="p_sub" style="color:#1f2937;">
-       Exploring the invisible boundaries of modern creative culture
-      </div><!-- Tagline -->
-      <div class="tagline-area" id="p_tagline" style="color:#C8553D;">
-       FORM FOLLOWS FEELING
-      </div><!-- Info Bar -->
-      <div class="info-bar" id="p_info_bar"><span style="color:#1f2937;" id="p_info">VOL. 03 — 2025 EDITION</span>
-       <div class="line" id="p_info_line" style="background:#e5e7eb;"></div>
-      </div><!-- Two Column Text -->
-      <div class="two-col-text">
-       <div class="col-text" id="p_desc1" style="color:#374151;">
-        A visual essay on the tension between minimalism and expression. We strip away the unnecessary to reveal what truly matters in design.
-       </div>
-       <div class="col-text" id="p_desc2" style="color:#374151;">
-        Through careful composition and deliberate restraint, each element finds its purpose. Nothing is accidental — every pixel is intentional.
-       </div>
-      </div><!-- Brand Area -->
-      <div class="brand-area" id="p_brand">
-       <div id="p_logo_placeholder" class="w-9 h-9 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.08);"><i data-lucide="hexagon" style="width:18px;height:18px;color:rgba(255,255,255,0.25)"></i>
-       </div>
-      </div><!-- Layout 7: Top right line -->
-      <div class="top-right-line"></div><!-- Layout 8: Bottom anchor line -->
-      <div class="layout-8-anchor-line" id="p_layout8_line"></div>
-     </div>
-     <div class="swipe-indicator right"><i data-lucide="chevron-right"></i>
-     </div>
-    </div>
-   </div>
+/* ── Layout ── */
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:var(--panel-w);min-width:var(--panel-w);background:var(--ui-surface);border-right:1px solid var(--ui-border);display:flex;flex-direction:column;overflow:hidden;z-index:10}
+#canvas-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#0a0a0c}
+#right-panel{width:var(--panel-w);min-width:var(--panel-w);background:var(--ui-surface);border-left:1px solid var(--ui-border);display:flex;flex-direction:column;overflow:hidden;z-index:10}
+
+/* ── Sidebar ── */
+#sidebar-header{padding:16px;border-bottom:1px solid var(--ui-border);flex-shrink:0}
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#6c63ff,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-sub{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+
+#layout-search{padding:12px;border-bottom:1px solid var(--ui-border);flex-shrink:0}
+#layout-search input{width:100%;background:#0f0f11;border:1px solid var(--ui-border2);border-radius:8px;padding:8px 12px;color:var(--ui-text);font-size:12px;outline:none}
+#layout-search input:focus{border-color:var(--ui-accent)}
+#layout-search input::placeholder{color:var(--ui-muted)}
+
+#layout-grid{flex:1;overflow-y:auto;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#layout-grid::-webkit-scrollbar{width:4px}
+#layout-grid::-webkit-scrollbar-track{background:transparent}
+#layout-grid::-webkit-scrollbar-thumb{background:var(--ui-border2);border-radius:4px}
+
+.layout-thumb{aspect-ratio:4/5;background:#0f0f11;border:1.5px solid var(--ui-border);border-radius:10px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s;display:flex;flex-direction:column}
+.layout-thumb:hover{border-color:var(--ui-accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,99,255,.2)}
+.layout-thumb.active{border-color:var(--ui-accent);box-shadow:0 0 0 2px rgba(108,99,255,.3)}
+.layout-thumb-preview{flex:1;padding:6px;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden}
+.layout-thumb-label{padding:4px 8px;font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);border-top:1px solid var(--ui-border);text-transform:uppercase;letter-spacing:1px;background:#0f0f11}
+.layout-thumb.active .layout-thumb-label{color:var(--ui-accent)}
+
+/* Thumb preview elements */
+.tp-img{background:linear-gradient(135deg,#2a2a35,#1a1a22);border-radius:4px;flex-shrink:0}
+.tp-line{background:var(--ui-border2);border-radius:2px;height:4px}
+.tp-line.accent{background:linear-gradient(90deg,#6c63ff,#ff6b6b);height:3px}
+.tp-line.thick{height:10px;border-radius:3px}
+.tp-circle{background:linear-gradient(135deg,#2a2a35,#1a1a22);border-radius:50%;flex-shrink:0}
+.tp-split{display:flex;gap:3px;flex:1}
+.tp-col{flex:1;background:linear-gradient(135deg,#2a2a35,#1a1a22);border-radius:3px}
+.tp-rows{display:flex;flex-direction:column;gap:3px;flex:1}
+
+/* ── Canvas ── */
+#canvas-toolbar{padding:10px 16px;border-bottom:1px solid var(--ui-border);display:flex;align-items:center;justify-content:between;gap:8px;flex-shrink:0;background:var(--ui-surface)}
+.toolbar-btn{padding:6px 12px;background:#0f0f11;border:1px solid var(--ui-border);border-radius:7px;color:var(--ui-text);font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.toolbar-btn:hover{border-color:var(--ui-border2);background:#16161a}
+.toolbar-btn.primary{background:var(--ui-accent);border-color:var(--ui-accent);color:#fff;font-weight:600}
+.toolbar-btn.primary:hover{background:#5b53ee}
+.toolbar-btn.danger{background:#ff6b6b22;border-color:#ff6b6b44;color:#ff6b6b}
+.toolbar-btn svg{width:13px;height:13px}
+#zoom-display{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);padding:0 8px;min-width:48px;text-align:center}
+
+#canvas-viewport{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:40px;position:relative}
+#canvas-viewport::-webkit-scrollbar{width:6px;height:6px}
+#canvas-viewport::-webkit-scrollbar-track{background:transparent}
+#canvas-viewport::-webkit-scrollbar-thumb{background:var(--ui-border2);border-radius:3px}
+
+#poster-wrap{position:relative;transform-origin:center center}
+#poster{width:1080px;height:1350px;background:#fff;position:relative;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6)}
+
+/* ── Right Panel ── */
+#right-panel-header{padding:14px 16px;border-bottom:1px solid var(--ui-border);flex-shrink:0;display:flex;align-items:center;justify-content:between;gap:8px}
+.panel-title{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);text-transform:uppercase;letter-spacing:2px}
+
+#panel-tabs{display:flex;padding:0 12px;border-bottom:1px solid var(--ui-border);flex-shrink:0;gap:0}
+.ptab{padding:10px 14px;font-size:11px;color:var(--ui-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;font-weight:500}
+.ptab:hover{color:var(--ui-text)}
+.ptab.active{color:var(--ui-accent);border-bottom-color:var(--ui-accent)}
+
+#panel-content{flex:1;overflow-y:auto;padding:16px}
+#panel-content::-webkit-scrollbar{width:4px}
+#panel-content::-webkit-scrollbar-track{background:transparent}
+#panel-content::-webkit-scrollbar-thumb{background:var(--ui-border2);border-radius:4px}
+
+/* ── Form Controls ── */
+.section{margin-bottom:20px}
+.section-label{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block}
+.ctrl-input{width:100%;background:#0f0f11;border:1px solid var(--ui-border);border-radius:8px;padding:9px 12px;color:var(--ui-text);font-size:12px;outline:none;transition:border .15s;font-family:'DM Sans',sans-serif;resize:vertical}
+.ctrl-input:focus{border-color:var(--ui-accent)}
+.ctrl-input::placeholder{color:var(--ui-muted)}
+
+.ctrl-select{width:100%;background:#0f0f11;border:1px solid var(--ui-border);border-radius:8px;padding:9px 12px;color:var(--ui-text);font-size:12px;outline:none;cursor:pointer;font-family:'DM Sans',sans-serif;appearance:none}
+.ctrl-select:focus{border-color:var(--ui-accent)}
+
+.ctrl-row{display:flex;gap:8px;align-items:center}
+.ctrl-row .ctrl-input{flex:1}
+
+.color-swatch{width:36px;height:36px;border-radius:8px;border:1px solid var(--ui-border);cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
+.color-swatch input[type=color]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.color-swatch-preview{position:absolute;inset:0;border-radius:7px}
+
+.slider-wrap{display:flex;align-items:center;gap:10px}
+.ctrl-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--ui-border2);outline:none;cursor:pointer}
+.ctrl-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ui-accent);cursor:pointer;border:2px solid var(--ui-bg)}
+.slider-val{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);min-width:28px;text-align:right}
+
+.upload-zone{border:1.5px dashed var(--ui-border2);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:#0f0f11}
+.upload-zone:hover{border-color:var(--ui-accent);background:rgba(108,99,255,.05)}
+.upload-zone-icon{color:var(--ui-muted);margin:0 auto 8px;display:block}
+.upload-zone-text{font-size:11px;color:var(--ui-muted)}
+.upload-zone-sub{font-size:9px;color:var(--ui-border2);margin-top:3px;font-family:'JetBrains Mono',monospace}
+.upload-thumb{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;display:block;margin-top:8px;border:1px solid var(--ui-border)}
+
+/* Gradient builder */
+.grad-stops{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.grad-stop{display:flex;align-items:center;gap:8px}
+.grad-stop .color-swatch{width:28px;height:28px;border-radius:6px}
+.grad-stop-pos{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);min-width:32px}
+.grad-preview{height:36px;border-radius:8px;border:1px solid var(--ui-border);margin-top:8px;transition:background .3s}
+.grad-dir{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+.grad-dir-btn{padding:6px;background:#0f0f11;border:1px solid var(--ui-border);border-radius:6px;cursor:pointer;text-align:center;font-size:9px;color:var(--ui-muted);transition:all .15s;font-family:'JetBrains Mono',monospace}
+.grad-dir-btn:hover,.grad-dir-btn.active{border-color:var(--ui-accent);color:var(--ui-accent)}
+
+/* Font picker */
+.font-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.font-pill{padding:8px 10px;background:#0f0f11;border:1px solid var(--ui-border);border-radius:8px;cursor:pointer;transition:all .15s;text-align:center}
+.font-pill:hover{border-color:var(--ui-border2)}
+.font-pill.active{border-color:var(--ui-accent);background:rgba(108,99,255,.08)}
+.font-pill-name{font-size:13px;line-height:1.2}
+.font-pill-label{font-size:8px;color:var(--ui-muted);font-family:'JetBrains Mono',monospace;margin-top:2px;letter-spacing:1px}
+
+/* Export */
+.export-btn{width:100%;padding:12px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;border:none;margin-bottom:8px}
+.export-png{background:linear-gradient(135deg,#6c63ff,#8b83ff);color:#fff}
+.export-png:hover{background:linear-gradient(135deg,#5b53ee,#7a72ee)}
+.export-pdf{background:linear-gradient(135deg,#ff6b6b,#ff8e8e);color:#fff}
+.export-pdf:hover{background:linear-gradient(135deg,#ee5a5a,#ee7d7d)}
+.export-btn svg{width:15px;height:15px}
+.export-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.size-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.size-chip{padding:5px 10px;background:#0f0f11;border:1px solid var(--ui-border);border-radius:6px;font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;color:var(--ui-muted);transition:all .15s}
+.size-chip:hover{border-color:var(--ui-border2);color:var(--ui-text)}
+.size-chip.active{border-color:var(--ui-accent);color:var(--ui-accent)}
+
+/* ── Poster CSS ── */
+.poster-element{position:absolute}
+.p-headline{font-family:'Fraunces',serif;font-weight:900;font-size:138px;line-height:.9;letter-spacing:-4px;text-transform:uppercase;word-break:break-word;z-index:2}
+.p-sub{font-family:'DM Sans',sans-serif;font-weight:600;font-size:28px;line-height:1.25;z-index:3}
+.p-tagline{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:3px;z-index:3}
+.p-desc{font-family:'DM Sans',sans-serif;font-weight:300;font-size:17px;line-height:1.65;z-index:3}
+.p-info{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:2px;z-index:3}
+.p-img{overflow:hidden;z-index:2}
+.p-img img{width:100%;height:100%;object-fit:cover;display:block}
+.p-overlay{position:absolute;inset:0;pointer-events:none;z-index:5}
+.p-logo img{height:40px;width:auto;display:block}
+.p-divider{z-index:3}
+.p-number{font-family:'Fraunces',serif;font-weight:900;line-height:1;z-index:1;opacity:.08;pointer-events:none}
+.p-badge{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:2px;z-index:3}
+
+/* Fade overlays */
+.fade-bottom{-webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 60%,transparent 100%)}
+.fade-top{-webkit-mask-image:linear-gradient(to top,#000 60%,transparent 100%);mask-image:linear-gradient(to top,#000 60%,transparent 100%)}
+.fade-right{-webkit-mask-image:linear-gradient(to right,#000 50%,transparent 100%);mask-image:linear-gradient(to right,#000 50%,transparent 100%)}
+.fade-left{-webkit-mask-image:linear-gradient(to left,#000 50%,transparent 100%);mask-image:linear-gradient(to left,#000 50%,transparent 100%)}
+
+/* ── Misc UI ── */
+.divider{height:1px;background:var(--ui-border);margin:12px 0}
+.tag{display:inline-flex;align-items:center;padding:2px 7px;background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.2);border-radius:4px;font-size:9px;font-family:'JetBrains Mono',monospace;color:#9b94ff;letter-spacing:1px;text-transform:uppercase}
+.hint{font-size:10px;color:var(--ui-muted);font-family:'JetBrains Mono',monospace;margin-top:4px}
+
+/* Scrollbar thin */
+.thin-scroll::-webkit-scrollbar{width:3px}
+.thin-scroll::-webkit-scrollbar-thumb{background:var(--ui-border2);border-radius:2px}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══ SIDEBAR: Layout Gallery ══ -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <div class="logo">Forma</div>
+    <div class="logo-sub">Poster Studio</div>
   </div>
-  <script>
-    // --- Element SDK (optional) ---
-    if (window.elementSdk) {
-      const defaultConfig = {
-        app_title: 'Poster Layout System'
-      };
+  <div id="layout-search">
+    <input type="text" id="search-input" placeholder="Search layouts…" oninput="filterLayouts(this.value)">
+  </div>
+  <div id="layout-grid"></div>
+</div>
 
-```
-  window.elementSdk.init({
-    defaultConfig,
-    onConfigChange: async (config) => {
-      const t = document.getElementById('app-title');
-      if (t) t.textContent = config.app_title || defaultConfig.app_title;
-    },
-    mapToCapabilities: (config) => ({
-      recolorables: [],
-      borderables: [],
-      fontEditable: undefined,
-      fontSizeable: undefined
-    }),
-    mapToEditPanelValues: (config) => new Map([
-      ['app_title', config.app_title || defaultConfig.app_title]
-    ])
+<!-- ══ CANVAS AREA ══ -->
+<div id="canvas-area">
+  <div id="canvas-toolbar">
+    <div style="display:flex;align-items:center;gap:8px;flex:1">
+      <button class="toolbar-btn" onclick="zoom(-0.1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+      <span id="zoom-display">50%</span>
+      <button class="toolbar-btn" onclick="zoom(0.1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+      <button class="toolbar-btn" onclick="resetZoom()">Fit</button>
+      <div style="flex:1"></div>
+      <span id="layout-badge" class="tag">Layout 1</span>
+    </div>
+  </div>
+  <div id="canvas-viewport">
+    <div id="poster-wrap">
+      <div id="poster"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RIGHT PANEL ══ -->
+<div id="right-panel">
+  <div id="right-panel-header">
+    <span class="panel-title">Properties</span>
+  </div>
+  <div id="panel-tabs">
+    <div class="ptab active" onclick="switchTab('text')">Text</div>
+    <div class="ptab" onclick="switchTab('design')">Design</div>
+    <div class="ptab" onclick="switchTab('media')">Media</div>
+    <div class="ptab" onclick="switchTab('export')">Export</div>
+  </div>
+  <div id="panel-content" class="thin-scroll">
+
+    <!-- TEXT TAB -->
+    <div id="tab-text">
+      <div class="section">
+        <span class="section-label">Headline</span>
+        <textarea class="ctrl-input" id="inp-headline" rows="2" oninput="updatePoster()">BEYOND THE EDGE</textarea>
+      </div>
+      <div class="section">
+        <span class="section-label">Sub Headline</span>
+        <textarea class="ctrl-input" id="inp-sub" rows="2" oninput="updatePoster()">Exploring the invisible boundaries of modern creative culture</textarea>
+      </div>
+      <div class="section">
+        <span class="section-label">Tagline</span>
+        <input class="ctrl-input" id="inp-tagline" type="text" value="FORM FOLLOWS FEELING" oninput="updatePoster()">
+      </div>
+      <div class="section">
+        <span class="section-label">Info / Edition</span>
+        <input class="ctrl-input" id="inp-info" type="text" value="VOL. 03 — 2025" oninput="updatePoster()">
+      </div>
+      <div class="section">
+        <span class="section-label">Description</span>
+        <textarea class="ctrl-input" id="inp-desc1" rows="3" oninput="updatePoster()">A visual essay on the tension between minimalism and expression. We strip away the unnecessary to reveal what truly matters.</textarea>
+      </div>
+      <div class="section">
+        <span class="section-label">Font Family</span>
+        <div class="font-grid" id="font-grid"></div>
+      </div>
+      <div class="section">
+        <span class="section-label">Headline Size</span>
+        <div class="slider-wrap">
+          <input type="range" class="ctrl-slider" id="sl-headline-size" min="60" max="200" value="138" oninput="updatePoster()">
+          <span class="slider-val" id="lbl-headline-size">138</span>
+        </div>
+      </div>
+      <div class="section">
+        <span class="section-label">Letter Spacing</span>
+        <div class="slider-wrap">
+          <input type="range" class="ctrl-slider" id="sl-tracking" min="-10" max="20" value="-4" oninput="updatePoster()">
+          <span class="slider-val" id="lbl-tracking">-4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN TAB -->
+    <div id="tab-design" style="display:none">
+      <div class="section">
+        <span class="section-label">Background</span>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <button class="toolbar-btn" id="bg-solid-btn" onclick="setBgMode('solid')" style="flex:1;justify-content:center">Solid</button>
+          <button class="toolbar-btn" id="bg-grad-btn" onclick="setBgMode('gradient')" style="flex:1;justify-content:center">Gradient</button>
+        </div>
+        <div id="bg-solid-ctrl">
+          <div class="ctrl-row">
+            <div class="color-swatch"><div class="color-swatch-preview" id="bg-color-preview" style="background:#ffffff"></div><input type="color" id="inp-bg-color" value="#ffffff" oninput="updatePoster()"></div>
+            <input class="ctrl-input" id="inp-bg-hex" type="text" value="#ffffff" oninput="bgHexInput(this.value)" placeholder="#ffffff">
+          </div>
+        </div>
+        <div id="bg-grad-ctrl" style="display:none">
+          <div class="grad-stops" id="grad-stops">
+            <div class="grad-stop"><div class="color-swatch" style="width:28px;height:28px;border-radius:6px"><div class="color-swatch-preview" id="gs1-prev" style="background:#6c63ff"></div><input type="color" id="gs1" value="#6c63ff" oninput="updatePoster()"></div><span class="grad-stop-pos">0%</span></div>
+            <div class="grad-stop"><div class="color-swatch" style="width:28px;height:28px;border-radius:6px"><div class="color-swatch-preview" id="gs2-prev" style="background:#ff6b6b"></div><input type="color" id="gs2" value="#ff6b6b" oninput="updatePoster()"></div><span class="grad-stop-pos">100%</span></div>
+          </div>
+          <div class="grad-dir" id="grad-dir">
+            <div class="grad-dir-btn active" data-deg="135" onclick="setGradDir(this)">↘ 135°</div>
+            <div class="grad-dir-btn" data-deg="180" onclick="setGradDir(this)">↓ 180°</div>
+            <div class="grad-dir-btn" data-deg="90" onclick="setGradDir(this)">→ 90°</div>
+            <div class="grad-dir-btn" data-deg="45" onclick="setGradDir(this)">↗ 45°</div>
+          </div>
+          <div class="grad-preview" id="grad-preview"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Accent Color</span>
+        <div class="ctrl-row">
+          <div class="color-swatch"><div class="color-swatch-preview" id="acc-color-preview" style="background:#C8553D"></div><input type="color" id="inp-accent" value="#C8553D" oninput="updatePoster()"></div>
+          <input class="ctrl-input" id="inp-acc-hex" type="text" value="#C8553D" oninput="accHexInput(this.value)" placeholder="#C8553D">
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Text Color</span>
+        <div class="ctrl-row">
+          <div class="color-swatch"><div class="color-swatch-preview" id="txt-color-preview" style="background:#1a1a1a"></div><input type="color" id="inp-text-color" value="#1a1a1a" oninput="updatePoster()"></div>
+          <input class="ctrl-input" id="inp-txt-hex" type="text" value="#1a1a1a" oninput="txtHexInput(this.value)" placeholder="#1a1a1a">
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Overlay Opacity</span>
+        <div class="slider-wrap">
+          <input type="range" class="ctrl-slider" id="sl-overlay" min="0" max="100" value="0" oninput="updatePoster()">
+          <span class="slider-val" id="lbl-overlay">0%</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Border Radius</span>
+        <div class="slider-wrap">
+          <input type="range" class="ctrl-slider" id="sl-radius" min="0" max="60" value="0" oninput="updatePoster()">
+          <span class="slider-val" id="lbl-radius">0px</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Poster Size</span>
+        <div class="size-chips" id="size-chips">
+          <div class="size-chip active" data-w="1080" data-h="1350" onclick="setSize(this)">1:1.25<div style="font-size:8px;color:var(--ui-muted)">Post</div></div>
+          <div class="size-chip" data-w="1080" data-h="1080" onclick="setSize(this)">1:1<div style="font-size:8px;color:var(--ui-muted)">Square</div></div>
+          <div class="size-chip" data-w="1080" data-h="1920" onclick="setSize(this)">9:16<div style="font-size:8px;color:var(--ui-muted)">Story</div></div>
+          <div class="size-chip" data-w="1200" data-h="628" onclick="setSize(this)">1.9:1<div style="font-size:8px;color:var(--ui-muted)">Banner</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIA TAB -->
+    <div id="tab-media" style="display:none">
+      <div class="section">
+        <span class="section-label">Main Image</span>
+        <div class="upload-zone" id="dz-main" onclick="document.getElementById('fi-main').click()">
+          <svg class="upload-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <div class="upload-zone-text">Click to upload image</div>
+          <div class="upload-zone-sub">PNG, JPG, WEBP</div>
+        </div>
+        <input type="file" id="fi-main" accept="image/*" style="display:none" onchange="loadImage(this,'main')">
+        <img id="prev-main" class="upload-thumb" style="display:none">
+      </div>
+
+      <div class="section">
+        <span class="section-label">Secondary Image</span>
+        <div class="upload-zone" id="dz-sec" onclick="document.getElementById('fi-sec').click()">
+          <svg class="upload-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <div class="upload-zone-text">Secondary image</div>
+          <div class="upload-zone-sub">For split layouts</div>
+        </div>
+        <input type="file" id="fi-sec" accept="image/*" style="display:none" onchange="loadImage(this,'sec')">
+        <img id="prev-sec" class="upload-thumb" style="display:none">
+      </div>
+
+      <div class="section">
+        <span class="section-label">Logo / Brand Mark</span>
+        <div class="upload-zone" id="dz-logo" onclick="document.getElementById('fi-logo').click()">
+          <svg class="upload-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div class="upload-zone-text">Brand logo</div>
+          <div class="upload-zone-sub">PNG with transparency</div>
+        </div>
+        <input type="file" id="fi-logo" accept="image/*" style="display:none" onchange="loadImage(this,'logo')">
+        <img id="prev-logo" class="upload-thumb" style="display:none">
+      </div>
+
+      <div class="section">
+        <span class="section-label">Image Fit</span>
+        <select class="ctrl-select" id="sel-fit" onchange="updatePoster()">
+          <option value="cover">Cover (fill)</option>
+          <option value="contain">Contain (fit)</option>
+          <option value="fill">Stretch</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Image Opacity</span>
+        <div class="slider-wrap">
+          <input type="range" class="ctrl-slider" id="sl-img-opacity" min="10" max="100" value="100" oninput="updatePoster()">
+          <span class="slider-val" id="lbl-img-opacity">100%</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Image Filter</span>
+        <select class="ctrl-select" id="sel-filter" onchange="updatePoster()">
+          <option value="none">None</option>
+          <option value="grayscale(100%)">Grayscale</option>
+          <option value="sepia(80%)">Sepia</option>
+          <option value="contrast(1.3) saturate(1.2)">Vivid</option>
+          <option value="brightness(0.85) contrast(1.1)">Matte</option>
+          <option value="hue-rotate(180deg)">Hue Shift</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- EXPORT TAB -->
+    <div id="tab-export" style="display:none">
+      <div class="section">
+        <span class="section-label">Export Quality</span>
+        <select class="ctrl-select" id="sel-scale">
+          <option value="1">1× — Screen (1080px)</option>
+          <option value="2" selected>2× — Print ready (2160px)</option>
+          <option value="3">3× — Ultra HD (3240px)</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <button class="export-btn export-png" id="btn-png" onclick="exportPNG()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export PNG
+      </button>
+      <button class="export-btn export-pdf" id="btn-pdf" onclick="exportPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Export PDF
+      </button>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <span class="section-label">Filename</span>
+        <input class="ctrl-input" id="inp-filename" type="text" value="forma-poster" placeholder="forma-poster">
+      </div>
+
+      <div class="hint" style="margin-top:8px">
+        PNG: transparent bg supported<br>
+        PDF: press-ready, RGB color
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <span class="section-label">Current Layout</span>
+        <div style="font-size:13px;color:var(--ui-text)" id="export-layout-name">Layout 1</div>
+        <div style="font-size:10px;color:var(--ui-muted);font-family:'JetBrains Mono',monospace;margin-top:4px" id="export-size-info">1080 × 1350 px</div>
+      </div>
+    </div>
+
+  </div><!-- /panel-content -->
+</div><!-- /right-panel -->
+
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+const state = {
+  layout: 1,
+  zoom: 0.42,
+  posterW: 1080,
+  posterH: 1350,
+  bgMode: 'solid',
+  bgColor: '#ffffff',
+  gradColor1: '#6c63ff',
+  gradColor2: '#ff6b6b',
+  gradDeg: 135,
+  accent: '#C8553D',
+  textColor: '#1a1a1a',
+  overlay: 0,
+  radius: 0,
+  font: 'Fraunces',
+  headlineSize: 138,
+  tracking: -4,
+  imgFit: 'cover',
+  imgOpacity: 100,
+  imgFilter: 'none',
+  images: { main: null, sec: null, logo: null },
+  texts: {
+    headline: 'BEYOND THE EDGE',
+    sub: 'Exploring the invisible boundaries of modern creative culture',
+    tagline: 'FORM FOLLOWS FEELING',
+    info: 'VOL. 03 — 2025',
+    desc1: 'A visual essay on the tension between minimalism and expression. We strip away the unnecessary to reveal what truly matters.',
+  }
+};
+
+// ══════════════════════════════════════════════════════════
+// FONTS
+// ══════════════════════════════════════════════════════════
+const FONTS = [
+  { name: 'Fraunces', label: 'Fraunces', style: "font-family:'Fraunces',serif" },
+  { name: 'Playfair Display', label: 'Playfair', style: "font-family:'Playfair Display',serif" },
+  { name: 'Instrument Serif', label: 'Instrument', style: "font-family:'Instrument Serif',serif" },
+  { name: 'Unbounded', label: 'Unbounded', style: "font-family:'Unbounded',sans-serif" },
+  { name: 'Space Grotesk', label: 'Space G', style: "font-family:'Space Grotesk',sans-serif" },
+  { name: 'Space Mono', label: 'Space Mono', style: "font-family:'Space Mono',monospace" },
+];
+
+function buildFontGrid() {
+  const grid = document.getElementById('font-grid');
+  grid.innerHTML = FONTS.map(f => `
+    <div class="font-pill ${f.name===state.font?'active':''}" onclick="setFont('${f.name}')" data-font="${f.name}">
+      <div class="font-pill-name" style="${f.style};font-size:15px">${f.label}</div>
+      <div class="font-pill-label">${f.label.toUpperCase()}</div>
+    </div>`).join('');
+}
+
+function setFont(name) {
+  state.font = name;
+  document.querySelectorAll('.font-pill').forEach(p => p.classList.toggle('active', p.dataset.font === name));
+  updatePoster();
+}
+
+// ══════════════════════════════════════════════════════════
+// LAYOUTS (20 layouts)
+// ══════════════════════════════════════════════════════════
+const LAYOUTS = [
+  { id:1,  name:'Classic Hero',     cat:'editorial',  thumb: buildThumb1  },
+  { id:2,  name:'Split Right',      cat:'split',      thumb: buildThumb2  },
+  { id:3,  name:'Image Top',        cat:'editorial',  thumb: buildThumb3  },
+  { id:4,  name:'Image Left',       cat:'split',      thumb: buildThumb4  },
+  { id:5,  name:'Center Float',     cat:'minimal',    thumb: buildThumb5  },
+  { id:6,  name:'Side Columns',     cat:'editorial',  thumb: buildThumb6  },
+  { id:7,  name:'Circles',          cat:'organic',    thumb: buildThumb7  },
+  { id:8,  name:'Magazine',         cat:'editorial',  thumb: buildThumb8  },
+  { id:9,  name:'Image Bottom',     cat:'minimal',    thumb: buildThumb9  },
+  { id:10, name:'Full Bleed',       cat:'bold',       thumb: buildThumb10 },
+  { id:11, name:'Typography Only',  cat:'minimal',    thumb: buildThumb11 },
+  { id:12, name:'Grid Blocks',      cat:'bold',       thumb: buildThumb12 },
+  { id:13, name:'Diagonal Cut',     cat:'dynamic',    thumb: buildThumb13 },
+  { id:14, name:'Centered Stack',   cat:'minimal',    thumb: buildThumb14 },
+  { id:15, name:'Duotone',          cat:'bold',       thumb: buildThumb15 },
+  { id:16, name:'Oversized Type',   cat:'typography', thumb: buildThumb16 },
+  { id:17, name:'Asymmetric',       cat:'dynamic',    thumb: buildThumb17 },
+  { id:18, name:'Bordered Frame',   cat:'elegant',    thumb: buildThumb18 },
+  { id:19, name:'Stacked Bands',    cat:'bold',       thumb: buildThumb19 },
+  { id:20, name:'Polaroid Grid',    cat:'editorial',  thumb: buildThumb20 },
+];
+
+// Thumb builders (compact SVG-like HTML previews)
+function tp(html){ return `<div class="layout-thumb-preview">${html}</div>`; }
+function buildThumb1()  { return tp(`<div class="tp-line thick" style="margin-top:4px"></div><div class="tp-line" style="width:70%;margin:3px auto"></div><div class="tp-img" style="flex:1;margin-top:4px"></div><div class="tp-line accent" style="width:60%;margin-top:4px"></div>`); }
+function buildThumb2()  { return tp(`<div class="tp-split"><div class="tp-rows" style="flex:1"><div class="tp-line thick" style="margin-top:8px"></div><div class="tp-line" style="width:80%;margin-top:4px"></div><div class="tp-line accent" style="width:50%;margin-top:auto"></div></div><div class="tp-col"></div></div>`); }
+function buildThumb3()  { return tp(`<div class="tp-img" style="height:55%;border-radius:4px"></div><div class="tp-line thick" style="margin-top:5px"></div><div class="tp-line" style="width:80%;margin-top:3px"></div><div class="tp-line accent" style="width:50%;margin-top:3px"></div>`); }
+function buildThumb4()  { return tp(`<div class="tp-split"><div class="tp-col"></div><div class="tp-rows" style="flex:1.2"><div class="tp-line thick" style="margin-top:6px"></div><div class="tp-line" style="width:90%;margin-top:3px"></div><div class="tp-line accent" style="width:60%;margin-top:auto"></div></div></div>`); }
+function buildThumb5()  { return tp(`<div class="tp-line" style="width:50%;margin:4px auto 0"></div><div class="tp-img" style="width:70%;height:40%;margin:4px auto;border-radius:4px"></div><div class="tp-line thick" style="width:90%;margin:3px auto"></div><div class="tp-line" style="width:70%;margin:3px auto"></div>`); }
+function buildThumb6()  { return tp(`<div class="tp-split"><div class="tp-col" style="opacity:.4;flex:.4"></div><div class="tp-rows" style="flex:1"><div class="tp-line thick" style="margin-top:auto;margin-bottom:2px"></div><div class="tp-line" style="width:80%;margin-bottom:auto"></div></div><div class="tp-col" style="opacity:.4;flex:.4"></div></div>`); }
+function buildThumb7()  { return tp(`<div class="tp-line thick" style="margin-top:4px;width:80%"></div><div style="display:flex;gap:4px;margin-top:4px;flex:1;align-items:center"><div class="tp-circle" style="width:28px;height:28px"></div><div class="tp-rows" style="flex:1"><div class="tp-line" style="margin-bottom:2px"></div><div class="tp-line accent" style="width:70%"></div></div><div class="tp-circle" style="width:20px;height:20px"></div></div>`); }
+function buildThumb8()  { return tp(`<div class="tp-img" style="height:38%;border-radius:0"></div><div class="tp-line thick" style="margin-top:4px;font-size:8px"></div><div class="tp-split" style="margin-top:4px;flex:1"><div class="tp-rows" style="flex:1"><div class="tp-line" style="margin-bottom:2px"></div><div class="tp-line" style="width:80%"></div></div></div><div class="tp-line accent" style="margin-top:auto"></div>`); }
+function buildThumb9()  { return tp(`<div class="tp-line thick" style="margin-top:4px;width:90%;margin-left:auto;margin-right:auto"></div><div class="tp-line" style="width:70%;margin:3px auto"></div><div class="tp-img" style="flex:1;margin-top:6px;border-radius:4px 4px 0 0"></div>`); }
+function buildThumb10() { return tp(`<div class="tp-img" style="position:absolute;inset:0;border-radius:0;opacity:.7"></div><div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:4px"><div class="tp-line thick" style="background:rgba(255,255,255,.9)"></div><div class="tp-line" style="width:70%;background:rgba(255,255,255,.5);margin-top:3px"></div></div>`); }
+function buildThumb11() { return tp(`<div style="flex:1;display:flex;flex-direction:column;justify-content:center"><div class="tp-line" style="height:6px;margin-bottom:3px;border-radius:3px"></div><div class="tp-line" style="height:14px;margin-bottom:3px;border-radius:3px"></div><div class="tp-line accent" style="width:50%"></div></div>`); }
+function buildThumb12() { return tp(`<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;flex:1"><div class="tp-img" style="border-radius:3px"></div><div class="tp-img" style="border-radius:3px;opacity:.6"></div><div class="tp-img" style="border-radius:3px;opacity:.8"></div><div style="background:var(--ui-accent);border-radius:3px;opacity:.7"></div></div>`); }
+function buildThumb13() { return tp(`<div style="position:relative;flex:1;overflow:hidden"><div class="tp-img" style="position:absolute;top:0;left:0;right:0;height:65%;clip-path:polygon(0 0,100% 0,100% 85%,0 100%)"></div><div style="position:absolute;bottom:0;left:0;right:0;padding:4px"><div class="tp-line thick"></div><div class="tp-line" style="width:70%;margin-top:2px"></div></div></div>`); }
+function buildThumb14() { return tp(`<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><div class="tp-line" style="width:40%"></div><div class="tp-img" style="width:50px;height:30px;border-radius:4px"></div><div class="tp-line thick" style="width:80%"></div><div class="tp-line accent" style="width:50%"></div><div class="tp-line" style="width:70%"></div></div>`); }
+function buildThumb15() { return tp(`<div style="position:relative;flex:1"><div class="tp-img" style="position:absolute;inset:0;border-radius:0"></div><div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,99,255,.7),rgba(255,107,107,.5))"></div><div style="position:relative;z-index:1;padding:4px 0;margin-top:auto"><div class="tp-line thick" style="background:rgba(255,255,255,.9)"></div></div></div>`); }
+function buildThumb16() { return tp(`<div style="flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden"><div style="font-size:22px;font-weight:900;font-family:'Fraunces',serif;color:var(--ui-accent);line-height:.9;letter-spacing:-2px;overflow:hidden">BIG<br>TYPE</div><div class="tp-line accent" style="width:40%;margin-top:4px"></div><div class="tp-line" style="width:80%;margin-top:3px;height:3px"></div></div>`); }
+function buildThumb17() { return tp(`<div style="position:relative;flex:1"><div class="tp-img" style="position:absolute;top:0;right:0;width:60%;height:55%;border-radius:4px 4px 0 4px"></div><div style="position:absolute;bottom:0;left:0;right:0"><div class="tp-line thick" style="width:80%"></div><div class="tp-line" style="width:60%;margin-top:2px"></div></div></div>`); }
+function buildThumb18() { return tp(`<div style="border:1.5px solid var(--ui-border2);flex:1;margin:3px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px"><div class="tp-line" style="width:60%"></div><div class="tp-img" style="width:70%;height:35%;border-radius:3px"></div><div class="tp-line thick" style="width:80%"></div><div class="tp-line accent" style="width:50%"></div></div>`); }
+function buildThumb19() { return tp(`<div style="flex:1;display:flex;flex-direction:column;gap:3px"><div style="background:var(--ui-accent);height:25%;border-radius:3px;opacity:.8"></div><div class="tp-img" style="height:35%"></div><div style="background:var(--ui-border2);height:20%;border-radius:3px"><div class="tp-line thick" style="margin:4px 4px 0;background:var(--ui-text);opacity:.5"></div></div></div>`); }
+function buildThumb20() { return tp(`<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;flex:1"><div style="background:var(--ui-border2);border-radius:3px;padding:2px"><div class="tp-img" style="border-radius:2px;height:70%"></div><div class="tp-line" style="margin-top:2px;height:3px"></div></div><div style="background:var(--ui-border2);border-radius:3px;padding:2px;margin-top:6px"><div class="tp-img" style="border-radius:2px;height:70%"></div><div class="tp-line" style="margin-top:2px;height:3px"></div></div><div style="background:var(--ui-border2);border-radius:3px;padding:2px;margin-top:-6px"><div class="tp-img" style="border-radius:2px;height:70%"></div><div class="tp-line" style="margin-top:2px;height:3px"></div></div><div style="background:var(--ui-border2);border-radius:3px;padding:2px"><div class="tp-img" style="border-radius:2px;height:70%"></div><div class="tp-line" style="margin-top:2px;height:3px"></div></div></div>`); }
+
+function buildLayoutGrid() {
+  const grid = document.getElementById('layout-grid');
+  grid.innerHTML = LAYOUTS.map(l => `
+    <div class="layout-thumb ${l.id===state.layout?'active':''}" data-id="${l.id}" onclick="selectLayout(${l.id})">
+      ${l.thumb()}
+      <div class="layout-thumb-label">${l.name}</div>
+    </div>`).join('');
+}
+
+function filterLayouts(q) {
+  const items = document.querySelectorAll('.layout-thumb');
+  const filtered = LAYOUTS.filter(l => !q || l.name.toLowerCase().includes(q.toLowerCase()) || l.cat.toLowerCase().includes(q.toLowerCase()));
+  const ids = new Set(filtered.map(l=>l.id));
+  items.forEach(el => { el.style.display = ids.has(+el.dataset.id) ? '' : 'none'; });
+}
+
+function selectLayout(id) {
+  state.layout = id;
+  document.querySelectorAll('.layout-thumb').forEach(el => el.classList.toggle('active', +el.dataset.id === id));
+  document.getElementById('layout-badge').textContent = `Layout ${id}`;
+  document.getElementById('export-layout-name').textContent = LAYOUTS[id-1].name;
+  renderPoster();
+}
+
+// ══════════════════════════════════════════════════════════
+// POSTER RENDERER
+// ══════════════════════════════════════════════════════════
+function getPosterBg() {
+  if (state.bgMode === 'gradient') {
+    return `linear-gradient(${state.gradDeg}deg, ${state.gradColor1}, ${state.gradColor2})`;
+  }
+  return state.bgColor;
+}
+
+function imgEl(src, extra='') {
+  if (!src) return `<div style="width:100%;height:100%;background:linear-gradient(135deg,#e8e8f0,#d0d0dc);display:flex;align-items:center;justify-content:center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>`;
+  return `<img src="${src}" style="width:100%;height:100%;object-fit:${state.imgFit};display:block;opacity:${state.imgOpacity/100};filter:${state.imgFilter};" ${extra}>`;
+}
+
+function getFont() {
+  const f = FONTS.find(x=>x.name===state.font);
+  return f ? f.name : 'Fraunces';
+}
+
+function getFontStack() {
+  const n = getFont();
+  if(n==='Fraunces'||n==='Playfair Display'||n==='Instrument Serif') return `'${n}',serif`;
+  if(n==='Space Mono') return `'${n}',monospace`;
+  return `'${n}',sans-serif`;
+}
+
+function headlineStyle(extra='') {
+  return `font-family:${getFontStack()};font-size:${state.headlineSize}px;letter-spacing:${state.tracking}px;color:${state.accent};font-weight:900;line-height:.9;${extra}`;
+}
+function subStyle(extra='') { return `font-family:'DM Sans',sans-serif;font-size:26px;font-weight:600;color:${state.textColor};line-height:1.3;${extra}`; }
+function tagStyle(extra='') { return `font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:3px;color:${state.accent};${extra}`; }
+function descStyle(extra='') { return `font-family:'DM Sans',sans-serif;font-size:16px;font-weight:300;color:${state.textColor};line-height:1.7;opacity:.8;${extra}`; }
+function infoStyle(extra='') { return `font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:2px;color:${state.textColor};opacity:.5;${extra}`; }
+
+function renderPoster() {
+  const s = state;
+  const poster = document.getElementById('poster');
+  const bg = getPosterBg();
+  poster.style.background = bg;
+  poster.style.width = s.posterW + 'px';
+  poster.style.height = s.posterH + 'px';
+  poster.style.borderRadius = s.radius + 'px';
+
+  const ovHex = s.accent;
+  const ov = s.overlay > 0 ? `<div style="position:absolute;inset:0;background:${ovHex};opacity:${s.overlay/100};z-index:4;pointer-events:none"></div>` : '';
+
+  const t = s.texts;
+  const img = s.images.main;
+  const img2 = s.images.sec;
+  const logo = s.images.logo;
+  const logoEl = logo ? `<img src="${logo}" style="height:38px;width:auto;display:block;">` : `<div style="width:44px;height:44px;border-radius:50%;background:${s.accent}22;border:1.5px solid ${s.accent}44;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${s.accent}" stroke-width="1.5" opacity=".6"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>`;
+
+  let html = '';
+
+  switch(s.layout) {
+    // ── Layout 1: Classic Hero ──────────────────────────────────────────
+    case 1: html = `
+      <div style="position:absolute;top:50px;left:40px;right:40px;text-transform:uppercase;word-break:break-word;text-align:center;${headlineStyle()}">${t.headline}</div>
+      <div style="position:absolute;top:360px;left:40px;right:40px;text-align:center;${subStyle()}">${t.sub}</div>
+      <div style="position:absolute;top:490px;left:40px;right:40px;height:520px;overflow:hidden;border-radius:16px;" class="fade-bottom">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;bottom:160px;left:40px;right:40px;text-align:center;${descStyle()}">${t.desc1}</div>
+      <div style="position:absolute;bottom:80px;left:0;right:0;text-align:center;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:40px;right:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 2: Split Right ───────────────────────────────────────────
+    case 2: html = `
+      <div style="position:absolute;top:40px;right:40px;left:auto;width:calc(50% - 60px);height:${s.posterH-80}px;overflow:hidden;border-radius:16px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:60px;left:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:200px;left:40px;right:50%;${headlineStyle('text-align:left;font-size:'+Math.min(s.headlineSize,96)+'px;line-height:1;')}">${t.headline}</div>
+      <div style="position:absolute;top:560px;left:40px;right:52%;${subStyle('text-align:left;font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;top:700px;left:40px;right:52%;${descStyle('font-size:15px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:80px;left:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:40px;left:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 3: Image Top ─────────────────────────────────────────────
+    case 3: html = `
+      <div style="position:absolute;top:0;left:0;right:0;height:620px;overflow:hidden;" class="fade-bottom">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:680px;left:40px;right:40px;text-align:center;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;top:720px;left:40px;right:40px;text-align:center;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,116)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:980px;left:40px;right:40px;text-align:center;${subStyle('font-size:20px;')}">${t.sub}</div>
+      <div style="position:absolute;top:1080px;left:40px;right:40px;text-align:center;${descStyle('font-size:15px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;bottom:40px;right:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 4: Image Left ────────────────────────────────────────────
+    case 4: html = `
+      <div style="position:absolute;top:40px;left:40px;width:44%;height:820px;overflow:hidden;border-radius:20px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:60px;left:52%;right:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:160px;left:52%;right:40px;text-transform:uppercase;word-break:break-word;${headlineStyle('text-align:left;font-size:'+Math.min(s.headlineSize,88)+'px;line-height:1;')}">${t.headline}</div>
+      <div style="position:absolute;top:520px;left:52%;right:40px;${subStyle('text-align:left;font-size:20px;')}">${t.sub}</div>
+      <div style="position:absolute;top:680px;left:52%;right:40px;${descStyle('font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:200px;left:52%;right:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:50px;right:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 5: Center Float ──────────────────────────────────────────
+    case 5: html = `
+      <div style="position:absolute;top:20px;left:50%;transform:translateX(-50%);${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:60px;left:50%;transform:translateX(-50%);width:640px;height:480px;overflow:hidden;border-radius:24px;" class="fade-bottom">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:600px;left:40px;right:40px;text-align:center;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,108)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:830px;left:80px;right:80px;text-align:center;${subStyle('font-size:20px;')}">${t.sub}</div>
+      <div style="position:absolute;top:960px;left:80px;right:80px;text-align:center;${descStyle()}">${t.desc1}</div>
+      <div style="position:absolute;bottom:80px;left:0;right:0;text-align:center;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:40px;right:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 6: Side Columns ──────────────────────────────────────────
+    case 6: html = `
+      <div style="position:absolute;top:0;left:0;width:32%;height:100%;overflow:hidden;opacity:.35;" class="fade-right">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:0;right:0;width:32%;height:100%;overflow:hidden;opacity:.35;" class="fade-left">
+        ${imgEl(img2||img)}
+      </div>
+      <div style="position:absolute;top:80px;left:50%;transform:translateX(-50%);${tagStyle('text-align:center;')}">${t.tagline}</div>
+      <div style="position:absolute;top:380px;left:50%;transform:translateX(-50%);width:580px;text-align:center;${subStyle('font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;top:460px;left:50%;transform:translateX(-50%);width:560px;text-align:center;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,130)+'px;line-height:.95;')}">${t.headline}</div>
+      <div style="position:absolute;top:900px;left:50%;transform:translateX(-50%);width:560px;text-align:center;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;top:960px;left:50%;transform:translateX(-50%);width:520px;text-align:center;${descStyle('font-size:15px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:40px;right:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 7: Circles ───────────────────────────────────────────────
+    case 7: html = `
+      <div style="position:absolute;top:60px;left:40px;right:220px;text-transform:uppercase;word-break:break-word;word-spacing:9999px;overflow:hidden;max-height:520px;${headlineStyle('text-align:left;font-size:'+Math.min(s.headlineSize,154)+'px;line-height:1.1;')}">${t.headline}</div>
+      <div style="position:absolute;top:420px;right:40px;width:280px;height:280px;border-radius:50%;overflow:hidden;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:640px;left:40px;right:auto;width:500px;${subStyle('text-align:left;font-size:26px;')}">${t.sub}</div>
+      <div style="position:absolute;top:760px;left:40px;right:360px;${descStyle('font-size:15px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:160px;left:40px;right:40px;width:380px;height:380px;border-radius:50%;overflow:hidden;">
+        ${imgEl(img2||img)}
+      </div>
+      <div style="position:absolute;bottom:80px;left:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:40px;right:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:60px;right:40px;width:120px;height:2px;background:${s.textColor};opacity:.3"></div>
+      ${ov}`; break;
+
+    // ── Layout 8: Magazine ──────────────────────────────────────────────
+    case 8: html = `
+      <div style="position:absolute;top:60px;left:40px;font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:400;color:${s.textColor};max-width:400px;line-height:1.3">${t.tagline}</div>
+      <div style="position:absolute;top:160px;left:340px;width:700px;height:420px;overflow:hidden;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:580px;left:100px;width:820px;text-transform:uppercase;word-break:break-word;word-spacing:9999px;${headlineStyle('text-align:left;font-size:'+Math.min(s.headlineSize,142)+'px;line-height:.95;font-family:\'DM Sans\',sans-serif;font-weight:700;')}">${t.headline}</div>
+      <div style="position:absolute;top:1020px;left:100px;width:560px;height:60px;${subStyle('font-size:24px;text-align:left;')}">${t.sub}</div>
+      <div style="position:absolute;top:1180px;left:100px;width:820px;${infoStyle('font-size:20px;')}">${t.info}</div>
+      <div style="position:absolute;top:1230px;left:100px;width:680px;height:10px;background:${s.accent};border-radius:2px"></div>
+      <div style="position:absolute;bottom:40px;left:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 9: Image Bottom ──────────────────────────────────────────
+    case 9: html = `
+      <div style="position:absolute;top:40px;right:40px">${logoEl}</div>
+      <div style="position:absolute;top:40px;left:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:140px;left:50%;transform:translateX(-50%);${infoStyle('white-space:nowrap;')}">${t.info}</div>
+      <div style="position:absolute;top:180px;left:40px;right:40px;text-align:center;text-transform:uppercase;word-break:break-word;max-width:520px;margin:0 auto;${headlineStyle('font-size:'+Math.min(s.headlineSize,96)+'px;line-height:1.1;')}">${t.headline}</div>
+      <div style="position:absolute;top:400px;left:80px;right:80px;text-align:center;${subStyle('font-size:20px;')}">${t.sub}</div>
+      <div style="position:absolute;top:500px;left:80px;right:80px;text-align:center;${descStyle('font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:720px;overflow:hidden;" class="fade-top">
+        ${imgEl(img)}
+      </div>
+      ${ov}`; break;
+
+    // ── Layout 10: Full Bleed ───────────────────────────────────────────
+    case 10: html = `
+      <div style="position:absolute;inset:0;overflow:hidden;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.2) 50%,transparent 100%)"></div>
+      <div style="position:absolute;top:40px;left:40px;${tagStyle('color:#fff;opacity:.7;')}">${t.tagline}</div>
+      <div style="position:absolute;top:40px;right:40px">${logoEl}</div>
+      <div style="position:absolute;bottom:280px;left:40px;right:40px;text-transform:uppercase;word-break:break-word;${headlineStyle('color:#fff;font-size:'+Math.min(s.headlineSize,120)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;bottom:200px;left:40px;right:40px;${subStyle('color:rgba(255,255,255,.8);font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;bottom:120px;left:40px;right:40px;${descStyle('color:rgba(255,255,255,.6);font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:60px;left:40px;${infoStyle('color:rgba(255,255,255,.5);')}">${t.info}</div>
+      ${ov}`; break;
+
+    // ── Layout 11: Typography Only ──────────────────────────────────────
+    case 11: html = `
+      <div style="position:absolute;top:80px;left:40px;right:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:120px;left:40px;right:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;top:160px;left:40px;right:0;font-family:${getFontStack()};font-size:${Math.min(s.headlineSize*1.3,180)}px;font-weight:900;line-height:.85;letter-spacing:${s.tracking}px;color:${s.accent};overflow:hidden;word-break:break-word;text-transform:uppercase">${t.headline}</div>
+      <div style="position:absolute;top:640px;left:40px;right:40px;height:2px;background:${s.textColor};opacity:.12"></div>
+      <div style="position:absolute;top:680px;left:40px;right:80px;${subStyle('font-size:32px;')}">${t.sub}</div>
+      <div style="position:absolute;top:860px;left:40px;right:80px;${descStyle()}">${t.desc1}</div>
+      <div style="position:absolute;bottom:40px;left:40px;right:40px;display:flex;justify-content:between;align-items:flex-end">
+        <div style="${tagStyle('position:absolute;bottom:0;left:0;')}">${t.tagline}</div>
+        <div style="position:absolute;bottom:0;right:0">${logoEl}</div>
+      </div>
+      ${ov}`; break;
+
+    // ── Layout 12: Grid Blocks ──────────────────────────────────────────
+    case 12: html = `
+      <div style="position:absolute;top:40px;left:40px;width:480px;height:480px;overflow:hidden;border-radius:8px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:40px;right:40px;width:480px;height:480px;overflow:hidden;border-radius:8px;background:${s.accent};">
+        <div style="padding:40px;height:100%;display:flex;flex-direction:column;justify-content:flex-end">
+          <div style="font-family:${getFontStack()};font-size:${Math.min(s.headlineSize,72)}px;font-weight:900;color:#fff;line-height:.9;letter-spacing:${s.tracking}px;text-transform:uppercase;word-break:break-word">${t.headline}</div>
+        </div>
+      </div>
+      <div style="position:absolute;top:560px;left:40px;width:480px;height:360px;background:${s.textColor};border-radius:8px;display:flex;flex-direction:column;justify-content:center;padding:40px">
+        <div style="${subStyle('color:#fff;font-size:22px;')}">${t.sub}</div>
+        <div style="${descStyle('color:rgba(255,255,255,.6);font-size:14px;margin-top:16px;')}">${t.desc1}</div>
+      </div>
+      <div style="position:absolute;top:560px;right:40px;width:480px;height:360px;overflow:hidden;border-radius:8px;">
+        ${imgEl(img2||img)}
+      </div>
+      <div style="position:absolute;top:960px;left:40px;right:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:60px;left:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;bottom:40px;right:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 13: Diagonal Cut ─────────────────────────────────────────
+    case 13: html = `
+      <div style="position:absolute;top:0;left:0;right:0;height:700px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% 85%,0 100%)">
+        ${imgEl(img)}
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,${s.bgMode==='gradient'?s.gradColor1:s.bgColor} 100%)"></div>
+      </div>
+      <div style="position:absolute;top:40px;left:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:40px;right:40px">${logoEl}</div>
+      <div style="position:absolute;top:680px;left:40px;right:40px;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,116)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:980px;left:40px;right:40px;text-align:center;${subStyle('font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;top:1080px;left:80px;right:80px;text-align:center;${descStyle('font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;${infoStyle()}">${t.info}</div>
+      ${ov}`; break;
+
+    // ── Layout 14: Centered Stack ───────────────────────────────────────
+    case 14: html = `
+      <div style="position:absolute;top:80px;left:0;right:0;text-align:center;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;top:120px;left:0;right:0;text-align:center;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:180px;left:50%;transform:translateX(-50%);width:520px;height:340px;overflow:hidden;border-radius:20px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:560px;left:40px;right:40px;text-align:center;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,110)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:780px;left:80px;right:80px;text-align:center;${subStyle('font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;top:900px;left:80px;right:80px;text-align:center;${descStyle('font-size:15px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%)">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 15: Duotone ──────────────────────────────────────────────
+    case 15: html = `
+      <div style="position:absolute;inset:0;overflow:hidden;">
+        ${imgEl(img,'style="filter:grayscale(100%)"')}
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,${s.accent}cc,${s.gradColor2||'#1a1a1a'}cc);mix-blend-mode:multiply"></div>
+      </div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 60%)"></div>
+      <div style="position:absolute;top:60px;left:40px;${tagStyle('color:rgba(255,255,255,.6);')}">${t.tagline}</div>
+      <div style="position:absolute;top:60px;right:40px">${logoEl}</div>
+      <div style="position:absolute;bottom:320px;left:40px;right:40px;text-transform:uppercase;word-break:break-word;${headlineStyle('color:#fff;font-size:'+Math.min(s.headlineSize,116)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;bottom:240px;left:40px;right:40px;${subStyle('color:rgba(255,255,255,.75);font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;bottom:140px;left:40px;right:40px;${descStyle('color:rgba(255,255,255,.55);font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:60px;left:40px;${infoStyle('color:rgba(255,255,255,.4);')}">${t.info}</div>
+      ${ov}`; break;
+
+    // ── Layout 16: Oversized Type ───────────────────────────────────────
+    case 16: html = `
+      <div style="position:absolute;top:0;left:-20px;right:-20px;font-family:${getFontStack()};font-size:${Math.min(s.headlineSize*1.6,240)}px;font-weight:900;line-height:.85;letter-spacing:-8px;color:${s.accent};opacity:.07;overflow:hidden;text-transform:uppercase;pointer-events:none;word-break:break-all">${t.headline}</div>
+      <div style="position:absolute;top:80px;left:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:140px;left:40px;right:40px;overflow:hidden;height:600px;border-radius:16px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:780px;left:40px;right:40px;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,108)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:1000px;left:40px;right:40px;${subStyle('font-size:20px;')}">${t.sub}</div>
+      <div style="position:absolute;top:1100px;left:40px;right:40px;${descStyle('font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:40px;left:40px;right:40px;display:flex;justify-content:space-between;align-items:center">
+        <div style="${infoStyle()}">${t.info}</div>
+        ${logoEl}
+      </div>
+      ${ov}`; break;
+
+    // ── Layout 17: Asymmetric ───────────────────────────────────────────
+    case 17: html = `
+      <div style="position:absolute;top:0;right:0;width:62%;height:58%;overflow:hidden;border-radius:0 0 0 40px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:60px;left:40px;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:120px;left:40px;right:42%;text-transform:uppercase;word-break:break-word;${headlineStyle('text-align:left;font-size:'+Math.min(s.headlineSize,96)+'px;line-height:1;')}">${t.headline}</div>
+      <div style="position:absolute;top:520px;left:40px;width:2px;height:60px;background:${s.accent}"></div>
+      <div style="position:absolute;top:530px;left:60px;right:40px;${subStyle('font-size:22px;')}">${t.sub}</div>
+      <div style="position:absolute;top:680px;left:40px;right:40px;${descStyle()}">${t.desc1}</div>
+      <div style="position:absolute;bottom:200px;right:40px;width:380px;height:280px;overflow:hidden;border-radius:20px 20px 0 20px;">
+        ${imgEl(img2||img)}
+      </div>
+      <div style="position:absolute;bottom:80px;left:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;bottom:40px;left:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    // ── Layout 18: Bordered Frame ───────────────────────────────────────
+    case 18: html = `
+      <div style="position:absolute;inset:24px;border:1.5px solid ${s.accent};opacity:.25;border-radius:${Math.max(0,s.radius-8)}px;pointer-events:none"></div>
+      <div style="position:absolute;inset:40px;border:1px solid ${s.accent};opacity:.1;border-radius:${Math.max(0,s.radius-16)}px;pointer-events:none"></div>
+      <div style="position:absolute;top:70px;left:0;right:0;text-align:center;${tagStyle()}">${t.tagline}</div>
+      <div style="position:absolute;top:110px;left:0;right:0;text-align:center;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;top:160px;left:80px;right:80px;height:400px;overflow:hidden;border-radius:12px;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:600px;left:60px;right:60px;text-align:center;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,102)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:840px;left:80px;right:80px;text-align:center;${subStyle('font-size:20px;')}">${t.sub}</div>
+      <div style="position:absolute;top:960px;left:80px;right:80px;text-align:center;${descStyle('font-size:14px;')}">${t.desc1}</div>
+      <div style="position:absolute;bottom:70px;left:0;right:0;text-align:center">${logoEl}<br><div style="${tagStyle('display:inline-block;margin-top:8px;')}">${t.tagline}</div></div>
+      ${ov}`; break;
+
+    // ── Layout 19: Stacked Bands ────────────────────────────────────────
+    case 19: html = `
+      <div style="position:absolute;top:0;left:0;right:0;height:80px;background:${s.accent};display:flex;align-items:center;padding:0 40px">
+        <div style="${tagStyle('color:#fff;')}">${t.tagline}</div>
+        <div style="margin-left:auto">${logoEl}</div>
+      </div>
+      <div style="position:absolute;top:80px;left:0;right:0;height:480px;overflow:hidden;">
+        ${imgEl(img)}
+      </div>
+      <div style="position:absolute;top:540px;left:0;right:0;height:420px;background:${s.textColor};padding:40px">
+        <div style="${infoStyle('color:rgba(255,255,255,.4);margin-bottom:12px;display:block;')}">${t.info}</div>
+        <div style="font-family:${getFontStack()};font-size:${Math.min(s.headlineSize,86)}px;font-weight:900;color:#fff;line-height:.9;letter-spacing:${s.tracking}px;text-transform:uppercase;word-break:break-word">${t.headline}</div>
+      </div>
+      <div style="position:absolute;top:1000px;left:0;right:0;background:${s.accent}18;padding:40px;height:350px">
+        <div style="${subStyle('font-size:22px;margin-bottom:16px;')}">${t.sub}</div>
+        <div style="${descStyle('font-size:14px;')}">${t.desc1}</div>
+      </div>
+      ${ov}`; break;
+
+    // ── Layout 20: Polaroid Grid ────────────────────────────────────────
+    case 20: html = `
+      <div style="position:absolute;top:40px;left:40px;right:40px;${infoStyle()}">${t.info}</div>
+      <div style="position:absolute;top:80px;left:40px;right:40px;text-transform:uppercase;word-break:break-word;${headlineStyle('font-size:'+Math.min(s.headlineSize,86)+'px;')}">${t.headline}</div>
+      <div style="position:absolute;top:340px;left:40px;width:460px;height:320px;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.12);padding:12px;transform:rotate(-2deg)">
+        <div style="width:100%;height:250px;overflow:hidden;">${imgEl(img)}</div>
+        <div style="${tagStyle('margin-top:10px;font-size:10px;display:block;color:'+s.textColor+';opacity:.5;')}">${t.tagline}</div>
+      </div>
+      <div style="position:absolute;top:380px;right:40px;width:460px;height:320px;background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.12);padding:12px;transform:rotate(1.5deg)">
+        <div style="width:100%;height:250px;overflow:hidden;">${imgEl(img2||img)}</div>
+        <div style="${tagStyle('margin-top:10px;font-size:10px;display:block;color:'+s.textColor+';opacity:.5;')}">${t.info}</div>
+      </div>
+      <div style="position:absolute;top:760px;left:40px;right:40px;${subStyle('font-size:24px;')}">${t.sub}</div>
+      <div style="position:absolute;top:880px;left:40px;right:40px;${descStyle()}">${t.desc1}</div>
+      <div style="position:absolute;bottom:40px;left:40px">${logoEl}</div>
+      ${ov}`; break;
+
+    default: html = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-family:'JetBrains Mono',monospace;font-size:12px">Layout ${s.layout}</div>`;
+  }
+
+  poster.innerHTML = html;
+}
+
+function updatePoster() {
+  // Sync state from inputs
+  state.texts.headline    = document.getElementById('inp-headline').value;
+  state.texts.sub         = document.getElementById('inp-sub').value;
+  state.texts.tagline     = document.getElementById('inp-tagline').value;
+  state.texts.info        = document.getElementById('inp-info').value;
+  state.texts.desc1       = document.getElementById('inp-desc1').value;
+  state.headlineSize      = +document.getElementById('sl-headline-size').value;
+  state.tracking          = +document.getElementById('sl-tracking').value;
+  state.overlay           = +document.getElementById('sl-overlay').value;
+  state.radius            = +document.getElementById('sl-radius').value;
+  state.imgFit            = document.getElementById('sel-fit').value;
+  state.imgOpacity        = +document.getElementById('sl-img-opacity').value;
+  state.imgFilter         = document.getElementById('sel-filter').value;
+  state.bgColor           = document.getElementById('inp-bg-color').value;
+  state.accent            = document.getElementById('inp-accent').value;
+  state.textColor         = document.getElementById('inp-text-color').value;
+  state.gradColor1        = document.getElementById('gs1').value;
+  state.gradColor2        = document.getElementById('gs2').value;
+
+  // Sync swatch previews
+  document.getElementById('bg-color-preview').style.background = state.bgColor;
+  document.getElementById('inp-bg-hex').value = state.bgColor;
+  document.getElementById('acc-color-preview').style.background = state.accent;
+  document.getElementById('inp-acc-hex').value = state.accent;
+  document.getElementById('txt-color-preview').style.background = state.textColor;
+  document.getElementById('inp-txt-hex').value = state.textColor;
+  document.getElementById('gs1-prev').style.background = state.gradColor1;
+  document.getElementById('gs2-prev').style.background = state.gradColor2;
+
+  // Sync labels
+  document.getElementById('lbl-headline-size').textContent = state.headlineSize;
+  document.getElementById('lbl-tracking').textContent      = state.tracking;
+  document.getElementById('lbl-overlay').textContent       = state.overlay + '%';
+  document.getElementById('lbl-radius').textContent        = state.radius + 'px';
+  document.getElementById('lbl-img-opacity').textContent   = state.imgOpacity + '%';
+
+  // Gradient preview
+  const gp = document.getElementById('grad-preview');
+  gp.style.background = `linear-gradient(${state.gradDeg}deg,${state.gradColor1},${state.gradColor2})`;
+
+  renderPoster();
+}
+
+// ══════════════════════════════════════════════════════════
+// BG MODE
+// ══════════════════════════════════════════════════════════
+function setBgMode(mode) {
+  state.bgMode = mode;
+  document.getElementById('bg-solid-ctrl').style.display  = mode==='solid'    ? '' : 'none';
+  document.getElementById('bg-grad-ctrl').style.display   = mode==='gradient' ? '' : 'none';
+  document.getElementById('bg-solid-btn').style.borderColor = mode==='solid'    ? 'var(--ui-accent)' : '';
+  document.getElementById('bg-grad-btn').style.borderColor  = mode==='gradient' ? 'var(--ui-accent)' : '';
+  updatePoster();
+}
+
+function setGradDir(el) {
+  document.querySelectorAll('.grad-dir-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  state.gradDeg = +el.dataset.deg;
+  updatePoster();
+}
+
+function bgHexInput(v){ if(/^#[0-9a-fA-F]{6}$/.test(v)){ document.getElementById('inp-bg-color').value=v; updatePoster(); } }
+function accHexInput(v){ if(/^#[0-9a-fA-F]{6}$/.test(v)){ document.getElementById('inp-accent').value=v; updatePoster(); } }
+function txtHexInput(v){ if(/^#[0-9a-fA-F]{6}$/.test(v)){ document.getElementById('inp-text-color').value=v; updatePoster(); } }
+
+// ══════════════════════════════════════════════════════════
+// SIZE
+// ══════════════════════════════════════════════════════════
+function setSize(el) {
+  document.querySelectorAll('.size-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  state.posterW = +el.dataset.w;
+  state.posterH = +el.dataset.h;
+  document.getElementById('export-size-info').textContent = `${state.posterW} × ${state.posterH} px`;
+  document.getElementById('poster').style.width  = state.posterW + 'px';
+  document.getElementById('poster').style.height = state.posterH + 'px';
+  resetZoom();
+  renderPoster();
+}
+
+// ══════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════
+function switchTab(name) {
+  ['text','design','media','export'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===name ? '' : 'none';
+    document.querySelectorAll('.ptab').forEach((el,i) => {
+      const tabs=['text','design','media','export'];
+      el.classList.toggle('active', tabs[i]===name);
+    });
   });
 }
 
-// --- Layout switching with swipe support ---
-let currentLayout = 1;
-let lastUploadedImage = null;
-let touchStartX = 0;
-
-function updateLayout(layoutNum) {
-  currentLayout = layoutNum;
-  const canvas = document.getElementById('posterCanvas');
-  const infoBar = document.getElementById('p_info_bar');
-  const colorInput = document.getElementById('inp_color').value;
-  
-  // Update indicator
-  document.getElementById('layoutIndicator').textContent = `Layout ${layoutNum}`;
-  
-  // Remove all layout classes
-  canvas.classList.remove('layout-1', 'layout-2', 'layout-3', 'layout-4', 'layout-5', 'layout-6', 'layout-7', 'layout-8', 'layout-9');
-  
-  // Hide side images by default
-  document.getElementById('p_side_image_left').style.display = 'none';
-  document.getElementById('p_side_image_center').style.display = 'none';
-  document.getElementById('p_side_image_right').style.display = 'none';
-  
-  // Reset info bar border
-  infoBar.style.borderBottom = 'none';
-  
-  // Add new layout class
-  if (layoutNum !== 1) {
-    canvas.classList.add(`layout-${layoutNum}`);
-  }
-  
-  // If layout 8, apply color to bottom border
-  if (layoutNum === 8) {
-    infoBar.style.borderBottom = `50px solid ${colorInput}`;
-    const anchorLine = document.getElementById('p_layout8_line');
-    if (anchorLine) {
-      anchorLine.style.backgroundColor = colorInput;
-      anchorLine.style.display = 'block';
-    }
-  } else {
-    const anchorLine = document.getElementById('p_layout8_line');
-    if (anchorLine) {
-      anchorLine.style.display = 'none';
-    }
-  }
-  
-  // If layout 6 and visual already uploaded, show left and right images
-  if (layoutNum === 6 && lastUploadedImage) {
-    document.getElementById('p_side_image_left').src = lastUploadedImage;
-    document.getElementById('p_side_image_left').style.display = 'block';
-    document.getElementById('p_side_image_right').src = lastUploadedImage;
-    document.getElementById('p_side_image_right').style.display = 'block';
-  }
-  
-  // If layout 7 and visual already uploaded, show left and right images
-  if (layoutNum === 7 && lastUploadedImage) {
-    document.getElementById('p_side_image_left').src = lastUploadedImage;
-    document.getElementById('p_side_image_left').style.display = 'block';
-    document.getElementById('p_side_image_right').src = lastUploadedImage;
-    document.getElementById('p_side_image_right').style.display = 'block';
-  }
+// ══════════════════════════════════════════════════════════
+// ZOOM
+// ══════════════════════════════════════════════════════════
+function applyZoom() {
+  const wrap = document.getElementById('poster-wrap');
+  wrap.style.transform = `scale(${state.zoom})`;
+  wrap.style.width  = state.posterW + 'px';
+  wrap.style.height = state.posterH + 'px';
+  document.getElementById('zoom-display').textContent = Math.round(state.zoom*100)+'%';
+}
+function zoom(delta) {
+  state.zoom = Math.min(2, Math.max(0.1, state.zoom + delta));
+  applyZoom();
+}
+function resetZoom() {
+  const vp = document.getElementById('canvas-viewport');
+  const availW = vp.clientWidth - 80;
+  const availH = vp.clientHeight - 80;
+  state.zoom = Math.min(availW/state.posterW, availH/state.posterH, 1) * 0.9;
+  applyZoom();
 }
 
-document.getElementById('nextBtn').addEventListener('click', () => {
-  if (currentLayout < 9) updateLayout(currentLayout + 1);
-});
+// ══════════════════════════════════════════════════════════
+// IMAGE LOADING
+// ══════════════════════════════════════════════════════════
+function loadImage(input, key) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.images[key] = e.target.result;
+    const prev = document.getElementById('prev-'+key);
+    if(prev){ prev.src=e.target.result; prev.style.display='block'; }
+    updatePoster();
+  };
+  reader.readAsDataURL(file);
+}
 
-document.getElementById('prevBtn').addEventListener('click', () => {
-  if (currentLayout > 1) updateLayout(currentLayout - 1);
-});
-
-// ─────────────────────────────────────────────────────────────────────
-// DOWNLOAD — dom-to-image-more (pixel-perfect CSS: mask-image, fonts,
-// gradients, transforms). iOS fix: pre-convert all <img> to base64
-// data URIs so domtoimage never needs to fetch() anything.
-// ─────────────────────────────────────────────────────────────────────
-
-/** Draw an <img> through an offscreen canvas → replace src with data URI.
- *  Works for blob: URLs and same-origin URLs. Skips if already data:. */
+// ══════════════════════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════════════════════
 async function imgToDataUri(img) {
   const src = img.getAttribute('src') || '';
-  if (!src || src.startsWith('data:')) return;          // already safe
-  return new Promise((resolve) => {
-    const tmp = new window.Image();
-    // crossOrigin attr only for http(s) URLs, not blob/data
+  if (!src || src.startsWith('data:')) return;
+  return new Promise(resolve => {
+    const tmp = new Image();
     if (src.startsWith('http')) tmp.crossOrigin = 'anonymous';
     tmp.onload = () => {
       try {
         const c = document.createElement('canvas');
-        c.width  = tmp.naturalWidth  || tmp.width  || 1;
-        c.height = tmp.naturalHeight || tmp.height || 1;
-        c.getContext('2d').drawImage(tmp, 0, 0);
+        c.width = tmp.naturalWidth||1; c.height = tmp.naturalHeight||1;
+        c.getContext('2d').drawImage(tmp,0,0);
         img.src = c.toDataURL('image/png');
-      } catch (e) {
-        // tainted canvas (truly cross-origin) — leave src as-is,
-        // domtoimage will try its own fetch path
-      }
+      } catch(e){}
       resolve();
     };
-    tmp.onerror = () => resolve();   // broken image — leave as-is
+    tmp.onerror = () => resolve();
     tmp.src = src;
   });
 }
 
-// Kumpulkan semua CSS dari dokumen (inline + computed) sebagai string
-async function collectAllCSS() {
-  let css = '';
-  for (const sheet of [...document.styleSheets]) {
-    try {
-      // stylesheet lokal (inline <style>)
-      const rules = [...(sheet.cssRules || [])];
-      css += rules.map(r => r.cssText).join('\n');
-    } catch(e) {
-      // stylesheet external (Tailwind CDN, Google Fonts) — fetch langsung
-      if (sheet.href) {
-        try {
-          const res = await fetch(sheet.href);
-          css += await res.text();
-        } catch(e2) {}
-      }
-    }
-  }
-  return css;
-}
-
-// Deep-inline computed styles ke setiap node di clone
-// Ini yang membuat hasil capture identik dengan live preview
-function deepInlineComputedStyles(original, clone) {
-  if (original.nodeType !== 1) return; // hanya element nodes
-  const computed = window.getComputedStyle(original);
-  const important = [
-    'position','top','left','right','bottom','width','height',
-    'display','flex-direction','align-items','justify-content',
-    'flex-wrap','gap','overflow','z-index','opacity',
-    'background','background-color','background-image','background-size',
-    'background-position','background-repeat',
-    'color','font-family','font-size','font-weight','font-style',
-    'line-height','letter-spacing','word-spacing','text-align',
-    'text-transform','white-space',
+function deepInlineStyles(orig, clone) {
+  if (orig.nodeType !== 1) return;
+  const cs = window.getComputedStyle(orig);
+  const props = ['position','top','left','right','bottom','width','height','display',
+    'flex-direction','align-items','justify-content','flex-wrap','gap','overflow','z-index','opacity',
+    'background','background-color','background-image','background-size','background-position','background-repeat',
+    'color','font-family','font-size','font-weight','font-style','line-height','letter-spacing','word-spacing',
+    'text-align','text-transform','white-space','word-break','overflow-wrap',
     'margin','margin-top','margin-right','margin-bottom','margin-left',
     'padding','padding-top','padding-right','padding-bottom','padding-left',
     'border','border-radius','border-color','border-width','border-style',
-    'box-shadow','transform','transform-origin',
-    'object-fit','object-position',
-    'mask-image','-webkit-mask-image',
-    'mix-blend-mode','clip-path',
+    'border-top','border-right','border-bottom','border-left',
+    'box-shadow','transform','transform-origin','object-fit','object-position',
+    'mask-image','-webkit-mask-image','clip-path','mix-blend-mode',
     'max-width','max-height','min-width','min-height',
-    'word-break','overflow-wrap',
+    'grid-template-columns','gap',
   ];
-  important.forEach(prop => {
-    try {
-      const val = computed.getPropertyValue(prop);
-      if (val) clone.style.setProperty(prop, val, 'important');
-    } catch(e) {}
+  props.forEach(p => {
+    try { const v=cs.getPropertyValue(p); if(v) clone.style.setProperty(p,v,'important'); } catch(e){}
   });
-  // Recurse ke children
-  const origChildren = original.children;
-  const cloneChildren = clone.children;
-  for (let i = 0; i < origChildren.length; i++) {
-    if (cloneChildren[i]) deepInlineComputedStyles(origChildren[i], cloneChildren[i]);
+  for(let i=0;i<orig.children.length;i++){
+    if(clone.children[i]) deepInlineStyles(orig.children[i],clone.children[i]);
   }
 }
 
-document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
-  const btn      = document.getElementById('downloadPdfBtn');
-  const posterEl = document.getElementById('posterCanvas');
-  const wrapEl   = document.getElementById('posterWrapper');
+async function captureDataUrl() {
+  await document.fonts.ready;
+  const posterEl = document.getElementById('poster');
+  await Promise.all([...posterEl.querySelectorAll('img')].map(imgToDataUri));
 
-  btn.disabled = true;
-  btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px;"></i> Processing...';
-  lucide.createIcons();
+  const scale = +document.getElementById('sel-scale').value || 2;
+  const clone = posterEl.cloneNode(true);
+  clone.style.cssText = [
+    'position:fixed','top:0','left:-9999px',
+    `width:${state.posterW}px`,`height:${state.posterH}px`,
+    'transform:none','overflow:hidden','background:#fff','pointer-events:none'
+  ].join(';');
 
-  const restore = () => scalePoster();
+  const origImgs  = [...posterEl.querySelectorAll('img')];
+  const cloneImgs = [...clone.querySelectorAll('img')];
+  origImgs.forEach((img,i) => { if(cloneImgs[i]) cloneImgs[i].src = img.src; });
 
+  document.body.appendChild(clone);
+  await new Promise(r=>setTimeout(r,60));
+  deepInlineStyles(posterEl, clone);
+  await new Promise(r=>setTimeout(r,80));
+
+  const dataUrl = await domtoimage.toPng(clone, {
+    width:  state.posterW * scale,
+    height: state.posterH * scale,
+    style: {
+      transform: `scale(${scale})`,
+      transformOrigin: 'top left',
+      width: state.posterW+'px',
+      height: state.posterH+'px',
+    },
+    bgcolor: '#ffffff',
+    imagePlaceholder: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  });
+
+  document.body.removeChild(clone);
+  return dataUrl;
+}
+
+async function exportPNG() {
+  const btn = document.getElementById('btn-png');
+  btn.disabled = true; btn.textContent = 'Exporting…';
   try {
-    // 1. Fonts ready
-    await document.fonts.ready;
-
-    // 2. Pre-convert semua <img> ke base64 (iOS fix)
-    await Promise.all([...posterEl.querySelectorAll('img')].map(imgToDataUri));
-
-    // 3. Clone posterCanvas dan deep-inline semua computed styles
-    //    Ini bypass masalah external CSS tidak terbaca di SVG foreignObject
-    const clone = posterEl.cloneNode(true);
-    clone.style.cssText = [
-      'position:fixed',
-      'top:0',
-      'left:-9999px',
-      'width:1080px',
-      'height:1350px',
-      'transform:none',
-      'zoom:1',
-      'overflow:hidden',
-      'background:#ffffff',
-    ].join(';');
-
-    // Copy img src base64 dari original ke clone
-    const origImgs  = [...posterEl.querySelectorAll('img')];
-    const cloneImgs = [...clone.querySelectorAll('img')];
-    origImgs.forEach((img, i) => { if (cloneImgs[i]) cloneImgs[i].src = img.src; });
-
-    // Inject ke body (perlu di DOM untuk getComputedStyle)
-    document.body.appendChild(clone);
-    await new Promise(r => setTimeout(r, 50));
-
-    // Deep-inline computed styles dari original ke clone
-    deepInlineComputedStyles(posterEl, clone);
-
-    // Hapus swipe-indicator dari clone
-    clone.querySelectorAll('.swipe-indicator').forEach(el => el.remove());
-
-    await new Promise(r => setTimeout(r, 100));
-
-    // 4. Capture clone (bukan original) — bebas dari transform parent
-    const SCALE = 2;
-    const dataUrl = await domtoimage.toPng(clone, {
-      width:  1080 * SCALE,
-      height: 1350 * SCALE,
-      style: {
-        transform:       `scale(${SCALE})`,
-        transformOrigin: 'top left',
-        width:           '1080px',
-        height:          '1350px',
-      },
-      bgcolor:          '#ffffff',
-      imagePlaceholder: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-    });
-
-    // 5. Cleanup clone
-    document.body.removeChild(clone);
-
-    // 6. Trigger download
+    const dataUrl = await captureDataUrl();
+    const fn = (document.getElementById('inp-filename').value||'forma-poster');
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
-      const win = window.open();
-      if (win) {
-        win.document.write(
-          '<html><head><title>poster-layout-' + currentLayout + '.png</title></head>' +
-          '<body style="margin:0;background:#111;">' +
-          '<img src="' + dataUrl + '" style="max-width:100%;display:block;margin:auto;">' +
-          '<p style="color:#aaa;font-family:sans-serif;text-align:center;padding:12px;font-size:13px;">' +
-          'Tekan & tahan gambar → Simpan ke Foto</p></body></html>'
-        );
-        win.document.close();
+      try {
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], fn+'.png', {type:'image/png'});
+        if (navigator.canShare && navigator.canShare({files:[file]})) {
+          await navigator.share({files:[file], title:'Poster'});
+        } else {
+          const blobUrl = URL.createObjectURL(blob);
+          window.location.href = blobUrl;
+          setTimeout(()=>URL.revokeObjectURL(blobUrl),3000);
+        }
+      } catch(e) {
+        const w=window.open();
+        if(w){ w.document.write(`<img src="${dataUrl}" style="max-width:100%"><p style="text-align:center;font-family:sans-serif;color:#aaa">Tap & hold → Save Image</p>`); w.document.close(); }
       }
     } else {
-      const link = document.createElement('a');
-      link.href  = dataUrl;
-      link.download = `poster-layout-${currentLayout}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const a = document.createElement('a');
+      a.href=dataUrl; a.download=fn+'.png';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
-
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG';
-    lucide.createIcons();
-
-  } catch (err) {
-    console.error('Download error:', err);
-    // Cleanup clone jika masih ada di DOM
-    const leftover = document.querySelector('div[style*="left:-9999px"]');
-    if (leftover) document.body.removeChild(leftover);
-    restore();
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="alert-circle" style="width:14px;height:14px;"></i> Error – retry';
-    lucide.createIcons();
-    setTimeout(() => {
-      btn.innerHTML = '<i data-lucide="download" style="width:14px;height:14px;"></i> Download PNG';
-      lucide.createIcons();
-    }, 2500);
-  }
-});
-
-// Touch swipe support on poster wrapper
-const posterWrapper = document.getElementById('posterWrapper');
-posterWrapper.addEventListener('touchstart', (e) => {
-  touchStartX = e.touches[0].clientX;
-});
-
-posterWrapper.addEventListener('touchend', (e) => {
-  const touchEndX = e.changedTouches[0].clientX;
-  if (touchStartX - touchEndX > 50 && currentLayout < 9) {
-    updateLayout(currentLayout + 1);
-  } else if (touchEndX - touchStartX > 50 && currentLayout > 1) {
-    updateLayout(currentLayout - 1);
-  }
-});
-
-// --- Live bindings ---
-const bind = (inputId, posterId, prop = 'textContent') => {
-  document.getElementById(inputId).addEventListener('input', (e) => {
-    document.getElementById(posterId)[prop] = e.target.value;
-  });
-};
-
-// Bind with special handling for headline (allows HTML)
-document.getElementById('inp_judul').addEventListener('input', (e) => {
-  document.getElementById('p_headline').textContent = e.target.value;
-});
-
-bind('inp_sub_judul', 'p_sub');
-bind('inp_info', 'p_info');
-bind('inp_desc1', 'p_desc1');
-bind('inp_desc2', 'p_desc2');
-bind('inp_tagline', 'p_tagline');
-
-// Color
-document.getElementById('inp_color').addEventListener('input', (e) => {
-  const c = e.target.value;
-  document.getElementById('color_label').textContent = c.toUpperCase();
-  document.getElementById('p_headline').style.color = c;
-  document.getElementById('p_tagline').style.color = c;
-  // If layout 8, apply color to bottom border
-  const infoBar = document.getElementById('p_info_bar');
-  const anchorLine = document.getElementById('p_layout8_line');
-  if (currentLayout === 8) {
-    infoBar.style.borderBottom = `3px solid ${c}`;
-    if (anchorLine) {
-      anchorLine.style.backgroundColor = c;
-    }
-  }
-});
-
-// File uploads
-function setupUpload(dropId, fileId, labelId, onLoad) {
-  const drop = document.getElementById(dropId);
-  const file = document.getElementById(fileId);
-  const label = document.getElementById(labelId);
-  drop.addEventListener('click', () => file.click());
-  file.addEventListener('change', (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      label.textContent = f.name.slice(0, 20);
-      onLoad(ev.target.result);
-    };
-    reader.readAsDataURL(f);
-  });
+  } catch(e){ console.error(e); alert('Export failed. Try again.'); }
+  btn.disabled=false;
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PNG';
 }
 
-setupUpload('drop_visual', 'file_visual', 'visual_label', (dataUrl) => {
-  lastUploadedImage = dataUrl;
-  const hero = document.getElementById('p_hero');
-  hero.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-  
-  // For Layout 6: populate left and right images
-  if (currentLayout === 6) {
-    document.getElementById('p_side_image_left').src = dataUrl;
-    document.getElementById('p_side_image_left').style.display = 'block';
-    document.getElementById('p_side_image_right').src = dataUrl;
-    document.getElementById('p_side_image_right').style.display = 'block';
-  }
-  
-  // For Layout 7: populate left and right circular images
-  if (currentLayout === 7) {
-    document.getElementById('p_side_image_left').src = dataUrl;
-    document.getElementById('p_side_image_left').style.display = 'block';
-    document.getElementById('p_side_image_right').src = dataUrl;
-    document.getElementById('p_side_image_right').style.display = 'block';
-  }
-});
-
-setupUpload('drop_logo', 'file_logo', 'logo_label', (dataUrl) => {
-  const brand = document.getElementById('p_brand');
-  brand.innerHTML = `<img src="${dataUrl}" style="height:36px;width:auto;">`;
-});
-
-// --- Poster scaling ---
-function scalePoster() {
-  const wrapper = document.getElementById('posterWrapper');
-  const available = Math.min(window.innerWidth - 48, 900);
-  const scale = Math.min(available / 1080, 0.55);
-  wrapper.style.transform = `scale(${scale})`;
-  wrapper.style.width = '1080px';
-  wrapper.style.height = `${1350 * scale}px`;
+async function exportPDF() {
+  const btn = document.getElementById('btn-pdf');
+  btn.disabled=true; btn.textContent='Exporting…';
+  try {
+    const dataUrl = await captureDataUrl();
+    const {jsPDF} = window.jspdf;
+    const mmW = state.posterW * 0.2646;
+    const mmH = state.posterH * 0.2646;
+    const pdf = new jsPDF({ orientation: mmW>mmH?'landscape':'portrait', unit:'mm', format:[mmW,mmH] });
+    pdf.addImage(dataUrl,'PNG',0,0,mmW,mmH);
+    const fn = (document.getElementById('inp-filename').value||'forma-poster');
+    pdf.save(fn+'.pdf');
+  } catch(e){ console.error(e); alert('PDF export failed.'); }
+  btn.disabled=false;
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Export PDF';
 }
 
-window.addEventListener('resize', scalePoster);
-scalePoster();
-
-// Init icons
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+buildFontGrid();
+buildLayoutGrid();
+renderPoster();
+setTimeout(resetZoom, 100);
 lucide.createIcons();
-```
-
-  </script>
+</script>
 </body>
 </html>
