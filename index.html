@@ -8,314 +8,280 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f0eb;--panel:#ffffff;--panel2:#f9f6f2;--border:#e0d8d0;
-  --accent:#1a1a1a;--accent2:#e05a5a;--text:#1a1a1a;--muted:#999;
-  --grid-line:rgba(0,0,0,0.08);--cell-bg:#e8e2da;--cell-empty:#d4cec7;
-  --cell-filled:#ffffff;--handle-pink:#e91e8c;
+  --bg:#f0ebe4;
+  --panel:#ffffff;
+  --border:#e0d8d0;
+  --accent:#1a1a1a;
+  --accent2:#e05a5a;
+  --text:#1a1a1a;
+  --muted:#999;
+  --cell-bg:#d9d2c9;
+  --pink:#e91e8c;
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
-/* ═══ HEADER ═══ */
-header{height:52px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:10}
-.logo{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:8px}
-.logo-icon{width:26px;height:26px;background:var(--text);border-radius:4px;display:flex;align-items:center;justify-content:center}
-.logo-icon svg{width:14px;height:14px;fill:white}
-.header-sep{width:1px;height:24px;background:var(--border);flex-shrink:0}
-.header-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
-.btn{padding:7px 16px;border-radius:20px;font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent;letter-spacing:.02em}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
-.btn-ghost:active{border-color:var(--text);color:var(--text)}
-.btn-primary{background:var(--text);color:#fff;font-weight:500;border-radius:20px}
-.btn-primary:active{background:#333}
-.btn-danger{background:transparent;border:1px solid var(--accent2);color:var(--accent2);border-radius:6px}
-.btn-danger:active{background:var(--accent2);color:#fff}
-.btn-icon{width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font-size:15px;border-radius:50%;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.btn-icon:active{border-color:var(--text);color:var(--text)}
+/* HEADER */
+header{height:52px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:10}
+.logo{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
+.logo-box{width:26px;height:26px;background:var(--text);border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:5px}
+.logo-box span{background:white;border-radius:1px;display:block}
+.header-div{width:1px;height:22px;background:var(--border)}
+.header-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-reset{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.btn-reset:active{border-color:var(--text);color:var(--text)}
+.btn-css{padding:8px 18px;background:var(--text);color:#fff;border:none;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.btn-css:active{background:#333}
 
-/* ═══ APP BODY ═══ */
-.app-body{flex:1;display:grid;grid-template-columns:240px 1fr 260px;overflow:hidden;min-height:0}
+/* APP LAYOUT */
+.app-body{flex:1;display:grid;grid-template-columns:260px 1fr 280px;overflow:hidden;min-height:0}
 
-/* ═══ LEFT PANEL ═══ */
-.left-panel{background:var(--panel);border-right:1px solid var(--border);padding:0;overflow-y:auto;display:flex;flex-direction:column}
-.panel-section{padding:16px 14px;border-bottom:1px solid var(--border)}
-.panel-section:last-child{border-bottom:none}
-.panel-section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+/* LEFT PANEL */
+.left-panel{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.ps{padding:14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ps:last-child{border-bottom:none}
+.ps-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 
-/* canvas size presets */
-.size-presets{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.size-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:10px 8px;cursor:pointer;text-align:center;transition:all .15s;color:var(--text);-webkit-tap-highlight-color:transparent}
-.size-btn.active{border-color:var(--text);background:var(--text);color:#fff}
-.size-btn-ratio{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;display:block;line-height:1;margin-bottom:3px}
-.size-btn-label{font-size:9px;color:inherit;opacity:.65;line-height:1}
-.size-btn.active .size-btn-label{color:#fff;opacity:.7}
-.custom-size-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-.custom-size-input{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:7px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;width:100%;transition:border-color .15s;text-align:center}
-.custom-size-input:focus{border-color:var(--text)}
+/* Size presets */
+.size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.sz-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;color:var(--text);-webkit-tap-highlight-color:transparent}
+.sz-btn.active{border-color:var(--text);background:var(--text);color:#fff}
+.sz-r{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;display:block;line-height:1.1}
+.sz-l{font-size:9px;opacity:.6;display:block;margin-top:2px}
+.sz-btn.active .sz-l{opacity:.7}
+.custom-wh{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cw-inp{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:7px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;width:100%;text-align:center;transition:border-color .15s}
+.cw-inp:focus{border-color:var(--text)}
 
-/* grid controls */
-.col-row-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.num-input-wrap{display:flex;flex-direction:column;gap:4px}
-.num-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
-.num-input-row{display:flex;align-items:center;background:#f5f0eb;border:1px solid var(--border);border-radius:6px;overflow:hidden}
-.num-stepper{width:28px;height:32px;border:none;background:transparent;cursor:pointer;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .1s}
-.num-stepper:active{background:rgba(0,0,0,.08)}
-.num-val{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);border:none;background:transparent;outline:none;width:30px}
-.gap-row{display:flex;flex-direction:column;gap:4px}
-.gap-slider-wrap{display:flex;align-items:center;gap:8px}
+/* Grid system selector */
+.grid-sys-list{display:flex;flex-direction:column;gap:5px}
+.gs-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.gs-btn.active{border-color:var(--text);background:rgba(26,26,26,.05)}
+.gs-name{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;display:block;margin-bottom:1px}
+.gs-desc{font-size:9px;color:var(--muted);line-height:1.4}
+
+/* Grid controls */
+.col-row-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.nr-wrap{display:flex;flex-direction:column;gap:4px}
+.nr-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.nr-row{display:flex;align-items:center;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:#f5f0eb}
+.nr-btn{width:30px;height:32px;border:none;background:transparent;cursor:pointer;font-size:16px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .1s;font-weight:300}
+.nr-btn:active{background:rgba(0,0,0,.08)}
+.nr-val{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;border:none;background:transparent;outline:none;color:var(--text)}
+.gap-wrap{display:flex;flex-direction:column;gap:5px}
+.gap-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;justify-content:space-between}
+.gap-val-disp{color:var(--text);font-weight:500}
 input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:2px;outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--text);border-radius:50%;cursor:pointer}
 
-/* palette */
-.element-palette{display:flex;flex-direction:column;gap:5px}
-.palette-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;border:1px solid var(--border);cursor:grab;transition:all .15s;-webkit-tap-highlight-color:transparent;background:white}
-.palette-item:active,.palette-item.dragging-from{border-color:var(--text);background:#f5f5f5;cursor:grabbing}
-.palette-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.palette-item-name{font-weight:500;color:var(--text);font-size:12px}
-.palette-item-hint{font-size:10px;color:var(--muted)}
+/* Element palette */
+.pal-list{display:flex;flex-direction:column;gap:5px}
+.pal-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;border:1px solid var(--border);cursor:grab;transition:all .15s;background:white;-webkit-tap-highlight-color:transparent}
+.pal-item:active{border-color:var(--text);cursor:grabbing}
+.pal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pal-name{font-size:12px;font-weight:500;color:var(--text)}
+.pal-hint{font-size:10px;color:var(--muted)}
 
-/* ═══ CANVAS AREA ═══ */
-.canvas-area{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;position:relative;padding:24px 20px;-webkit-overflow-scrolling:touch}
-.canvas-area-inner{display:flex;flex-direction:column;align-items:center;gap:12px;min-height:100%}
-.canvas-size-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;flex-shrink:0}
+/* CANVAS AREA */
+.canvas-area{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;position:relative;padding:20px;-webkit-overflow-scrolling:touch;gap:10px}
 
-/* the actual canvas */
+.canvas-size-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;letter-spacing:.06em}
+
+/* THE CANVAS */
 #canvas{
   position:relative;
   background:#ffffff;
-  box-shadow:0 2px 8px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.06);
+  box-shadow:0 1px 4px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.07);
   border-radius:4px;
   flex-shrink:0;
   overflow:hidden;
   touch-action:none;
+  user-select:none;
 }
 
-/* grid overlay */
-.grid-canvas{
-  display:grid;
-  width:100%;height:100%;
-  position:absolute;top:0;left:0;
+/* GRID OVERLAY — cream cells */
+.grid-overlay{
+  position:absolute;inset:0;
   pointer-events:none;
   z-index:1;
 }
-
-/* individual cells */
-.grid-cell{
-  background:var(--cell-empty);
-  border-radius:3px;
-  position:relative;
+.grid-cell-bg{
+  position:absolute;
+  background:var(--cell-bg);
+  border-radius:2px;
+  /* pointer events added per cell */
   pointer-events:all;
   cursor:crosshair;
-  transition:background .12s;
+  transition:background .1s;
   display:flex;align-items:center;justify-content:center;
 }
-.grid-cell:hover{background:rgba(0,0,0,.14)}
-.grid-cell.has-el{background:transparent;pointer-events:none}
-
-/* plus button — like reference */
+.grid-cell-bg:hover{background:rgba(0,0,0,.18)}
 .add-btn{
-  width:28px;height:28px;
-  border-radius:50%;
-  background:rgba(255,255,255,.6);
-  border:1.5px solid rgba(0,0,0,.2);
-  color:rgba(0,0,0,.5);
-  font-size:18px;
-  line-height:1;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,.55);
+  border:1.5px solid rgba(0,0,0,.18);
+  color:rgba(0,0,0,.45);
+  font-size:17px;font-weight:300;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  transition:all .12s;
-  opacity:0;
-  font-weight:300;
+  cursor:pointer;opacity:0;
+  transition:opacity .12s;
   -webkit-tap-highlight-color:transparent;
+  line-height:1;
 }
-.grid-cell:hover .add-btn{opacity:1}
-.grid-cell:hover{background:rgba(0,0,0,.07)}
-@media(hover:none){.add-btn{opacity:.5!important}}
+.grid-cell-bg:hover .add-btn{opacity:1}
+@media(hover:none){.add-btn{opacity:.45!important}}
 
-/* ═══ DESIGN ELEMENTS — reference style ═══ */
-.design-element{
+/* DESIGN ELEMENTS */
+.design-el{
   position:absolute;
   background:#ffffff;
-  border:1.5px solid rgba(0,0,0,.15);
+  border:1.5px solid rgba(0,0,0,.13);
   border-radius:3px;
-  cursor:move;
-  user-select:none;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;
-  overflow:visible;
   z-index:10;
   touch-action:none;
+  cursor:move;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
+  overflow:hidden;
+  transition:border-color .1s;
 }
-.design-element.selected{
-  border-color:transparent;
+.design-el.selected{
+  border-color:var(--text);
   z-index:20;
 }
-.design-element.dragging{
-  opacity:.9;
-  z-index:100;
-  cursor:grabbing;
-}
+.design-el.dragging{opacity:.88;z-index:100;cursor:grabbing}
 
-/* element inner content */
-.el-inner{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;
-  overflow:hidden;
-  border-radius:2px;
-  padding:8px;
-}
-.element-label{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(0,0,0,.4);pointer-events:none}
-.element-preview{font-family:'DM Sans',sans-serif;text-align:center;padding:0 6px;pointer-events:none;font-size:11px;line-height:1.35;max-width:100%;overflow:hidden;word-break:break-word;color:rgba(0,0,0,.7)}
+/* element content */
+.el-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.35);pointer-events:none;line-height:1}
+.el-prev{font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(0,0,0,.65);text-align:center;padding:0 6px;pointer-events:none;line-height:1.35;max-width:100%;overflow:hidden;word-break:break-word}
 
-/* close X — pink like reference */
-.element-close{
-  position:absolute;
-  top:-10px;right:-10px;
-  width:22px;height:22px;
-  border-radius:50%;
-  background:var(--handle-pink);
-  border:2px solid #fff;
-  color:#fff;
-  font-size:12px;
-  line-height:1;
+/* CLOSE button — pink circle */
+.el-close{
+  position:absolute;top:-10px;right:-10px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--pink);border:2px solid #fff;
+  color:#fff;font-size:11px;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  z-index:40;
+  cursor:pointer;z-index:50;
   box-shadow:0 1px 4px rgba(0,0,0,.25);
-  opacity:0;
-  transition:opacity .15s;
+  opacity:0;transition:opacity .15s;
   -webkit-tap-highlight-color:transparent;
+  line-height:1;
 }
-.design-element.selected .element-close{opacity:1}
-.design-element:hover .element-close{opacity:1}
+.design-el.selected .el-close,
+.design-el:hover .el-close{opacity:1}
 
-/* resize handle — bottom-right corner like reference (L-bracket) */
-.resize-handle-br{
-  position:absolute;
-  bottom:-5px;right:-5px;
-  width:16px;height:16px;
-  cursor:se-resize;
-  z-index:35;
-  opacity:0;
-  transition:opacity .15s;
+/* RESIZE handle — bottom-right L-bracket */
+.el-resize{
+  position:absolute;bottom:-6px;right:-6px;
+  width:18px;height:18px;
+  cursor:se-resize;z-index:50;
+  opacity:0;transition:opacity .15s;
   touch-action:none;
 }
-.design-element.selected .resize-handle-br,
-.design-element:hover .resize-handle-br{opacity:1}
-/* L bracket SVG drawn via CSS */
-.resize-handle-br::before{
-  content:'';
-  position:absolute;
+.design-el.selected .el-resize,
+.design-el:hover .el-resize{opacity:1}
+.el-resize::before{
+  content:'';position:absolute;
   bottom:3px;right:3px;
-  width:8px;height:8px;
+  width:9px;height:9px;
   border-right:2.5px solid var(--text);
   border-bottom:2.5px solid var(--text);
   border-radius:0 0 2px 0;
 }
 
-/* selected border — thin black border */
-.design-element.selected::after{
-  content:'';
-  position:absolute;
-  inset:-1px;
-  border:1.5px solid var(--text);
-  border-radius:3px;
-  pointer-events:none;
-  z-index:25;
-}
+/* element type styles */
+.el-headline .el-prev{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#1a1a1a}
+.el-subheadline .el-prev{font-size:12px;color:#333}
+.el-description .el-prev{font-size:10px;color:#888;line-height:1.5}
+.el-footer .el-prev{font-family:'DM Mono',monospace;font-size:9px;color:#999}
+.el-visualhook{background:rgba(233,30,140,.04)!important;border-color:rgba(233,30,140,.25)!important}
+.el-visualhook .el-prev{font-size:20px;color:var(--pink)}
 
-/* element color variants */
-.el-headline .el-inner{background:rgba(26,26,26,.03)}
-.el-headline .element-preview{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#1a1a1a}
-.el-subheadline .el-inner{background:rgba(26,26,26,.02)}
-.el-subheadline .element-preview{font-size:12px;color:#444}
-.el-description .el-inner{background:rgba(26,26,26,.015)}
-.el-description .element-preview{font-size:10px;color:#888}
-.el-footer .el-inner{background:rgba(26,26,26,.025)}
-.el-footer .element-preview{font-family:'DM Mono',monospace;font-size:9px;color:#888}
-.el-visualhook .el-inner{background:rgba(224,90,90,.06);border:1px dashed rgba(224,90,90,.3)}
-.el-visualhook .element-preview{font-size:22px;color:#e05a5a}
-
-/* ═══ RIGHT PANEL ═══ */
+/* RIGHT PANEL */
 .right-panel{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.right-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.right-tab{flex:1;padding:14px 8px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.right-tab.active{color:var(--text);border-bottom:2px solid var(--text)}
-.tab-content{flex:1;overflow-y:auto;padding:16px 14px}
-.tab-pane{display:none}
-.tab-pane.active{display:block}
-.no-selection{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;color:var(--muted);font-size:11px;text-align:center;gap:10px;line-height:1.6}
-.no-selection-icon{font-size:28px;opacity:.2}
-.prop-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.prop-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
-.prop-input{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
-.prop-input:focus{border-color:var(--text)}
-.prop-row-2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
-.prop-mini{display:flex;flex-direction:column;gap:4px}
+.r-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.r-tab{flex:1;padding:14px 8px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.r-tab.active{color:var(--text);border-bottom:2px solid var(--text)}
+.tab-body{flex:1;overflow-y:auto;padding:16px 14px}
+.tp{display:none}
+.tp.active{display:block}
+.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;color:var(--muted);font-size:11px;text-align:center;gap:10px;line-height:1.6}
+.no-sel-icon{font-size:28px;opacity:.18}
+.pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.pr-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
+.pr-inp{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.pr-inp:focus{border-color:var(--text)}
+.pr2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.pm{display:flex;flex-direction:column;gap:4px}
 .pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
 .pos-box{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
-.pos-box-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
-.pos-box-val{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);font-weight:500}
-.code-block{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:10px}
-.code-block-label{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:7px}
-.code-text{font-family:'DM Mono',monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:180px;overflow-y:auto}
-.copy-code-btn{width:100%;margin-top:8px;padding:8px;background:var(--text);border:none;border-radius:20px;color:#fff;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s}
-.copy-code-btn:active{background:#444}
+.pos-box-l{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
+.pos-box-v{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);font-weight:500}
+.code-blk{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:10px}
+.code-lbl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:7px}
+.code-txt{font-family:'DM Mono',monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:180px;overflow-y:auto}
+.copy-btn{width:100%;margin-top:8px;padding:8px;background:var(--text);border:none;border-radius:20px;color:#fff;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:background .15s}
+.copy-btn:active{background:#444}
+.del-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--accent2);border-radius:20px;color:var(--accent2);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;margin-top:4px;transition:all .15s}
+.del-btn:active{background:var(--accent2);color:#fff}
 
-/* ═══ ELEMENT PICKER ═══ */
-.element-picker{
-  position:fixed;background:#fff;border:1px solid var(--border);border-radius:12px;
-  padding:14px;z-index:2000;box-shadow:0 8px 32px rgba(0,0,0,.12);
-  display:none;width:200px;
-  animation:pickerIn .12s ease;
-}
-@keyframes pickerIn{from{opacity:0;transform:scale(.94) translateY(-4px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.picker-title{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:8px}
-.picker-grid{display:flex;flex-direction:column;gap:4px}
-.picker-item{padding:9px 12px;border-radius:7px;border:1px solid var(--border);cursor:pointer;text-align:left;transition:all .1s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:10px}
-.picker-item:active{border-color:var(--text);background:#f5f0eb}
-.picker-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.picker-item-info{flex:1}
-.picker-item-name{font-size:12px;font-weight:500;color:var(--text)}
-.picker-item-sub{font-size:10px;color:var(--muted)}
+/* ELEMENT PICKER */
+.picker{position:fixed;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;z-index:3000;box-shadow:0 8px 32px rgba(0,0,0,.12);display:none;width:195px;animation:pickerIn .12s ease}
+@keyframes pickerIn{from{opacity:0;transform:scale(.93) translateY(-4px)}to{opacity:1;transform:none}}
+.picker-ttl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:8px}
+.picker-list{display:flex;flex-direction:column;gap:4px}
+.picker-itm{padding:8px 10px;border-radius:7px;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:9px;transition:all .1s;-webkit-tap-highlight-color:transparent}
+.picker-itm:active{border-color:var(--text);background:#f5f0eb}
+.picker-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.picker-n{font-size:12px;font-weight:500;color:var(--text)}
+.picker-s{font-size:9px;color:var(--muted)}
 
-/* ═══ MOBILE ═══ */
-.mobile-bottom-nav{display:none;height:56px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
-.mobile-nav-items{display:flex;height:56px}
-.mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(--muted);font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;-webkit-tap-highlight-color:transparent;transition:color .15s}
-.mobile-nav-item.active{color:var(--text)}
-.mobile-nav-icon{font-size:18px;line-height:1}
-.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;opacity:0;transition:opacity .22s}
-.drawer-overlay.visible{opacity:1}
-.drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);max-height:85vh;display:flex;flex-direction:column;padding-bottom:calc(var(--safe-bottom)+8px)}
+/* MOBILE NAV */
+.mob-nav{display:none;height:56px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
+.mob-nav-items{display:flex;height:56px}
+.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(--muted);font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;-webkit-tap-highlight-color:transparent;transition:color .15s}
+.mob-nav-btn.active{color:var(--text)}
+.mob-nav-ico{font-size:18px;line-height:1}
+
+/* DRAWER */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;opacity:0;transition:opacity .22s}
+.overlay.vis{opacity:1}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);max-height:86vh;display:flex;flex-direction:column;padding-bottom:calc(var(--safe-bottom)+8px)}
 .drawer.open{transform:translateY(0)}
-.drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
-.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;flex-shrink:0;border-bottom:1px solid var(--border)}
-.drawer-title{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.1em}
-.drawer-close{width:28px;height:28px;border-radius:50%;background:var(--border);border:none;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.drawer-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
-.m-size-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.drw-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.drw-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.drw-title{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em}
+.drw-cls{width:28px;height:28px;border-radius:50%;background:var(--border);border:none;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+
+/* mobile shared */
+.m-sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px}
 .m-col-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.m-element-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.m-element-item{padding:14px 10px;border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s;background:white}
-.m-element-item:active{border-color:var(--text);background:#f5f0eb}
-.m-element-item.full-width{grid-column:1/-1}
-.m-el-icon{font-size:22px}
-.m-el-name{font-size:11px;font-weight:500}
-.m-el-hint{font-size:9px;color:var(--muted)}
-.m-prop-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.m-prop-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
-.m-prop-input{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%}
-.m-prop-input:focus{border-color:var(--text)}
-.m-prop-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.m-prop-mini{display:flex;flex-direction:column;gap:5px}
-.m-code-block{background:#f5f0eb;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
-.m-code-label{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:8px}
-.m-code-text{font-family:'DM Mono',monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:140px;overflow-y:auto}
-.m-copy-btn{width:100%;margin-top:10px;padding:12px;background:var(--text);color:#fff;border:none;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.m-el-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-el-item{padding:13px 8px;border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s;background:white}
+.m-el-item:active{border-color:var(--text);background:#f5f0eb}
+.m-el-item.fw{grid-column:1/-1}
+.m-el-ico{font-size:20px}
+.m-el-n{font-size:11px;font-weight:500}
+.m-el-h{font-size:9px;color:var(--muted)}
+.m-pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.m-prl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
+.m-pri{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%}
+.m-pr2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.m-pm{display:flex;flex-direction:column;gap:5px}
+.m-cb{background:#f5f0eb;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
+.m-cl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:8px}
+.m-ct{font-family:'DM Mono',monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto}
+.m-cpb{width:100%;margin-top:10px;padding:12px;background:var(--text);color:#fff;border:none;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* mobile grid sys */
+.m-gs-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.m-gs-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.m-gs-btn.active{border-color:var(--text);background:rgba(26,26,26,.05)}
 
 /* TOAST */
-.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:#fff;padding:8px 18px;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .25s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:#fff;padding:9px 20px;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -323,16 +289,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
 @media(max-width:900px){
-  .app-body{grid-template-columns:220px 1fr}
+  .app-body{grid-template-columns:240px 1fr}
   .right-panel{display:none}
 }
 @media(max-width:640px){
-  header{padding:0 12px;gap:8px}
+  header{padding:0 12px}
   .app-body{grid-template-columns:1fr}
   .left-panel,.right-panel{display:none}
-  .mobile-bottom-nav{display:block}
-  .canvas-area{padding:12px 10px;align-items:flex-start}
-  .toast{bottom:68px}
+  .mob-nav{display:block}
+  .canvas-area{padding:10px;align-items:flex-start}
+  .toast{bottom:64px}
 }
 </style>
 </head>
@@ -340,594 +306,710 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
 <header>
   <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 14 14"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg>
-    </div>
+    <div class="logo-box"><span></span><span></span><span></span><span></span></div>
     Grid Design
   </div>
-  <div class="header-sep"></div>
-  <div class="header-actions">
-    <button class="btn-icon" onclick="resetCanvas()" title="Reset">↺</button>
-    <button class="btn btn-primary" onclick="copyCSS()">Copy CSS</button>
+  <div class="header-div"></div>
+  <div class="header-right">
+    <button class="btn-reset" onclick="resetCanvas()" title="Reset">↺</button>
+    <button class="btn-css" onclick="copyCSS()">Copy CSS</button>
   </div>
 </header>
 
 <div class="app-body">
 
-  <!-- LEFT PANEL -->
-  <div class="left-panel">
+<!-- ══ LEFT ══ -->
+<div class="left-panel">
 
-    <!-- Canvas Size -->
-    <div class="panel-section">
-      <div class="panel-section-title">Canvas Size</div>
-      <div class="size-presets">
-        <button class="size-btn" onclick="setCanvasSize('1:1',this)">
-          <span class="size-btn-ratio">1:1</span>
-          <span class="size-btn-label">Square</span>
-        </button>
-        <button class="size-btn" onclick="setCanvasSize('4:5',this)">
-          <span class="size-btn-ratio">4:5</span>
-          <span class="size-btn-label">Portrait</span>
-        </button>
-        <button class="size-btn" onclick="setCanvasSize('9:16',this)">
-          <span class="size-btn-ratio">9:16</span>
-          <span class="size-btn-label">Story / Reel</span>
-        </button>
-        <button class="size-btn active" onclick="setCanvasSize('custom',this)" id="btn-custom">
-          <span class="size-btn-ratio">⊡</span>
-          <span class="size-btn-label">Custom</span>
-        </button>
-      </div>
-      <div class="custom-size-row" id="custom-size-row">
-        <input class="custom-size-input" id="custom-w" type="number" value="540" placeholder="W" oninput="applyCustomSize()">
-        <input class="custom-size-input" id="custom-h" type="number" value="400" placeholder="H" oninput="applyCustomSize()">
-      </div>
+  <!-- Canvas Size -->
+  <div class="ps">
+    <div class="ps-title">Canvas Size</div>
+    <div class="size-grid">
+      <button class="sz-btn" onclick="setRatio('1:1',this)"><span class="sz-r">1:1</span><span class="sz-l">Square</span></button>
+      <button class="sz-btn" onclick="setRatio('4:5',this)"><span class="sz-r">4:5</span><span class="sz-l">Portrait</span></button>
+      <button class="sz-btn" onclick="setRatio('9:16',this)"><span class="sz-r">9:16</span><span class="sz-l">Story / Reel</span></button>
+      <button class="sz-btn active" onclick="setRatio('custom',this)"><span class="sz-r">⊡</span><span class="sz-l">Custom</span></button>
     </div>
-
-    <!-- Grid Controls -->
-    <div class="panel-section">
-      <div class="panel-section-title">Grid</div>
-      <div class="col-row-grid">
-        <div class="num-input-wrap">
-          <div class="num-label">Columns</div>
-          <div class="num-input-row">
-            <button class="num-stepper" onclick="stepNum('cols',-1)">−</button>
-            <input class="num-val" id="cols-val" type="number" value="5" min="1" max="20" oninput="onNumInput('cols')">
-            <button class="num-stepper" onclick="stepNum('cols',1)">+</button>
-          </div>
-        </div>
-        <div class="num-input-wrap">
-          <div class="num-label">Rows</div>
-          <div class="num-input-row">
-            <button class="num-stepper" onclick="stepNum('rows',-1)">−</button>
-            <input class="num-val" id="rows-val" type="number" value="5" min="1" max="20" oninput="onNumInput('rows')">
-            <button class="num-stepper" onclick="stepNum('rows',1)">+</button>
-          </div>
-        </div>
-      </div>
-      <div class="gap-row">
-        <div class="num-label">Gap — <span style="color:var(--text);font-weight:500" id="gap-disp">8px</span></div>
-        <div class="gap-slider-wrap">
-          <input type="range" id="gap-slider" min="0" max="40" value="8" oninput="onGapChange()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Elements -->
-    <div class="panel-section">
-      <div class="panel-section-title">Elements — drag to canvas</div>
-      <div class="element-palette">
-        <div class="palette-item" draggable="true" ondragstart="onPaletteDragStart('headline',event)">
-          <div class="palette-dot" style="background:#1a1a1a"></div>
-          <div><div class="palette-item-name">Headline</div><div class="palette-item-hint">Primary title</div></div>
-        </div>
-        <div class="palette-item" draggable="true" ondragstart="onPaletteDragStart('subheadline',event)">
-          <div class="palette-dot" style="background:#555"></div>
-          <div><div class="palette-item-name">Sub Headline</div><div class="palette-item-hint">Supporting</div></div>
-        </div>
-        <div class="palette-item" draggable="true" ondragstart="onPaletteDragStart('description',event)">
-          <div class="palette-dot" style="background:#999"></div>
-          <div><div class="palette-item-name">Description</div><div class="palette-item-hint">Body copy</div></div>
-        </div>
-        <div class="palette-item" draggable="true" ondragstart="onPaletteDragStart('footer',event)">
-          <div class="palette-dot" style="background:#bbb"></div>
-          <div><div class="palette-item-name">Footer</div><div class="palette-item-hint">Bottom zone</div></div>
-        </div>
-        <div class="palette-item" draggable="true" ondragstart="onPaletteDragStart('visualhook',event)">
-          <div class="palette-dot" style="background:#e05a5a"></div>
-          <div><div class="palette-item-name">Visual Hook</div><div class="palette-item-hint">Image / CTA</div></div>
-        </div>
-      </div>
+    <div class="custom-wh" id="custom-wh">
+      <input class="cw-inp" id="cw" type="number" value="540" placeholder="W px" oninput="applyRatio()">
+      <input class="cw-inp" id="ch" type="number" value="400" placeholder="H px" oninput="applyRatio()">
     </div>
   </div>
 
-  <!-- CANVAS AREA -->
-  <div class="canvas-area" id="canvas-area"
-       ondragover="event.preventDefault()"
-       ondrop="onPaletteDrop(event)"
-       onclick="canvasAreaClick(event)">
-    <div class="canvas-size-label" id="canvas-size-label">540 × 400 px</div>
-    <div id="canvas">
-      <div class="grid-canvas" id="grid"></div>
+  <!-- Grid System -->
+  <div class="ps">
+    <div class="ps-title">Grid System</div>
+    <div class="grid-sys-list">
+      <button class="gs-btn active" onclick="setGridSystem('column',this)">
+        <span class="gs-name">Column Grid</span>
+        <span class="gs-desc">Classic editorial columns, same width</span>
+      </button>
+      <button class="gs-btn" onclick="setGridSystem('modular',this)">
+        <span class="gs-name">Modular Grid</span>
+        <span class="gs-desc">Equal rows × columns matrix</span>
+      </button>
+      <button class="gs-btn" onclick="setGridSystem('hierarchy',this)">
+        <span class="gs-name">Hierarchy Grid</span>
+        <span class="gs-desc">Unequal zones — 2fr + 1fr, 4 rows</span>
+      </button>
+      <button class="gs-btn" onclick="setGridSystem('golden',this)">
+        <span class="gs-name">Golden Ratio</span>
+        <span class="gs-desc">φ = 1.618 harmonic columns</span>
+      </button>
     </div>
   </div>
 
-  <!-- RIGHT PANEL -->
-  <div class="right-panel">
-    <div class="right-tabs">
-      <button class="right-tab active" onclick="switchTab('properties',this)">Properties</button>
-      <button class="right-tab" onclick="switchTab('code',this)">Code</button>
-    </div>
-    <div class="tab-content">
-      <div class="tab-pane active" id="tab-properties">
-        <div id="props-no-sel" class="no-selection">
-          <div class="no-selection-icon">◱</div>
-          <div>Select an element<br>to edit its properties</div>
-        </div>
-        <div id="props-form" style="display:none">
-          <div class="prop-row">
-            <div class="prop-label">Type</div>
-            <div id="prop-type" style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;padding:2px 0"></div>
-          </div>
-          <div class="prop-row">
-            <div class="prop-label">Content</div>
-            <input class="prop-input" id="prop-content" oninput="updateElContent('d')">
-          </div>
-          <div class="prop-label" style="margin-bottom:8px">Position & Size</div>
-          <div class="pos-grid">
-            <div class="pos-box"><div class="pos-box-label">X</div><div class="pos-box-val" id="pos-x">0</div></div>
-            <div class="pos-box"><div class="pos-box-label">Y</div><div class="pos-box-val" id="pos-y">0</div></div>
-            <div class="pos-box"><div class="pos-box-label">W</div><div class="pos-box-val" id="pos-w">0</div></div>
-            <div class="pos-box"><div class="pos-box-label">H</div><div class="pos-box-val" id="pos-h">0</div></div>
-          </div>
-          <div class="prop-row-2">
-            <div class="prop-mini"><div class="prop-label">X</div><input class="prop-input" id="prop-x" type="number" oninput="updateElPosInput()"></div>
-            <div class="prop-mini"><div class="prop-label">Y</div><input class="prop-input" id="prop-y" type="number" oninput="updateElPosInput()"></div>
-          </div>
-          <div class="prop-row-2">
-            <div class="prop-mini"><div class="prop-label">Width</div><input class="prop-input" id="prop-w-in" type="number" oninput="updateElPosInput()"></div>
-            <div class="prop-mini"><div class="prop-label">Height</div><input class="prop-input" id="prop-h-in" type="number" oninput="updateElPosInput()"></div>
-          </div>
-          <button class="btn btn-danger" style="width:100%;margin-top:4px;padding:10px;border-radius:20px" onclick="deleteSelected()">Delete Element</button>
+  <!-- Grid Controls -->
+  <div class="ps" id="manual-ctrl">
+    <div class="ps-title">Grid</div>
+    <div class="col-row-wrap">
+      <div class="nr-wrap">
+        <div class="nr-label">Columns</div>
+        <div class="nr-row">
+          <button class="nr-btn" onclick="step('cols',-1)">−</button>
+          <input class="nr-val" id="cols-d" type="number" value="5" min="1" max="20" oninput="onNR('cols','d')">
+          <button class="nr-btn" onclick="step('cols',1)">+</button>
         </div>
       </div>
-      <div class="tab-pane" id="tab-code">
-        <div class="code-block">
-          <div class="code-block-label">HTML</div>
-          <div class="code-text" id="code-html"></div>
-          <button class="copy-code-btn" onclick="copyHTML()">Copy HTML</button>
+      <div class="nr-wrap" id="rows-ctrl">
+        <div class="nr-label">Rows</div>
+        <div class="nr-row">
+          <button class="nr-btn" onclick="step('rows',-1)">−</button>
+          <input class="nr-val" id="rows-d" type="number" value="5" min="1" max="20" oninput="onNR('rows','d')">
+          <button class="nr-btn" onclick="step('rows',1)">+</button>
         </div>
-        <div class="code-block">
-          <div class="code-block-label">CSS</div>
-          <div class="code-text" id="code-css"></div>
-          <button class="copy-code-btn" onclick="copyCSS()">Copy CSS</button>
-        </div>
+      </div>
+    </div>
+    <div class="gap-wrap">
+      <div class="gap-label">Gap <span class="gap-val-disp" id="gap-disp-d">8px</span></div>
+      <input type="range" id="gap-sl-d" min="0" max="40" value="8" oninput="onGap('d')">
+    </div>
+  </div>
+
+  <!-- Elements -->
+  <div class="ps">
+    <div class="ps-title">Elements — drag to canvas</div>
+    <div class="pal-list">
+      <div class="pal-item" draggable="true" ondragstart="palDragStart('headline',event)">
+        <div class="pal-dot" style="background:#1a1a1a"></div>
+        <div><div class="pal-name">Headline</div><div class="pal-hint">Primary title</div></div>
+      </div>
+      <div class="pal-item" draggable="true" ondragstart="palDragStart('subheadline',event)">
+        <div class="pal-dot" style="background:#555"></div>
+        <div><div class="pal-name">Sub Headline</div><div class="pal-hint">Supporting</div></div>
+      </div>
+      <div class="pal-item" draggable="true" ondragstart="palDragStart('description',event)">
+        <div class="pal-dot" style="background:#999"></div>
+        <div><div class="pal-name">Description</div><div class="pal-hint">Body copy</div></div>
+      </div>
+      <div class="pal-item" draggable="true" ondragstart="palDragStart('footer',event)">
+        <div class="pal-dot" style="background:#bbb"></div>
+        <div><div class="pal-name">Footer</div><div class="pal-hint">Bottom zone</div></div>
+      </div>
+      <div class="pal-item" draggable="true" ondragstart="palDragStart('visualhook',event)">
+        <div class="pal-dot" style="background:#e91e8c"></div>
+        <div><div class="pal-name">Visual Hook</div><div class="pal-hint">Image / CTA</div></div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- ══ CANVAS ══ -->
+<div class="canvas-area" id="canvas-area"
+     ondragover="event.preventDefault()"
+     ondrop="palDrop(event)"
+     onclick="areaClick(event)">
+  <div class="canvas-size-label" id="cv-lbl">540 × 400 px</div>
+  <div id="canvas">
+    <div class="grid-overlay" id="grid-overlay"></div>
+  </div>
+</div>
+
+<!-- ══ RIGHT ══ -->
+<div class="right-panel">
+  <div class="r-tabs">
+    <button class="r-tab active" onclick="switchTab('props',this)">Properties</button>
+    <button class="r-tab" onclick="switchTab('code',this)">Code</button>
+  </div>
+  <div class="tab-body">
+    <div class="tp active" id="tp-props">
+      <div id="no-sel" class="no-sel">
+        <div class="no-sel-icon">◱</div>
+        <div>Select an element<br>to edit properties</div>
+      </div>
+      <div id="props-form" style="display:none">
+        <div class="pr"><div class="pr-label">Type</div>
+          <div id="pr-type" style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;padding:2px 0"></div>
+        </div>
+        <div class="pr"><div class="pr-label">Content</div>
+          <input class="pr-inp" id="pr-content" oninput="updContent('d')">
+        </div>
+        <div class="pr-label" style="margin-bottom:8px">Position & Size</div>
+        <div class="pos-grid">
+          <div class="pos-box"><div class="pos-box-l">X</div><div class="pos-box-v" id="pv-x">0</div></div>
+          <div class="pos-box"><div class="pos-box-l">Y</div><div class="pos-box-v" id="pv-y">0</div></div>
+          <div class="pos-box"><div class="pos-box-l">W</div><div class="pos-box-v" id="pv-w">0</div></div>
+          <div class="pos-box"><div class="pos-box-l">H</div><div class="pos-box-v" id="pv-h">0</div></div>
+        </div>
+        <div class="pr2">
+          <div class="pm"><div class="pr-label">X</div><input class="pr-inp" id="pr-x" type="number" oninput="updPosInp('d')"></div>
+          <div class="pm"><div class="pr-label">Y</div><input class="pr-inp" id="pr-y" type="number" oninput="updPosInp('d')"></div>
+        </div>
+        <div class="pr2">
+          <div class="pm"><div class="pr-label">Width</div><input class="pr-inp" id="pr-w" type="number" oninput="updPosInp('d')"></div>
+          <div class="pm"><div class="pr-label">Height</div><input class="pr-inp" id="pr-h" type="number" oninput="updPosInp('d')"></div>
+        </div>
+        <button class="del-btn" onclick="deleteSel()">Delete Element</button>
+      </div>
+    </div>
+    <div class="tp" id="tp-code">
+      <div class="code-blk"><div class="code-lbl">HTML</div><div class="code-txt" id="code-html"></div><button class="copy-btn" onclick="copyHTML()">Copy HTML</button></div>
+      <div class="code-blk"><div class="code-lbl">CSS</div><div class="code-txt" id="code-css"></div><button class="copy-btn" onclick="copyCSS()">Copy CSS</button></div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- MOBILE NAV -->
-<nav class="mobile-bottom-nav">
-  <div class="mobile-nav-items">
-    <button class="mobile-nav-item" onclick="openDrawer('grid')" id="mnav-grid"><span class="mobile-nav-icon">⊞</span>Grid</button>
-    <button class="mobile-nav-item" onclick="openDrawer('elements')" id="mnav-elements"><span class="mobile-nav-icon">＋</span>Add</button>
-    <button class="mobile-nav-item" onclick="openDrawer('props')" id="mnav-props"><span class="mobile-nav-icon">◱</span>Props</button>
-    <button class="mobile-nav-item" onclick="openDrawer('code')" id="mnav-code"><span class="mobile-nav-icon">{}</span>Code</button>
+<nav class="mob-nav">
+  <div class="mob-nav-items">
+    <button class="mob-nav-btn" onclick="openDrw('grid')" id="mn-grid"><span class="mob-nav-ico">⊞</span>Grid</button>
+    <button class="mob-nav-btn" onclick="openDrw('add')" id="mn-add"><span class="mob-nav-ico">＋</span>Add</button>
+    <button class="mob-nav-btn" onclick="openDrw('props')" id="mn-props"><span class="mob-nav-ico">◱</span>Props</button>
+    <button class="mob-nav-btn" onclick="openDrw('code')" id="mn-code"><span class="mob-nav-ico">{}</span>Code</button>
   </div>
 </nav>
 
-<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="overlay" id="overlay" onclick="closeDrw()"></div>
 
 <!-- DRAWER: GRID -->
-<div class="drawer" id="drawer-grid">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header"><div class="drawer-title">Grid & Canvas</div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
-  <div class="drawer-body">
-    <div class="panel-section-title" style="margin-bottom:8px">Canvas Size</div>
-    <div class="m-size-grid">
-      <button class="size-btn" onclick="setCanvasSize('1:1',this,'m')" style="min-width:0">
-        <span class="size-btn-ratio" style="font-size:11px">1:1</span>
-        <span class="size-btn-label" style="font-size:8px">Square</span>
-      </button>
-      <button class="size-btn" onclick="setCanvasSize('4:5',this,'m')" style="min-width:0">
-        <span class="size-btn-ratio" style="font-size:11px">4:5</span>
-        <span class="size-btn-label" style="font-size:8px">Portrait</span>
-      </button>
-      <button class="size-btn" onclick="setCanvasSize('9:16',this,'m')" style="min-width:0">
-        <span class="size-btn-ratio" style="font-size:11px">9:16</span>
-        <span class="size-btn-label" style="font-size:8px">Story</span>
-      </button>
-      <button class="size-btn active" onclick="setCanvasSize('custom',this,'m')" id="m-btn-custom" style="min-width:0">
-        <span class="size-btn-ratio" style="font-size:11px">⊡</span>
-        <span class="size-btn-label" style="font-size:8px">Custom</span>
-      </button>
+<div class="drawer" id="drw-grid">
+  <div class="drw-handle"></div>
+  <div class="drw-hdr"><div class="drw-title">Grid & Canvas</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
+  <div class="drw-body">
+    <div class="ps-title" style="margin-bottom:8px">Canvas Size</div>
+    <div class="m-sz-grid">
+      <button class="sz-btn" onclick="setRatio('1:1',this,'m')" style="padding:8px 4px"><span class="sz-r" style="font-size:11px">1:1</span><span class="sz-l" style="font-size:8px">Square</span></button>
+      <button class="sz-btn" onclick="setRatio('4:5',this,'m')" style="padding:8px 4px"><span class="sz-r" style="font-size:11px">4:5</span><span class="sz-l" style="font-size:8px">Portrait</span></button>
+      <button class="sz-btn" onclick="setRatio('9:16',this,'m')" style="padding:8px 4px"><span class="sz-r" style="font-size:11px">9:16</span><span class="sz-l" style="font-size:8px">Story</span></button>
+      <button class="sz-btn active" onclick="setRatio('custom',this,'m')" id="m-btn-custom" style="padding:8px 4px"><span class="sz-r" style="font-size:11px">⊡</span><span class="sz-l" style="font-size:8px">Custom</span></button>
     </div>
-    <div class="panel-section-title" style="margin-bottom:8px;margin-top:14px">Columns & Rows</div>
+    <div class="ps-title" style="margin-bottom:8px">Grid System</div>
+    <div class="m-gs-list">
+      <button class="m-gs-btn active" onclick="setGridSystem('column',this,'m')"><span class="gs-name">Column Grid</span></button>
+      <button class="m-gs-btn" onclick="setGridSystem('modular',this,'m')"><span class="gs-name">Modular Grid</span></button>
+      <button class="m-gs-btn" onclick="setGridSystem('hierarchy',this,'m')"><span class="gs-name">Hierarchy Grid</span></button>
+      <button class="m-gs-btn" onclick="setGridSystem('golden',this,'m')"><span class="gs-name">Golden Ratio</span></button>
+    </div>
+    <div class="ps-title" style="margin-bottom:8px">Columns & Rows</div>
     <div class="m-col-row">
-      <div class="num-input-wrap">
-        <div class="num-label">Columns</div>
-        <div class="num-input-row">
-          <button class="num-stepper" onclick="stepNum('cols',-1)">−</button>
-          <input class="num-val" id="m-cols-val" type="number" value="5" min="1" max="20" oninput="onNumInput('cols','m')">
-          <button class="num-stepper" onclick="stepNum('cols',1)">+</button>
+      <div class="nr-wrap">
+        <div class="nr-label">Columns</div>
+        <div class="nr-row">
+          <button class="nr-btn" onclick="step('cols',-1)">−</button>
+          <input class="nr-val" id="cols-m" type="number" value="5" min="1" max="20" oninput="onNR('cols','m')">
+          <button class="nr-btn" onclick="step('cols',1)">+</button>
         </div>
       </div>
-      <div class="num-input-wrap">
-        <div class="num-label">Rows</div>
-        <div class="num-input-row">
-          <button class="num-stepper" onclick="stepNum('rows',-1)">−</button>
-          <input class="num-val" id="m-rows-val" type="number" value="5" min="1" max="20" oninput="onNumInput('rows','m')">
-          <button class="num-stepper" onclick="stepNum('rows',1)">+</button>
+      <div class="nr-wrap" id="m-rows-ctrl">
+        <div class="nr-label">Rows</div>
+        <div class="nr-row">
+          <button class="nr-btn" onclick="step('rows',-1)">−</button>
+          <input class="nr-val" id="rows-m" type="number" value="5" min="1" max="20" oninput="onNR('rows','m')">
+          <button class="nr-btn" onclick="step('rows',1)">+</button>
         </div>
       </div>
     </div>
-    <div class="gap-row">
-      <div class="num-label">Gap — <span style="color:var(--text);font-weight:500" id="m-gap-disp">8px</span></div>
-      <input type="range" id="m-gap-slider" min="0" max="40" value="8" oninput="onGapChange('m')">
+    <div class="gap-wrap">
+      <div class="gap-label">Gap <span class="gap-val-disp" id="gap-disp-m">8px</span></div>
+      <input type="range" id="gap-sl-m" min="0" max="40" value="8" oninput="onGap('m')">
     </div>
   </div>
 </div>
 
-<!-- DRAWER: ELEMENTS -->
-<div class="drawer" id="drawer-elements">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header"><div class="drawer-title">Add Element</div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
-  <div class="drawer-body">
-    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap to place. Drag element on canvas to move. Drag bottom-right corner to resize.</p>
-    <div class="m-element-grid">
-      <div class="m-element-item" onclick="mobilePlaceElement('headline')"><div class="m-el-icon">𝗛</div><div class="m-el-name">Headline</div><div class="m-el-hint">Primary title</div></div>
-      <div class="m-element-item" onclick="mobilePlaceElement('subheadline')"><div class="m-el-icon">𝗦</div><div class="m-el-name">Sub Headline</div><div class="m-el-hint">Supporting</div></div>
-      <div class="m-element-item" onclick="mobilePlaceElement('description')"><div class="m-el-icon">≡</div><div class="m-el-name">Description</div><div class="m-el-hint">Body copy</div></div>
-      <div class="m-element-item" onclick="mobilePlaceElement('footer')"><div class="m-el-icon">▬</div><div class="m-el-name">Footer</div><div class="m-el-hint">Bottom zone</div></div>
-      <div class="m-element-item full-width" onclick="mobilePlaceElement('visualhook')"><div class="m-el-icon">◈</div><div class="m-el-name">Visual Hook</div><div class="m-el-hint">Image / CTA zone</div></div>
+<!-- DRAWER: ADD -->
+<div class="drawer" id="drw-add">
+  <div class="drw-handle"></div>
+  <div class="drw-hdr"><div class="drw-title">Add Element</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
+  <div class="drw-body">
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap to place at grid origin. Then drag to move, or drag corner handle to resize.</p>
+    <div class="m-el-grid">
+      <div class="m-el-item" onclick="mobPlace('headline')"><div class="m-el-ico">𝗛</div><div class="m-el-n">Headline</div><div class="m-el-h">Primary title</div></div>
+      <div class="m-el-item" onclick="mobPlace('subheadline')"><div class="m-el-ico">𝗦</div><div class="m-el-n">Sub Headline</div><div class="m-el-h">Supporting</div></div>
+      <div class="m-el-item" onclick="mobPlace('description')"><div class="m-el-ico">≡</div><div class="m-el-n">Description</div><div class="m-el-h">Body copy</div></div>
+      <div class="m-el-item" onclick="mobPlace('footer')"><div class="m-el-ico">▬</div><div class="m-el-n">Footer</div><div class="m-el-h">Bottom zone</div></div>
+      <div class="m-el-item fw" onclick="mobPlace('visualhook')"><div class="m-el-ico">◈</div><div class="m-el-n">Visual Hook</div><div class="m-el-h">Image / CTA zone</div></div>
     </div>
   </div>
 </div>
 
 <!-- DRAWER: PROPS -->
-<div class="drawer" id="drawer-props">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header"><div class="drawer-title" id="m-prop-title">Properties</div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
-  <div class="drawer-body">
+<div class="drawer" id="drw-props">
+  <div class="drw-handle"></div>
+  <div class="drw-hdr"><div class="drw-title" id="m-prop-title">Properties</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
+  <div class="drw-body">
     <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Tap any element on the canvas<br>to edit its properties</div>
     <div id="m-props-form" style="display:none">
-      <div class="m-prop-row"><div class="m-prop-label">Content</div><input class="m-prop-input" id="m-prop-content" oninput="updateElContent('m')"></div>
-      <div class="m-prop-row-2">
-        <div class="m-prop-mini"><div class="m-prop-label">X (px)</div><input class="m-prop-input" id="m-prop-x" type="number" oninput="updateElPosInputM()"></div>
-        <div class="m-prop-mini"><div class="m-prop-label">Y (px)</div><input class="m-prop-input" id="m-prop-y" type="number" oninput="updateElPosInputM()"></div>
+      <div class="m-pr"><div class="m-prl">Content</div><input class="m-pri" id="m-pr-content" oninput="updContent('m')"></div>
+      <div class="m-pr2">
+        <div class="m-pm"><div class="m-prl">X (px)</div><input class="m-pri" id="m-pr-x" type="number" oninput="updPosInp('m')"></div>
+        <div class="m-pm"><div class="m-prl">Y (px)</div><input class="m-pri" id="m-pr-y" type="number" oninput="updPosInp('m')"></div>
       </div>
-      <div class="m-prop-row-2">
-        <div class="m-prop-mini"><div class="m-prop-label">Width</div><input class="m-prop-input" id="m-prop-w" type="number" oninput="updateElPosInputM()"></div>
-        <div class="m-prop-mini"><div class="m-prop-label">Height</div><input class="m-prop-input" id="m-prop-h" type="number" oninput="updateElPosInputM()"></div>
+      <div class="m-pr2">
+        <div class="m-pm"><div class="m-prl">Width</div><input class="m-pri" id="m-pr-w" type="number" oninput="updPosInp('m')"></div>
+        <div class="m-pm"><div class="m-prl">Height</div><input class="m-pri" id="m-pr-h" type="number" oninput="updPosInp('m')"></div>
       </div>
-      <button class="btn btn-danger" style="width:100%;padding:12px;border-radius:20px" onclick="deleteSelected();closeDrawer()">Delete Element</button>
+      <button class="del-btn" onclick="deleteSel();closeDrw()">Delete Element</button>
     </div>
   </div>
 </div>
 
 <!-- DRAWER: CODE -->
-<div class="drawer" id="drawer-code">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header"><div class="drawer-title">Generated Code</div><button class="drawer-close" onclick="closeDrawer()">×</button></div>
-  <div class="drawer-body">
-    <div class="m-code-block"><div class="m-code-label">HTML</div><div class="m-code-text" id="m-code-html"></div><button class="m-copy-btn" onclick="copyHTML()">Copy HTML</button></div>
-    <div class="m-code-block"><div class="m-code-label">CSS</div><div class="m-code-text" id="m-code-css"></div><button class="m-copy-btn" onclick="copyCSS()">Copy CSS</button></div>
+<div class="drawer" id="drw-code">
+  <div class="drw-handle"></div>
+  <div class="drw-hdr"><div class="drw-title">Generated Code</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
+  <div class="drw-body">
+    <div class="m-cb"><div class="m-cl">HTML</div><div class="m-ct" id="m-code-html"></div><button class="m-cpb" onclick="copyHTML()">Copy HTML</button></div>
+    <div class="m-cb"><div class="m-cl">CSS</div><div class="m-ct" id="m-code-css"></div><button class="m-cpb" onclick="copyCSS()">Copy CSS</button></div>
   </div>
 </div>
 
-<!-- ELEMENT PICKER -->
-<div class="element-picker" id="element-picker">
-  <div class="picker-title">Choose Element</div>
-  <div class="picker-grid">
-    <div class="picker-item" onclick="pickerPlace('headline')"><div class="picker-item-dot" style="background:#1a1a1a"></div><div class="picker-item-info"><div class="picker-item-name">Headline</div><div class="picker-item-sub">Primary title</div></div></div>
-    <div class="picker-item" onclick="pickerPlace('subheadline')"><div class="picker-item-dot" style="background:#555"></div><div class="picker-item-info"><div class="picker-item-name">Sub Headline</div><div class="picker-item-sub">Supporting</div></div></div>
-    <div class="picker-item" onclick="pickerPlace('description')"><div class="picker-item-dot" style="background:#999"></div><div class="picker-item-info"><div class="picker-item-name">Description</div><div class="picker-item-sub">Body copy</div></div></div>
-    <div class="picker-item" onclick="pickerPlace('footer')"><div class="picker-item-dot" style="background:#bbb"></div><div class="picker-item-info"><div class="picker-item-name">Footer</div><div class="picker-item-sub">Bottom zone</div></div></div>
-    <div class="picker-item" onclick="pickerPlace('visualhook')"><div class="picker-item-dot" style="background:#e05a5a"></div><div class="picker-item-info"><div class="picker-item-name">Visual Hook</div><div class="picker-item-sub">Image / CTA</div></div></div>
+<!-- PICKER -->
+<div class="picker" id="picker">
+  <div class="picker-ttl">Add Element</div>
+  <div class="picker-list">
+    <div class="picker-itm" onclick="pickerPick('headline')"><div class="picker-dot" style="background:#1a1a1a"></div><div><div class="picker-n">Headline</div><div class="picker-s">Primary title</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('subheadline')"><div class="picker-dot" style="background:#555"></div><div><div class="picker-n">Sub Headline</div><div class="picker-s">Supporting</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('description')"><div class="picker-dot" style="background:#999"></div><div><div class="picker-n">Description</div><div class="picker-s">Body copy</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('footer')"><div class="picker-dot" style="background:#bbb"></div><div><div class="picker-n">Footer</div><div class="picker-s">Bottom zone</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('visualhook')"><div class="picker-dot" style="background:#e91e8c"></div><div><div class="picker-n">Visual Hook</div><div class="picker-s">Image / CTA</div></div></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STATE ───
-let cols=5,rows=5,gap=8;
-let canvasW=540,canvasH=400;
-let canvasRatio='custom';
-let elements=[],selectedId=null,elemIdCounter=0;
-let pendingDropPx={x:0,y:0};
-let paletteDragType=null;
+// ════════════════════════════════
+//  STATE
+// ════════════════════════════════
+let cols=5, rows=5, gap=8;
+let canvasW=540, canvasH=400;
+let ratio='custom';
+let gridSystem='column'; // column | modular | hierarchy | golden
+let elements=[], selId=null, eid=0;
+let pendDrop={x:0,y:0};
+let palType=null;
 
-const EL={
-  headline:    {label:'Headline',    content:'Your Headline',           fw:0.5, fh:0.15},
-  subheadline: {label:'Sub Headline',content:'Supporting subtitle',     fw:0.4, fh:0.12},
-  description: {label:'Description', content:'Body copy goes here.',    fw:0.38,fh:0.25},
-  footer:      {label:'Footer',      content:'© 2025 Brand · Privacy',  fw:1.0, fh:0.12},
-  visualhook:  {label:'Visual Hook', content:'◈',                       fw:0.35,fh:0.4},
+// element defaults (fraction of canvas)
+const EL_DEF={
+  headline:    {lbl:'Headline',    content:'Your Headline',          fw:.55, fh:.16, dot:'#1a1a1a'},
+  subheadline: {lbl:'Sub Headline',content:'Supporting subtitle',    fw:.4,  fh:.12, dot:'#555'},
+  description: {lbl:'Description', content:'Body copy goes here.',   fw:.38, fh:.27, dot:'#999'},
+  footer:      {lbl:'Footer',      content:'© 2025 Brand · Privacy', fw:1.0, fh:.13, dot:'#bbb'},
+  visualhook:  {lbl:'Visual Hook', content:'◈',                      fw:.35, fh:.42, dot:'#e91e8c'},
 };
 
-// ─── CANVAS SIZE ───
-const SIZE_MAP={
-  '1:1': (w)=>({w,h:w}),
-  '4:5': (w)=>({w,h:Math.round(w*5/4)}),
-  '9:16':(w)=>({w,h:Math.round(w*16/9)}),
+// Grid system presets
+const GS={
+  column:   {cols:5,  rows:1,  showRows:false, desc:'Column Grid'},
+  modular:  {cols:5,  rows:5,  showRows:true,  desc:'Modular Grid'},
+  hierarchy:{cols:2,  rows:4,  showRows:false, desc:'Hierarchy Grid'},
+  golden:   {cols:2,  rows:3,  showRows:false, desc:'Golden Ratio'},
 };
 
-function getCanvasDisplayWidth(){
+// ════════════════════════════════
+//  CANVAS SIZE
+// ════════════════════════════════
+const RATIOS={'1:1':1,'4:5':5/4,'9:16':16/9};
+
+function dispW(){
   const area=document.getElementById('canvas-area');
   const mob=window.innerWidth<=640;
-  const maxW=mob?area.clientWidth-20:Math.min(area.clientWidth-48,600);
-  return Math.max(200,maxW);
+  return Math.max(200, Math.min(mob?area.clientWidth-20:area.clientWidth-48, mob?400:640));
 }
 
-function setCanvasSize(ratio,btn,ctx){
-  canvasRatio=ratio;
-  // sync both desktop+mobile size buttons
-  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
-  // only activate matching buttons
-  document.querySelectorAll('.size-btn').forEach(b=>{
-    const fn=b.getAttribute('onclick');
-    if(fn&&fn.includes(`'${ratio}'`)) b.classList.add('active');
+function setRatio(r,btn,ctx){
+  ratio=r;
+  document.querySelectorAll('.sz-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.sz-btn').forEach(b=>{
+    const fn=b.getAttribute('onclick')||'';
+    if(fn.includes(`'${r}'`)) b.classList.add('active');
   });
-  const csr=document.getElementById('custom-size-row');
-  if(csr) csr.style.display=ratio==='custom'?'grid':'none';
-  applyCanvasRatio();
+  const cwhEl=document.getElementById('custom-wh');
+  if(cwhEl) cwhEl.style.display=r==='custom'?'grid':'none';
+  applyRatio();
 }
 
-function applyCanvasRatio(){
-  const dispW=getCanvasDisplayWidth();
-  if(canvasRatio==='custom'){
-    const wi=parseInt(document.getElementById('custom-w').value)||540;
-    const hi=parseInt(document.getElementById('custom-h').value)||400;
-    const scale=Math.min(1,dispW/wi);
-    canvasW=Math.round(wi*scale);
-    canvasH=Math.round(hi*scale);
+function applyRatio(){
+  const dw=dispW();
+  const maxH=window.innerWidth<=640?460:560;
+  if(ratio==='custom'){
+    const iw=parseInt(document.getElementById('cw').value)||540;
+    const ih=parseInt(document.getElementById('ch').value)||400;
+    const sc=Math.min(1,dw/iw,maxH/ih);
+    canvasW=Math.round(iw*sc);
+    canvasH=Math.round(ih*sc);
   } else {
-    const sz=SIZE_MAP[canvasRatio](dispW);
-    canvasW=sz.w; canvasH=sz.h;
-    // cap height
-    const maxH=window.innerWidth<=640?500:580;
-    if(canvasH>maxH){const s=maxH/canvasH;canvasH=maxH;canvasW=Math.round(canvasW*s);}
+    canvasW=dw;
+    canvasH=Math.min(maxH,Math.round(dw*RATIOS[ratio]));
+    if(canvasH>=maxH) canvasW=Math.round(maxH/RATIOS[ratio]);
   }
-  const canvas=document.getElementById('canvas');
-  canvas.style.width=canvasW+'px';
-  canvas.style.height=canvasH+'px';
-  document.getElementById('canvas-size-label').textContent=`${canvasW} × ${canvasH} px`;
-  renderGrid();renderElements();updateCode();
+  const cv=document.getElementById('canvas');
+  cv.style.width=canvasW+'px'; cv.style.height=canvasH+'px';
+  document.getElementById('cv-lbl').textContent=`${canvasW} × ${canvasH} px`;
+  buildGrid();
+  renderEls();
+  genCode();
 }
 
-function applyCustomSize(){
-  if(canvasRatio==='custom') applyCanvasRatio();
+// ════════════════════════════════
+//  GRID SYSTEM
+// ════════════════════════════════
+function setGridSystem(gs,btn,ctx){
+  gridSystem=gs;
+  // sync all gs buttons
+  document.querySelectorAll('.gs-btn,.m-gs-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.gs-btn,.m-gs-btn').forEach(b=>{
+    const fn=b.getAttribute('onclick')||'';
+    if(fn.includes(`'${gs}'`)) b.classList.add('active');
+  });
+  const preset=GS[gs];
+  cols=preset.cols; rows=preset.rows;
+  // apply golden gap if golden
+  if(gs==='golden') gap=0;
+  syncInputs();
+  // show/hide row control based on grid system
+  const showR=preset.showRows;
+  const rcD=document.getElementById('rows-ctrl');
+  const rcM=document.getElementById('m-rows-ctrl');
+  if(rcD) rcD.style.display=showR?'block':'none';
+  if(rcM) rcM.style.display=showR?'block':'none';
+  elements=[]; selId=null;
+  buildGrid(); renderEls(); genCode(); showProps(null);
 }
 
-// ─── GRID ───
-function stepNum(which,delta){
-  if(which==='cols'){cols=Math.max(1,Math.min(20,cols+delta));}
-  else{rows=Math.max(1,Math.min(20,rows+delta));}
-  syncNumInputs();renderGrid();renderElements();updateCode();
+// ════════════════════════════════
+//  GRID CONTROLS
+// ════════════════════════════════
+function step(which,delta){
+  if(which==='cols') cols=Math.max(1,Math.min(20,cols+delta));
+  else rows=Math.max(1,Math.min(20,rows+delta));
+  syncInputs(); buildGrid(); renderEls(); genCode();
 }
-function onNumInput(which,ctx){
-  const id=ctx==='m'?`m-${which}-val`:`${which}-val`;
-  const v=parseInt(document.getElementById(id).value)||1;
-  if(which==='cols') cols=Math.max(1,Math.min(20,v));
-  else rows=Math.max(1,Math.min(20,v));
-  syncNumInputs();renderGrid();renderElements();updateCode();
+function onNR(which,ctx){
+  const id=ctx==='m'?`${which==='cols'?'cols':'rows'}-m`:`${which==='cols'?'cols':'rows'}-d`;
+  const v=Math.max(1,Math.min(20,parseInt(document.getElementById(id).value)||1));
+  if(which==='cols') cols=v; else rows=v;
+  syncInputs(); buildGrid(); renderEls(); genCode();
 }
-function onGapChange(ctx){
-  const id=ctx==='m'?'m-gap-slider':'gap-slider';
-  gap=parseInt(document.getElementById(id).value);
-  syncNumInputs();renderGrid();renderElements();updateCode();
+function onGap(ctx){
+  const id=ctx==='m'?'gap-sl-m':'gap-sl-d';
+  gap=parseInt(document.getElementById(id).value)||0;
+  syncInputs(); buildGrid(); renderEls(); genCode();
 }
-function syncNumInputs(){
-  ['cols-val','m-cols-val'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=cols;});
-  ['rows-val','m-rows-val'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=rows;});
-  ['gap-slider','m-gap-slider'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=gap;});
-  ['gap-disp','m-gap-disp'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=gap+'px';});
-}
-
-// ─── SNAP TO GRID ───
-function getGridBoundaries(){
-  // returns arrays of x and y pixel positions for all column/row starts & ends
-  const cellW=(canvasW-gap*(cols+1))/cols;
-  const cellH=(canvasH-gap*(rows+1))/rows;
-  const xs=[],ys=[];
-  for(let i=0;i<=cols;i++) xs.push(gap+i*(cellW+gap));
-  for(let i=0;i<=rows;i++) ys.push(gap+i*(cellH+gap));
-  return{xs,ys,cellW,cellH};
+function syncInputs(){
+  const setV=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
+  setV('cols-d',cols); setV('cols-m',cols);
+  setV('rows-d',rows); setV('rows-m',rows);
+  setV('gap-sl-d',gap); setV('gap-sl-m',gap);
+  const setT=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
+  setT('gap-disp-d',gap+'px'); setT('gap-disp-m',gap+'px');
 }
 
-function snapXY(x,y,w,h){
-  const{xs,ys}=getGridBoundaries();
-  const DIST=18;
-  function nearest(arr,val){let b=val,bd=DIST;arr.forEach(v=>{const d=Math.abs(v-val);if(d<bd){bd=d;b=v;}});return b;}
-  const nx=nearest(xs,x);
-  const ny=nearest(ys,y);
-  const nr=nearest(xs,x+w);
-  const nb=nearest(ys,y+h);
+// ════════════════════════════════
+//  COMPUTE GRID CELL RECTS
+//  Returns array of {x,y,w,h,col,row} for each cell
+//  This is the SINGLE source of truth for snap
+// ════════════════════════════════
+function computeCells(){
+  const cells=[];
+  if(gridSystem==='hierarchy'){
+    // 2 cols: 2fr + 1fr, 4 rows with specific heights
+    const cTotal=canvasW-gap*3; // 2 gaps (left,middle,right)
+    const c1w=Math.round(cTotal*2/3);
+    const c2w=cTotal-c1w;
+    const rTotal=canvasH-gap*5; // 4 gaps
+    const rH=[
+      Math.round(rTotal*.15),
+      Math.round(rTotal*.52),
+      Math.round(rTotal*.18),
+      rTotal-Math.round(rTotal*.15)-Math.round(rTotal*.52)-Math.round(rTotal*.18)
+    ];
+    const xs=[gap, gap+c1w+gap];
+    const cws=[c1w,c2w];
+    let yCur=gap;
+    for(let r=0;r<4;r++){
+      let xCur=gap;
+      for(let c=0;c<2;c++){
+        cells.push({x:xCur,y:yCur,w:cws[c],h:rH[r],col:c+1,row:r+1});
+        xCur+=cws[c]+gap;
+      }
+      yCur+=rH[r]+gap;
+    }
+  } else if(gridSystem==='golden'){
+    // φ cols, 3 rows: top φ, middle 1, bottom φ-1
+    const phi=1.618;
+    const cTotal=canvasW-gap*3;
+    const c1w=Math.round(cTotal*phi/(phi+1));
+    const c2w=cTotal-c1w;
+    const rTotal=canvasH-gap*4;
+    const r1h=Math.round(rTotal*phi/(phi+1+phi-1));
+    const r3h=Math.round(rTotal*(phi-1)/(phi+1+phi-1));
+    const r2h=rTotal-r1h-r3h;
+    const cws=[c1w,c2w];
+    const rhs=[r1h,r2h,r3h];
+    let yCur=gap;
+    for(let r=0;r<3;r++){
+      let xCur=gap;
+      for(let c=0;c<2;c++){
+        cells.push({x:xCur,y:yCur,w:cws[c],h:rhs[r],col:c+1,row:r+1});
+        xCur+=cws[c]+gap;
+      }
+      yCur+=rhs[r]+gap;
+    }
+  } else {
+    // column / modular — uniform grid
+    const effCols=cols, effRows=(gridSystem==='column')?1:rows;
+    const cellW=(canvasW-gap*(effCols+1))/effCols;
+    const cellH=(canvasH-gap*(effRows+1))/effRows;
+    for(let r=0;r<effRows;r++){
+      for(let c=0;c<effCols;c++){
+        const x=gap+c*(cellW+gap);
+        const y=gap+r*(cellH+gap);
+        cells.push({x:Math.round(x),y:Math.round(y),w:Math.round(cellW),h:Math.round(cellH),col:c+1,row:r+1});
+      }
+    }
+  }
+  return cells;
+}
+
+// ════════════════════════════════
+//  SNAP — finds nearest cell edges
+// ════════════════════════════════
+function snapRect(x,y,w,h){
+  const cells=computeCells();
+  // build unique X and Y boundary arrays from cells
+  const xs=new Set(), ys=new Set();
+  cells.forEach(c=>{xs.add(c.x);xs.add(c.x+c.w);ys.add(c.y);ys.add(c.y+c.h);});
+  const xArr=[...xs].sort((a,b)=>a-b);
+  const yArr=[...ys].sort((a,b)=>a-b);
+  const SNAP=22;
+
+  function nearest(arr,val){
+    let best=val,bd=SNAP;
+    arr.forEach(v=>{const d=Math.abs(v-val);if(d<bd){bd=d;best=v;}});
+    return best;
+  }
+
+  const nx=nearest(xArr,x);
+  const ny=nearest(yArr,y);
+  // snap right/bottom edge too
+  const snappedRight=nearest(xArr,x+w);
+  const snappedBottom=nearest(yArr,y+h);
+
+  let nw=snappedRight-nx;
+  let nh=snappedBottom-ny;
+  if(nw<20) nw=w; // fallback
+  if(nh<16) nh=h;
+
   return{
-    x:nx,y:ny,
-    w:Math.max(20,nr-nx),
-    h:Math.max(16,nb-ny)
+    x:Math.max(0,nx),
+    y:Math.max(0,ny),
+    w:Math.max(20,nw),
+    h:Math.max(16,nh)
   };
 }
 
-// ─── RENDER GRID ───
-function renderGrid(){
-  const grid=document.getElementById('grid');
-  grid.style.cssText=`
-    display:grid;
-    width:100%;height:100%;
-    grid-template-columns:repeat(${cols},1fr);
-    grid-template-rows:repeat(${rows},1fr);
-    gap:${gap}px;
-    padding:${gap}px;
-    position:absolute;top:0;left:0;
-    pointer-events:none;
-    box-sizing:border-box;
-  `;
-  grid.innerHTML='';
-  for(let r=1;r<=rows;r++){
-    for(let c=1;c<=cols;c++){
-      const cell=document.createElement('div');
-      cell.className='grid-cell';
-      cell.dataset.r=r; cell.dataset.c=c;
-      cell.style.pointerEvents='all';
-      const btn=document.createElement('button');
-      btn.className='add-btn'; btn.textContent='+'; btn.setAttribute('aria-label','Add element');
-      btn.addEventListener('pointerdown',(e)=>{e.stopPropagation();});
-      btn.addEventListener('click',(e)=>{
-        e.stopPropagation();
-        const cr=cell.getBoundingClientRect();
-        const cvr=document.getElementById('canvas').getBoundingClientRect();
-        pendingDropPx={x:cr.left-cvr.left, y:cr.top-cvr.top};
-        showPicker(e);
-      });
-      cell.appendChild(btn);
-      grid.appendChild(cell);
-    }
+// Auto-snap: find the cell the element center falls in, snap to that cell
+function autoSnapToCell(x,y,w,h){
+  const cells=computeCells();
+  const cx=x+w/2, cy=y+h/2;
+  // find nearest cell center
+  let best=null,bestD=Infinity;
+  cells.forEach(c=>{
+    const ccx=c.x+c.w/2, ccy=c.y+c.h/2;
+    const d=Math.hypot(cx-ccx,cy-ccy);
+    if(d<bestD){bestD=d;best=c;}
+  });
+  if(best && bestD<Math.max(best.w,best.h)*1.2){
+    // snap element left/top to this cell; keep width/height spanning as many cells as fit
+    return snapRect(best.x, best.y, w, h);
   }
+  return snapRect(x,y,w,h);
 }
 
-// ─── PICKER ───
+// ════════════════════════════════
+//  BUILD GRID OVERLAY
+// ════════════════════════════════
+function buildGrid(){
+  const ov=document.getElementById('grid-overlay');
+  ov.innerHTML='';
+  const cells=computeCells();
+  cells.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='grid-cell-bg';
+    div.style.left=c.x+'px'; div.style.top=c.y+'px';
+    div.style.width=c.w+'px'; div.style.height=c.h+'px';
+    const btn=document.createElement('button');
+    btn.className='add-btn'; btn.textContent='+'; btn.setAttribute('aria-label','Add');
+    btn.addEventListener('pointerdown',e=>{e.stopPropagation();});
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      pendDrop={x:c.x,y:c.y};
+      showPicker(e);
+    });
+    div.appendChild(btn);
+    ov.appendChild(div);
+  });
+}
+
+// ════════════════════════════════
+//  PICKER
+// ════════════════════════════════
 function showPicker(e){
-  const picker=document.getElementById('element-picker');
-  picker.style.display='block';
+  const p=document.getElementById('picker');
+  p.style.display='block';
   const r=e.target.getBoundingClientRect();
   let left=r.left+window.scrollX, top=r.bottom+6+window.scrollY;
-  if(left+210>window.innerWidth) left=window.innerWidth-218;
-  if(top+260>window.innerHeight) top=r.top-10-220+window.scrollY;
-  picker.style.left=left+'px'; picker.style.top=top+'px';
+  if(left+200>window.innerWidth) left=window.innerWidth-208;
+  if(top+260>window.innerHeight) top=r.top-14-220+window.scrollY;
+  p.style.left=left+'px'; p.style.top=top+'px';
   e.stopPropagation();
 }
-function hidePicker(){document.getElementById('element-picker').style.display='none';}
+function hidePicker(){document.getElementById('picker').style.display='none';}
 
-document.addEventListener('click',(e)=>{
-  if(!e.target.closest('#element-picker')&&!e.target.closest('.add-btn')) hidePicker();
-  if(!e.target.closest('.design-element')&&!e.target.closest('.drawer')&&!e.target.closest('#element-picker')){
-    selectedId=null; renderElements(); showProps(null);
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#picker')&&!e.target.closest('.add-btn')) hidePicker();
+  if(!e.target.closest('.design-el')&&!e.target.closest('.drawer')&&!e.target.closest('#picker')){
+    selId=null; renderEls(); showProps(null);
   }
 });
 
-function pickerPlace(type){
+function pickerPick(type){
   hidePicker();
-  placeElement(type, pendingDropPx.x, pendingDropPx.y);
+  placeEl(type, pendDrop.x, pendDrop.y);
 }
 
-// ─── PLACE ELEMENT ───
-function placeElement(type, px, py){
-  const cfg=EL[type];
-  const ew=Math.round(canvasW*cfg.fw);
-  const eh=Math.round(canvasH*cfg.fh);
-  const snapped=snapXY(px, py, ew, eh);
+// ════════════════════════════════
+//  PLACE ELEMENT
+// ════════════════════════════════
+function placeEl(type, dropX, dropY){
+  const def=EL_DEF[type];
+  const ew=Math.round(canvasW*def.fw);
+  const eh=Math.round(canvasH*def.fh);
+  // auto-snap to nearest grid cell
+  const s=autoSnapToCell(dropX, dropY, ew, eh);
   const el={
-    id:++elemIdCounter, type,
-    content:cfg.content,
-    x:Math.max(0,Math.min(snapped.x, canvasW-snapped.w)),
-    y:Math.max(0,Math.min(snapped.y, canvasH-snapped.h)),
-    w:snapped.w, h:snapped.h
+    id:++eid, type,
+    content:def.content,
+    x:Math.max(0,Math.min(s.x,canvasW-s.w)),
+    y:Math.max(0,Math.min(s.y,canvasH-s.h)),
+    w:s.w, h:s.h
   };
-  elements.push(el); selectedId=el.id;
-  renderElements(); showProps(el); updateCode();
-  showToast(cfg.label+' added ✓');
+  elements.push(el); selId=el.id;
+  renderEls(); showProps(el); genCode();
+  showToast(def.lbl+' added ✓');
 }
 
-function mobilePlaceElement(type){
-  closeDrawer();
-  const{xs,ys,cellW,cellH}=getGridBoundaries();
-  placeElement(type, xs[0], ys[0]);
-  setTimeout(()=>openDrawer('props'),300);
+function mobPlace(type){
+  closeDrw();
+  const cells=computeCells();
+  const c=cells[0]||{x:gap,y:gap};
+  placeEl(type,c.x,c.y);
+  setTimeout(()=>openDrw('props'),280);
 }
 
-// ─── PALETTE DRAG ───
-function onPaletteDragStart(type,e){
-  paletteDragType=type;
+// ════════════════════════════════
+//  PALETTE DRAG
+// ════════════════════════════════
+function palDragStart(type,e){
+  palType=type;
   e.dataTransfer.setData('text/plain',type);
   e.dataTransfer.effectAllowed='copy';
 }
-function onPaletteDrop(e){
-  if(!paletteDragType) return;
+function palDrop(e){
+  if(!palType) return;
   e.preventDefault();
   const cvr=document.getElementById('canvas').getBoundingClientRect();
   const px=e.clientX-cvr.left, py=e.clientY-cvr.top;
-  const cfg=EL[paletteDragType];
-  const ew=Math.round(canvasW*cfg.fw), eh=Math.round(canvasH*cfg.fh);
-  placeElement(paletteDragType, px-ew/2, py-eh/2);
-  paletteDragType=null;
+  const def=EL_DEF[palType];
+  const ew=Math.round(canvasW*def.fw), eh=Math.round(canvasH*def.fh);
+  placeEl(palType, px-ew/2, py-eh/2);
+  palType=null;
 }
 
-// ─── RENDER ELEMENTS ───
-function renderElements(){
-  document.querySelectorAll('.design-element').forEach(el=>el.remove());
+// ════════════════════════════════
+//  RENDER ELEMENTS
+// ════════════════════════════════
+function renderEls(){
+  document.querySelectorAll('.design-el').forEach(e=>e.remove());
   const canvas=document.getElementById('canvas');
   elements.forEach(el=>{
     const div=document.createElement('div');
-    div.className=`design-element el-${el.type}${el.id===selectedId?' selected':''}`;
+    div.className=`design-el el-${el.type}${el.id===selId?' selected':''}`;
     div.dataset.id=el.id;
     div.style.left=el.x+'px'; div.style.top=el.y+'px';
     div.style.width=el.w+'px'; div.style.height=el.h+'px';
 
-    // inner
-    const inner=document.createElement('div'); inner.className='el-inner';
-    const lbl=document.createElement('div'); lbl.className='element-label'; lbl.textContent=EL[el.type].label;
-    const prev=document.createElement('div'); prev.className='element-preview'; prev.textContent=el.content;
-    inner.appendChild(lbl); inner.appendChild(prev);
-    div.appendChild(inner);
+    // label + preview
+    const lbl=document.createElement('div'); lbl.className='el-lbl'; lbl.textContent=EL_DEF[el.type].lbl;
+    const prev=document.createElement('div'); prev.className='el-prev'; prev.textContent=el.content;
+    div.appendChild(lbl); div.appendChild(prev);
 
-    // close X (pink)
-    const close=document.createElement('button'); close.className='element-close';
-    close.innerHTML='&#x2715;';
-    close.addEventListener('pointerdown',(e)=>{e.stopPropagation();});
-    close.addEventListener('click',(e)=>{e.stopPropagation(); deleteElement(el.id);});
-    div.appendChild(close);
+    // close X
+    const cls=document.createElement('button'); cls.className='el-close'; cls.innerHTML='&#x2715;';
+    cls.addEventListener('pointerdown',e=>{e.stopPropagation();});
+    cls.addEventListener('click',e=>{e.stopPropagation();delEl(el.id);});
+    div.appendChild(cls);
 
-    // resize handle — bottom right (L-bracket style)
-    const rh=document.createElement('div'); rh.className='resize-handle-br';
-    rh.setAttribute('aria-label','Resize');
+    // resize handle BR
+    const rh=document.createElement('div'); rh.className='el-resize';
+    rh.addEventListener('pointerdown',e=>{
+      e.stopPropagation(); e.preventDefault();
+      selId=el.id; renderEls(); showProps(el);
+      startResize(e,el);
+    });
     div.appendChild(rh);
 
-    // ── DRAG (move) ──
-    div.addEventListener('pointerdown',(e)=>{
-      if(e.target===close||e.target===rh) return;
+    // drag (move)
+    div.addEventListener('pointerdown',e=>{
+      if(e.target===cls||e.target===rh) return;
       e.stopPropagation(); e.preventDefault();
-      selectedId=el.id; renderElements(); showProps(el);
+      selId=el.id; renderEls(); showProps(el);
       startMove(e,el);
     });
 
-    // ── RESIZE ──
-    rh.addEventListener('pointerdown',(e)=>{
-      e.stopPropagation(); e.preventDefault();
-      selectedId=el.id; renderElements(); showProps(el);
-      startResize(e,el);
-    });
-
-    // tap to select (mobile)
-    div.addEventListener('click',(e)=>{
+    // tap → props (mobile)
+    div.addEventListener('click',e=>{
       e.stopPropagation();
-      selectedId=el.id; renderElements(); showProps(el);
-      if(window.innerWidth<=640) openDrawer('props');
+      selId=el.id; renderEls(); showProps(el);
+      if(window.innerWidth<=640) openDrw('props');
     });
 
     canvas.appendChild(div);
   });
 }
 
-// ─── MOVE ───
+// ════════════════════════════════
+//  MOVE
+// ════════════════════════════════
 function startMove(e,el){
   const canvas=document.getElementById('canvas');
-  const div=canvas.querySelector(`.design-element[data-id="${el.id}"]`);
-  const startX=e.clientX, startY=e.clientY;
+  const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  const sx=e.clientX, sy=e.clientY;
   const ox=el.x, oy=el.y;
   let moved=false;
-  if(div) div.classList.add('dragging');
+
+  div.classList.add('dragging');
   div.setPointerCapture(e.pointerId);
 
   function onMove(ev){
     if(ev.pointerId!==e.pointerId) return;
     moved=true;
-    const dx=ev.clientX-startX, dy=ev.clientY-startY;
+    const dx=ev.clientX-sx, dy=ev.clientY-sy;
     let nx=ox+dx, ny=oy+dy;
-    const s=snapXY(nx,ny,el.w,el.h);
+    // live snap while dragging
+    const s=snapRect(nx,ny,el.w,el.h);
     el.x=Math.max(0,Math.min(s.x,canvasW-el.w));
     el.y=Math.max(0,Math.min(s.y,canvasH-el.h));
     div.style.left=el.x+'px'; div.style.top=el.y+'px';
@@ -937,30 +1019,42 @@ function startMove(e,el){
     if(ev.pointerId!==e.pointerId) return;
     div.removeEventListener('pointermove',onMove);
     div.removeEventListener('pointerup',onUp);
-    if(div) div.classList.remove('dragging');
-    if(moved){renderElements();updateCode();}
+    div.classList.remove('dragging');
+    // final: auto-snap to nearest cell
+    if(moved){
+      const s=autoSnapToCell(el.x,el.y,el.w,el.h);
+      el.x=Math.max(0,Math.min(s.x,canvasW-el.w));
+      el.y=Math.max(0,Math.min(s.y,canvasH-el.h));
+      el.w=s.w; el.h=s.h;
+      renderEls(); showProps(el); genCode();
+    }
   }
   div.addEventListener('pointermove',onMove,{passive:false});
   div.addEventListener('pointerup',onUp);
 }
 
-// ─── RESIZE ───
+// ════════════════════════════════
+//  RESIZE
+// ════════════════════════════════
 function startResize(e,el){
   const canvas=document.getElementById('canvas');
-  const div=canvas.querySelector(`.design-element[data-id="${el.id}"]`);
-  const rh=div.querySelector('.resize-handle-br');
-  const startX=e.clientX, startY=e.clientY;
-  const ow=el.w, oh=el.h, ox=el.x, oy=el.y;
-  const MIN_W=40, MIN_H=24;
+  const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  const rh=div.querySelector('.el-resize');
+  const sx=e.clientX, sy=e.clientY;
+  const ow=el.w, oh=el.h;
+  const MIN_W=20, MIN_H=16;
+
   rh.setPointerCapture(e.pointerId);
 
   function onMove(ev){
     if(ev.pointerId!==e.pointerId) return;
-    const dx=ev.clientX-startX, dy=ev.clientY-startY;
+    const dx=ev.clientX-sx, dy=ev.clientY-sy;
     let nw=Math.max(MIN_W,ow+dx);
     let nh=Math.max(MIN_H,oh+dy);
-    nw=Math.min(nw,canvasW-ox); nh=Math.min(nh,canvasH-oy);
-    const s=snapXY(ox,oy,nw,nh);
+    nw=Math.min(nw,canvasW-el.x);
+    nh=Math.min(nh,canvasH-el.y);
+    // snap right + bottom edges
+    const s=snapRect(el.x,el.y,nw,nh);
     el.w=Math.max(MIN_W,s.w); el.h=Math.max(MIN_H,s.h);
     div.style.width=el.w+'px'; div.style.height=el.h+'px';
     showProps(el);
@@ -969,166 +1063,176 @@ function startResize(e,el){
     if(ev.pointerId!==e.pointerId) return;
     rh.removeEventListener('pointermove',onMove);
     rh.removeEventListener('pointerup',onUp);
-    renderElements(); updateCode();
+    renderEls(); genCode();
   }
   rh.addEventListener('pointermove',onMove,{passive:false});
   rh.addEventListener('pointerup',onUp);
 }
 
-// ─── PROPS ───
+// ════════════════════════════════
+//  PROPS PANEL
+// ════════════════════════════════
 function showProps(el){
   if(!el){
-    document.getElementById('props-no-sel').style.display='flex';
+    document.getElementById('no-sel').style.display='flex';
     document.getElementById('props-form').style.display='none';
     document.getElementById('m-no-sel').style.display='block';
     document.getElementById('m-props-form').style.display='none';
     return;
   }
-  document.getElementById('props-no-sel').style.display='none';
+  document.getElementById('no-sel').style.display='none';
   document.getElementById('props-form').style.display='block';
-  document.getElementById('prop-type').textContent=EL[el.type].label;
-  document.getElementById('prop-content').value=el.content;
-  document.getElementById('prop-x').value=Math.round(el.x);
-  document.getElementById('prop-y').value=Math.round(el.y);
-  document.getElementById('prop-w-in').value=Math.round(el.w);
-  document.getElementById('prop-h-in').value=Math.round(el.h);
-  document.getElementById('pos-x').textContent=Math.round(el.x);
-  document.getElementById('pos-y').textContent=Math.round(el.y);
-  document.getElementById('pos-w').textContent=Math.round(el.w);
-  document.getElementById('pos-h').textContent=Math.round(el.h);
+  document.getElementById('pr-type').textContent=EL_DEF[el.type].lbl;
+  document.getElementById('pr-content').value=el.content;
+  document.getElementById('pr-x').value=Math.round(el.x);
+  document.getElementById('pr-y').value=Math.round(el.y);
+  document.getElementById('pr-w').value=Math.round(el.w);
+  document.getElementById('pr-h').value=Math.round(el.h);
+  document.getElementById('pv-x').textContent=Math.round(el.x);
+  document.getElementById('pv-y').textContent=Math.round(el.y);
+  document.getElementById('pv-w').textContent=Math.round(el.w);
+  document.getElementById('pv-h').textContent=Math.round(el.h);
   document.getElementById('m-no-sel').style.display='none';
   document.getElementById('m-props-form').style.display='block';
-  document.getElementById('m-prop-title').textContent=EL[el.type].label;
-  document.getElementById('m-prop-content').value=el.content;
-  document.getElementById('m-prop-x').value=Math.round(el.x);
-  document.getElementById('m-prop-y').value=Math.round(el.y);
-  document.getElementById('m-prop-w').value=Math.round(el.w);
-  document.getElementById('m-prop-h').value=Math.round(el.h);
+  document.getElementById('m-prop-title').textContent=EL_DEF[el.type].lbl;
+  document.getElementById('m-pr-content').value=el.content;
+  document.getElementById('m-pr-x').value=Math.round(el.x);
+  document.getElementById('m-pr-y').value=Math.round(el.y);
+  document.getElementById('m-pr-w').value=Math.round(el.w);
+  document.getElementById('m-pr-h').value=Math.round(el.h);
 }
 
-function updateElContent(ctx){
-  const el=elements.find(e=>e.id===selectedId); if(!el) return;
+function updContent(ctx){
+  const el=elements.find(e=>e.id===selId); if(!el) return;
   el.content=ctx==='m'
-    ?document.getElementById('m-prop-content').value
-    :document.getElementById('prop-content').value;
-  renderElements(); updateCode();
+    ?document.getElementById('m-pr-content').value
+    :document.getElementById('pr-content').value;
+  renderEls(); genCode();
 }
-function updateElPosInput(){
-  const el=elements.find(e=>e.id===selectedId); if(!el) return;
-  el.x=parseFloat(document.getElementById('prop-x').value)||0;
-  el.y=parseFloat(document.getElementById('prop-y').value)||0;
-  el.w=Math.max(20,parseFloat(document.getElementById('prop-w-in').value)||20);
-  el.h=Math.max(16,parseFloat(document.getElementById('prop-h-in').value)||16);
-  renderElements(); showProps(el); updateCode();
-}
-function updateElPosInputM(){
-  const el=elements.find(e=>e.id===selectedId); if(!el) return;
-  el.x=parseFloat(document.getElementById('m-prop-x').value)||0;
-  el.y=parseFloat(document.getElementById('m-prop-y').value)||0;
-  el.w=Math.max(20,parseFloat(document.getElementById('m-prop-w').value)||20);
-  el.h=Math.max(16,parseFloat(document.getElementById('m-prop-h').value)||16);
-  renderElements(); showProps(el); updateCode();
+function updPosInp(ctx){
+  const el=elements.find(e=>e.id===selId); if(!el) return;
+  const p=ctx==='m'?'m-pr':'pr';
+  el.x=parseFloat(document.getElementById(p+'-x').value)||0;
+  el.y=parseFloat(document.getElementById(p+'-y').value)||0;
+  el.w=Math.max(20,parseFloat(document.getElementById(p+'-w').value)||20);
+  el.h=Math.max(16,parseFloat(document.getElementById(p+'-h').value)||16);
+  renderEls(); showProps(el); genCode();
 }
 
-function deleteElement(id){
+function delEl(id){
   elements=elements.filter(e=>e.id!==id);
-  if(selectedId===id){selectedId=null;showProps(null);}
-  renderElements(); updateCode();
+  if(selId===id){selId=null;showProps(null);}
+  renderEls(); genCode();
 }
-function deleteSelected(){if(selectedId) deleteElement(selectedId);}
+function deleteSel(){if(selId) delEl(selId);}
 
-// ─── CODE GEN ───
-function updateCode(){
+// ════════════════════════════════
+//  CODE GEN
+// ════════════════════════════════
+function genCode(){
   let html=`<div class="layout">\n`;
   elements.forEach(el=>{html+=`  <div class="${el.type}">${el.content}</div>\n`;});
   html+=`</div>`;
-  let css=`.layout {\n  position: relative;\n  width: ${canvasW}px;\n  height: ${canvasH}px;\n}\n`;
+  let css=`.layout {\n  position: relative;\n  width: ${canvasW}px;\n  height: ${canvasH}px;\n  /* Grid: ${GS[gridSystem].desc}, ${cols} cols, gap ${gap}px */\n}\n`;
   elements.forEach(el=>{
     css+=`\n.${el.type} {\n  position: absolute;\n  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n}\n`;
   });
-  ['code-html','m-code-html'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=html;});
-  ['code-css','m-code-css'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=css;});
+  const setTxt=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
+  setTxt('code-html',html); setTxt('m-code-html',html);
+  setTxt('code-css',css);   setTxt('m-code-css',css);
 }
 
-// ─── TABS ───
+// ════════════════════════════════
+//  TABS
+// ════════════════════════════════
 function switchTab(name,btn){
-  document.querySelectorAll('.right-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
-  if(name==='code') updateCode();
+  document.getElementById('tp-'+name).classList.add('active');
+  if(name==='code') genCode();
 }
 
-// ─── DRAWER ───
-function openDrawer(name){
-  closeDrawer(true);
-  const overlay=document.getElementById('drawer-overlay');
-  const drawer=document.getElementById('drawer-'+name);
-  overlay.style.display='block';
-  requestAnimationFrame(()=>{overlay.classList.add('visible');drawer.classList.add('open');});
-  if(name==='code') updateCode();
-  document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
-  const nav=document.getElementById('mnav-'+name);
-  if(nav) nav.classList.add('active');
+// ════════════════════════════════
+//  DRAWER
+// ════════════════════════════════
+function openDrw(name){
+  closeDrw(true);
+  const ov=document.getElementById('overlay');
+  const drw=document.getElementById('drw-'+name);
+  ov.style.display='block';
+  requestAnimationFrame(()=>{ov.classList.add('vis');drw.classList.add('open');});
+  if(name==='code') genCode();
+  document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('mn-'+name);
+  if(nb) nb.classList.add('active');
 }
-function closeDrawer(silent){
-  const overlay=document.getElementById('drawer-overlay');
-  overlay.classList.remove('visible');
+function closeDrw(silent){
+  const ov=document.getElementById('overlay');
+  ov.classList.remove('vis');
   document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));
   if(!silent){
-    document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
-    setTimeout(()=>{overlay.style.display='none';},280);
+    document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
+    setTimeout(()=>{ov.style.display='none';},280);
   }
 }
 
-// ─── COPY ───
+// ════════════════════════════════
+//  COPY
+// ════════════════════════════════
 function copyHTML(){
-  const txt=document.getElementById('code-html').textContent||document.getElementById('m-code-html').textContent;
-  navigator.clipboard.writeText(txt); showToast('HTML copied!');
+  const t=document.getElementById('code-html').textContent||document.getElementById('m-code-html').textContent;
+  navigator.clipboard.writeText(t); showToast('HTML copied!');
 }
 function copyCSS(){
-  updateCode();
-  const txt=document.getElementById('code-css').textContent||document.getElementById('m-code-css').textContent;
-  navigator.clipboard.writeText(txt); showToast('CSS copied!');
+  genCode();
+  const t=document.getElementById('code-css').textContent||document.getElementById('m-code-css').textContent;
+  navigator.clipboard.writeText(t); showToast('CSS copied!');
 }
 
-// ─── RESET ───
-function resetCanvas(){elements=[];selectedId=null;renderElements();showProps(null);updateCode();showToast('Canvas reset');}
+// ════════════════════════════════
+//  RESET / MISC
+// ════════════════════════════════
+function resetCanvas(){elements=[];selId=null;renderEls();showProps(null);genCode();showToast('Canvas reset');}
 
-// ─── TOAST ───
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
-
-function canvasAreaClick(e){
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+function areaClick(e){
   if(e.target===document.getElementById('canvas-area')||e.target===document.getElementById('canvas')){
-    selectedId=null; renderElements(); showProps(null);
+    selId=null;renderEls();showProps(null);
   }
 }
 
-// ─── KEYBOARD ───
-document.addEventListener('keydown',(e)=>{
-  if((e.key==='Delete'||e.key==='Backspace')&&document.activeElement.tagName!=='INPUT') deleteSelected();
-  if(e.key==='Escape'){selectedId=null;renderElements();showProps(null);}
-  if(selectedId&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
-    const el=elements.find(e2=>e2.id===selectedId); if(!el) return;
+// ════════════════════════════════
+//  KEYBOARD
+// ════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if((e.key==='Delete'||e.key==='Backspace')&&document.activeElement.tagName!=='INPUT') deleteSel();
+  if(e.key==='Escape'){selId=null;renderEls();showProps(null);}
+  if(selId&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
+    const el=elements.find(e2=>e2.id===selId);if(!el)return;
     const step=e.shiftKey?10:1;
-    if(e.key==='ArrowLeft') el.x=Math.max(0,el.x-step);
+    if(e.key==='ArrowLeft')  el.x=Math.max(0,el.x-step);
     if(e.key==='ArrowRight') el.x=Math.min(canvasW-el.w,el.x+step);
-    if(e.key==='ArrowUp') el.y=Math.max(0,el.y-step);
-    if(e.key==='ArrowDown') el.y=Math.min(canvasH-el.h,el.y+step);
+    if(e.key==='ArrowUp')    el.y=Math.max(0,el.y-step);
+    if(e.key==='ArrowDown')  el.y=Math.min(canvasH-el.h,el.y+step);
     e.preventDefault();
-    renderElements(); showProps(el); updateCode();
+    renderEls();showProps(el);genCode();
   }
 });
 
-// ─── INIT ───
+// ════════════════════════════════
+//  INIT
+// ════════════════════════════════
 window.addEventListener('load',()=>{
-  // default to custom, show custom row
-  document.getElementById('custom-size-row').style.display='grid';
-  applyCanvasRatio();
-  syncNumInputs();
-  updateCode();
+  document.getElementById('custom-wh').style.display='grid';
+  applyRatio(); // also calls buildGrid + genCode
+  syncInputs();
+  showProps(null);
 });
-window.addEventListener('resize',()=>{applyCanvasRatio();});
+window.addEventListener('resize',()=>{applyRatio();});
 </script>
 </body>
 </html>
