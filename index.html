@@ -1,501 +1,831 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>LayoutEngine Pro - Social Layout Engine</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "error": "#ffb4ab",
-                        "surface-dim": "#0b1326",
-                        "secondary-container": "#571bc1",
-                        "primary-container": "#4d8eff",
-                        "on-secondary-fixed": "#23005c",
-                        "surface": "#0b1326",
-                        "on-tertiary-fixed-variant": "#005236",
-                        "inverse-surface": "#dae2fd",
-                        "surface-container-low": "#131b2e",
-                        "surface-tint": "#adc6ff",
-                        "tertiary-container": "#00a572",
-                        "on-secondary": "#3c0091",
-                        "on-secondary-fixed-variant": "#5516be",
-                        "secondary-fixed": "#e9ddff",
-                        "on-tertiary-fixed": "#002113",
-                        "on-primary-fixed-variant": "#004395",
-                        "secondary": "#d0bcff",
-                        "on-tertiary": "#003824",
-                        "on-error": "#690005",
-                        "surface-container": "#171f33",
-                        "on-surface-variant": "#c2c6d6",
-                        "on-background": "#dae2fd",
-                        "background": "#0b1326",
-                        "primary-fixed-dim": "#adc6ff",
-                        "outline-variant": "#424754",
-                        "primary-fixed": "#d8e2ff",
-                        "on-surface": "#dae2fd",
-                        "on-tertiary-container": "#00311f",
-                        "surface-bright": "#31394d",
-                        "primary": "#adc6ff",
-                        "on-primary-fixed": "#001a42",
-                        "surface-container-lowest": "#060e20",
-                        "inverse-primary": "#005ac2",
-                        "surface-variant": "#2d3449",
-                        "secondary-fixed-dim": "#d0bcff",
-                        "on-secondary-container": "#c4abff",
-                        "tertiary-fixed-dim": "#4edea3",
-                        "on-primary-container": "#00285d",
-                        "error-container": "#93000a",
-                        "surface-container-highest": "#2d3449",
-                        "surface-container-high": "#222a3d",
-                        "on-primary": "#002e6a",
-                        "inverse-on-surface": "#283044",
-                        "tertiary-fixed": "#6ffbbe",
-                        "outline": "#8c909f",
-                        "on-error-container": "#ffdad6",
-                        "tertiary": "#4edea3"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "gutter": "12px",
-                        "sm": "8px",
-                        "panel-width": "280px",
-                        "lg": "24px",
-                        "xs": "4px",
-                        "xl": "48px",
-                        "unit": "4px",
-                        "md": "16px"
-                    },
-                    "fontFamily": {
-                        "body-main": ["Inter"],
-                        "label-caps": ["Space Grotesk"],
-                        "body-mono": ["Space Grotesk"],
-                        "ui-small": ["Inter"],
-                        "h2": ["Inter"],
-                        "h1": ["Inter"]
-                    },
-                    "fontSize": {
-                        "body-main": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-                        "body-mono": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
-                        "ui-small": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
-                        "h2": ["18px", {"lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                        "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
-                    }
-                }
-            }
-        }
-    </script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Design Grid Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
-            font-size: 20px;
-        }
-        .canvas-bg {
-            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-            background-size: 24px 24px;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-        
-        #properties-sidebar {
-            transition: transform 0.3s ease-in-out;
-        }
-        @media (max-width: 1024px) {
-            #properties-sidebar {
-                position: fixed;
-                right: 0;
-                top: 48px;
-                bottom: 0;
-                z-index: 50;
-                transform: translateX(100%);
-                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-            }
-            #properties-sidebar.open {
-                transform: translateX(0);
-            }
-        }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0e0e;--panel:#141414;--panel2:#1a1a1a;--border:#2a2a2a;
+  --accent:#f0d060;--accent2:#e05a5a;--text:#e8e8e8;--muted:#666;
+  --cell-hover:rgba(240,208,96,0.07);--grid-line:rgba(255,255,255,0.07);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
-        /* Logic Styles */
-        .canvas-item {
-            touch-action: none;
-            cursor: grab;
-        }
-        .canvas-item:active {
-            cursor: grabbing;
-        }
-        .canvas-item.selected {
-            outline: 2px solid #adc6ff;
-            outline-offset: 2px;
-        }
-        .resizing {
-            cursor: nwse-resize !important;
-        }
-        .toggle-active {
-            background-color: #adc6ff;
-        }
-        .toggle-active .toggle-knob {
-            transform: translateX(100%);
-            background-color: #002e6a;
-        }
-    </style>
+/* ═══ HEADER ═══ */
+header{height:52px;background:var(–panel);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:10}
+.logo{font-family:‘Playfair Display’,serif;font-size:17px;font-weight:900;color:var(–accent);letter-spacing:-.3px}
+.logo span{color:var(–text)}
+.header-sep{width:1px;height:24px;background:var(–border);flex-shrink:0}
+.header-tagline{font-size:10px;color:var(–muted);letter-spacing:.08em;text-transform:uppercase}
+.header-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{padding:6px 14px;border-radius:5px;font-size:11px;font-family:‘DM Mono’,monospace;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.btn-ghost{background:transparent;border:1px solid var(–border);color:var(–muted)}
+.btn-ghost:active{border-color:var(–accent);color:var(–accent)}
+.btn-primary{background:var(–accent);color:#0e0e0e;font-weight:500}
+.btn-primary:active{background:#fce070}
+.btn-danger{background:transparent;border:1px solid var(–accent2);color:var(–accent2)}
+.btn-danger:active{background:var(–accent2);color:#fff}
+.btn-icon{width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font-size:15px;border-radius:6px;background:transparent;border:1px solid var(–border);color:var(–muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn-icon:active{border-color:var(–accent);color:var(–accent)}
+
+/* ═══ APP BODY ═══ */
+.app-body{flex:1;display:grid;grid-template-columns:260px 1fr 280px;overflow:hidden;min-height:0}
+
+/* ═══ LEFT PANEL ═══ */
+.left-panel{background:var(–panel);border-right:1px solid var(–border);padding:16px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:20px}
+.panel-section-title{font-family:‘DM Mono’,monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(–muted);margin-bottom:10px}
+.grid-types{display:flex;flex-direction:column;gap:5px}
+.grid-type-btn{background:transparent;border:1px solid var(–border);border-radius:7px;padding:10px 12px;cursor:pointer;text-align:left;transition:all .15s;color:var(–text);-webkit-tap-highlight-color:transparent}
+.grid-type-btn.active{border-color:var(–accent);background:rgba(240,208,96,.08)}
+.grid-type-name{font-family:‘Playfair Display’,serif;font-size:13px;font-weight:700;display:block;margin-bottom:2px}
+.grid-type-desc{font-size:10px;color:var(–muted);line-height:1.4}
+.control-group{display:flex;flex-direction:column;gap:10px}
+.control-row{display:flex;flex-direction:column;gap:5px}
+.control-label{font-family:‘DM Mono’,monospace;font-size:11px;color:var(–muted);display:flex;justify-content:space-between}
+.control-val{color:var(–accent)}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(–border);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(–accent);border-radius:50%;cursor:pointer}
+.element-palette{display:flex;flex-direction:column;gap:5px}
+.palette-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;border:1px solid var(–border);cursor:grab;transition:all .15s;font-size:12px;-webkit-tap-highlight-color:transparent}
+.palette-item:active{border-color:var(–accent);background:rgba(240,208,96,.06)}
+.palette-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.palette-item-info{flex:1}
+.palette-item-name{font-weight:500;color:var(–text);font-size:12px}
+.palette-item-hint{font-size:10px;color:var(–muted)}
+
+/* ═══ CANVAS ═══ */
+.canvas-wrap{background:#090909;display:flex;align-items:center;justify-content:center;overflow:auto;position:relative;padding:20px;-webkit-overflow-scrolling:touch}
+.canvas-bg-dots{position:absolute;inset:0;background-image:radial-gradient(circle,#1e1e1e 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+#canvas{position:relative;background:#161616;box-shadow:0 0 0 1px var(–border),0 24px 48px rgba(0,0,0,.6);border-radius:4px;flex-shrink:0}
+.grid-canvas{display:grid;width:100%;height:100%;position:relative}
+.grid-cell{border:1px solid var(–grid-line);position:relative;transition:background .1s;cursor:crosshair;min-height:32px}
+.grid-cell:hover{background:var(–cell-hover)}
+.grid-cell .add-btn{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(–accent);color:#0e0e0e;border:none;font-size:20px;line-height:30px;text-align:center;cursor:pointer;font-weight:700}
+.grid-cell:hover .add-btn{display:block}
+@media(hover:none){.grid-cell .add-btn{display:block!important}}
+.grid-info-badge{position:absolute;top:8px;left:8px;background:rgba(240,208,96,.1);border:1px solid rgba(240,208,96,.2);border-radius:4px;padding:3px 8px;font-family:‘DM Mono’,monospace;font-size:9px;color:var(–accent);letter-spacing:.08em;z-index:5;pointer-events:none}
+.design-element{border-radius:4px;cursor:pointer;user-select:none;transition:box-shadow .15s;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;position:relative}
+.design-element.selected{box-shadow:0 0 0 2px var(–accent);z-index:30}
+.element-label{font-family:‘DM Mono’,monospace;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;opacity:.8;pointer-events:none}
+.element-preview{font-family:‘Playfair Display’,serif;text-align:center;padding:0 8px;pointer-events:none;opacity:.7;font-size:11px;line-height:1.3;max-width:100%;overflow:hidden;word-break:break-word}
+.element-close{position:absolute;top:3px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.5);border:none;color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;z-index:2}
+.el-headline{background:rgba(240,208,96,.14);border:1px solid rgba(240,208,96,.3)}
+.el-headline .element-preview{font-size:16px;font-weight:900;color:var(–accent)}
+.el-subheadline{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
+.el-subheadline .element-preview{font-size:12px;color:#ccc;font-family:‘DM Sans’}
+.el-description{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.1)}
+.el-description .element-preview{font-size:10px;color:var(–muted);font-family:‘DM Sans’}
+.el-footer{background:rgba(100,100,100,.1);border:1px solid rgba(255,255,255,.08)}
+.el-footer .element-preview{font-family:‘DM Mono’,monospace;font-size:9px;color:var(–muted)}
+.el-visualhook{background:rgba(224,90,90,.12);border:1px solid rgba(224,90,90,.3)}
+.el-visualhook .element-preview{font-size:24px}
+
+/* ═══ RIGHT PANEL ═══ */
+.right-panel{background:var(–panel);border-left:1px solid var(–border);display:flex;flex-direction:column;overflow:hidden}
+.right-tabs{display:flex;border-bottom:1px solid var(–border);flex-shrink:0}
+.right-tab{flex:1;padding:13px;font-size:10px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(–muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.right-tab.active{color:var(–accent);border-bottom:2px solid var(–accent)}
+.tab-content{flex:1;overflow-y:auto;padding:16px 14px}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.no-selection{display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(–muted);font-size:12px;text-align:center;gap:10px}
+.no-selection-icon{font-size:32px;opacity:.25}
+.prop-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.prop-label{font-size:10px;color:var(–muted);font-family:‘DM Mono’,monospace}
+.prop-input{background:#0a0a0a;border:1px solid var(–border);border-radius:4px;padding:8px 10px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.prop-input:focus{border-color:var(–accent)}
+.code-block{background:#0a0a0a;border:1px solid var(–border);border-radius:6px;padding:12px;margin-bottom:10px}
+.code-block-label{font-family:‘DM Mono’,monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:7px}
+.code-text{font-family:‘DM Mono’,monospace;font-size:10px;color:#a8e6a8;line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.copy-code-btn{width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid var(–border);border-radius:4px;color:var(–muted);font-family:‘DM Mono’,monospace;font-size:10px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.copy-code-btn:active{border-color:var(–accent);color:var(–accent)}
+
+/* ═══ ELEMENT PICKER ═══ */
+.element-picker{position:fixed;background:#1c1c1c;border:1px solid var(–border);border-radius:12px;padding:14px;z-index:2000;box-shadow:0 20px 60px rgba(0,0,0,.8);display:none;width:210px;animation:pickerIn .14s ease}
+@keyframes pickerIn{from{opacity:0;transform:scale(.92) translateY(-6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.picker-title{font-family:‘DM Mono’,monospace;font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:var(–muted);margin-bottom:10px}
+.picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.picker-item{padding:10px 6px;border-radius:8px;border:1px solid var(–border);cursor:pointer;text-align:center;transition:all .12s;-webkit-tap-highlight-color:transparent}
+.picker-item:active{border-color:var(–accent);background:rgba(240,208,96,.1)}
+.picker-icon{font-size:20px;margin-bottom:4px}
+.picker-name{font-size:10px;font-weight:500;color:var(–text)}
+.picker-sub{font-size:9px;color:var(–muted);margin-top:1px}
+
+/* ═══ MOBILE BOTTOM NAV ═══ */
+.mobile-bottom-nav{display:none;height:56px;background:var(–panel);border-top:1px solid var(–border);flex-shrink:0}
+.mobile-nav-items{display:flex;height:56px}
+.mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(–muted);font-size:9px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.06em;-webkit-tap-highlight-color:transparent;transition:color .15s}
+.mobile-nav-item.active{color:var(–accent)}
+.mobile-nav-icon{font-size:18px;line-height:1}
+
+/* ═══ DRAWER ═══ */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;opacity:0;transition:opacity .25s}
+.drawer-overlay.visible{opacity:1}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:var(–panel2);border-top:1px solid var(–border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:82vh;display:flex;flex-direction:column;padding-bottom:calc(var(–safe-bottom) + 8px)}
+.drawer.open{transform:translateY(0)}
+.drawer-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;flex-shrink:0}
+.drawer-title{font-family:‘Playfair Display’,serif;font-size:15px;font-weight:700;color:var(–text)}
+.drawer-close{width:28px;height:28px;border-radius:50%;background:var(–border);border:none;color:var(–muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.drawer-body{flex:1;overflow-y:auto;padding:0 16px 16px;-webkit-overflow-scrolling:touch}
+
+/* Mobile grid type horizontal scroll */
+.mobile-grid-types{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mobile-grid-types::-webkit-scrollbar{display:none}
+.mobile-grid-type-btn{flex-shrink:0;background:transparent;border:1px solid var(–border);border-radius:8px;padding:10px 14px;cursor:pointer;text-align:center;color:var(–text);min-width:105px;-webkit-tap-highlight-color:transparent}
+.mobile-grid-type-btn.active{border-color:var(–accent);background:rgba(240,208,96,.08)}
+.mobile-grid-type-btn .grid-type-name{font-family:‘Playfair Display’,serif;font-size:12px;font-weight:700;display:block;margin-bottom:2px}
+.mobile-grid-type-btn .grid-type-desc{font-size:9px;color:var(–muted);line-height:1.3}
+
+/* Mobile element grid 2-col */
+.mobile-element-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mobile-element-item{padding:14px 10px;border:1px solid var(–border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s}
+.mobile-element-item:active{border-color:var(–accent);background:rgba(240,208,96,.06)}
+.mobile-element-item.full-width{grid-column:1/-1}
+.mobile-el-icon{font-size:24px}
+.mobile-el-name{font-size:11px;font-weight:500;color:var(–text)}
+.mobile-el-hint{font-size:9px;color:var(–muted)}
+
+/* Mobile props */
+.mobile-prop-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.mobile-prop-label{font-size:10px;color:var(–muted);font-family:‘DM Mono’,monospace}
+.mobile-prop-input{background:#0a0a0a;border:1px solid var(–border);border-radius:6px;padding:10px 12px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:13px;outline:none;width:100%}
+.mobile-prop-input:focus{border-color:var(–accent)}
+.mobile-prop-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.mobile-prop-mini{display:flex;flex-direction:column;gap:5px}
+
+/* Mobile code */
+.mobile-code-block{background:#0a0a0a;border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:12px}
+.mobile-code-label{font-family:‘DM Mono’,monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:8px}
+.mobile-code-text{font-family:‘DM Mono’,monospace;font-size:10px;color:#a8e6a8;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:150px;overflow-y:auto}
+.mobile-copy-btn{width:100%;margin-top:10px;padding:11px;background:var(–accent);color:#0e0e0e;border:none;border-radius:6px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* ═══ TOAST ═══ */
+.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(60px);background:var(–accent);color:#0e0e0e;padding:9px 20px;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(–border);border-radius:2px}
+
+/* ═══ TABLET ═══ */
+@media(max-width:900px){
+.app-body{grid-template-columns:220px 1fr}
+.right-panel{display:none}
+}
+
+/* ═══ MOBILE ═══ */
+@media(max-width:640px){
+header{padding:0 12px;gap:8px}
+.header-sep,.header-tagline{display:none}
+.app-body{grid-template-columns:1fr}
+.left-panel,.right-panel{display:none}
+.mobile-bottom-nav{display:block}
+.canvas-wrap{padding:10px;align-items:flex-start}
+.toast{bottom:68px}
+}
+</style>
+
 </head>
-<body class="bg-background text-on-background font-body-main selection:bg-primary-container selection:text-on-primary-container h-screen overflow-hidden">
-<header class="flex justify-between items-center w-full px-4 h-12 z-[60] fixed top-0 bg-slate-950 font-inter text-sm antialiased tracking-tight border-b border-white/10">
-<div class="flex items-center gap-4 lg:gap-6 overflow-hidden">
-<span class="text-base lg:text-lg font-black text-slate-50 tracking-tighter uppercase whitespace-nowrap">LayoutEngine</span>
-<nav class="flex items-center gap-4 lg:gap-6 h-12 overflow-x-auto no-scrollbar scroll-smooth">
-<a class="text-blue-400 border-b-2 border-blue-500 pb-3 mt-3 transition-transform duration-100 whitespace-nowrap" href="#">Editor</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap" href="#">Logic</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap" href="#">Assets</a>
-<a class="text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap" href="#">History</a>
+<body>
+
+<header>
+  <div class="logo">Grid<span>Design</span></div>
+  <div class="header-sep"></div>
+  <div class="header-tagline">Layout Builder</div>
+  <div class="header-actions">
+    <button class="btn-icon" onclick="resetCanvas()" title="Reset">↺</button>
+    <button class="btn btn-primary" onclick="copyCSS()">Copy CSS</button>
+  </div>
+</header>
+
+<div class="app-body">
+
+  <!-- LEFT PANEL -->
+
+  <div class="left-panel">
+    <div>
+      <div class="panel-section-title">Grid Type</div>
+      <div class="grid-types">
+        <button class="grid-type-btn active" onclick="setGridType('column',this)">
+          <span class="grid-type-name">Column Grid</span>
+          <span class="grid-type-desc">Classic multi-column editorial layout</span>
+        </button>
+        <button class="grid-type-btn" onclick="setGridType('modular',this)">
+          <span class="grid-type-name">Modular Grid</span>
+          <span class="grid-type-desc">Rows × Columns matrix structure</span>
+        </button>
+        <button class="grid-type-btn" onclick="setGridType('hierarchy',this)">
+          <span class="grid-type-name">Hierarchy Grid</span>
+          <span class="grid-type-desc">Unequal zones for visual weight</span>
+        </button>
+        <button class="grid-type-btn" onclick="setGridType('golden',this)">
+          <span class="grid-type-name">Golden Ratio</span>
+          <span class="grid-type-desc">φ = 1.618 harmonic proportions</span>
+        </button>
+      </div>
+    </div>
+    <div>
+      <div class="panel-section-title">Grid Settings</div>
+      <div class="control-group">
+        <div class="control-row">
+          <div class="control-label">Columns <span class="control-val" id="col-val">12</span></div>
+          <input type="range" id="col-slider" min="2" max="16" value="12" oninput="updateGrid()">
+        </div>
+        <div class="control-row" id="row-control" style="display:none">
+          <div class="control-label">Rows <span class="control-val" id="row-val">6</span></div>
+          <input type="range" id="row-slider" min="2" max="12" value="6" oninput="updateGrid()">
+        </div>
+        <div class="control-row">
+          <div class="control-label">Gap <span class="control-val" id="gap-val">16px</span></div>
+          <input type="range" id="gap-slider" min="0" max="40" value="16" oninput="updateGrid()">
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="panel-section-title">Elements — click + on grid</div>
+      <div class="element-palette">
+        <div class="palette-item" draggable="true" ondragstart="dragElement('headline',event)">
+          <div class="palette-dot" style="background:#f0d060"></div>
+          <div class="palette-item-info"><div class="palette-item-name">Headline</div><div class="palette-item-hint">Primary title</div></div>
+        </div>
+        <div class="palette-item" draggable="true" ondragstart="dragElement('subheadline',event)">
+          <div class="palette-dot" style="background:#a0c4ff"></div>
+          <div class="palette-item-info"><div class="palette-item-name">Sub Headline</div><div class="palette-item-hint">Supporting title</div></div>
+        </div>
+        <div class="palette-item" draggable="true" ondragstart="dragElement('description',event)">
+          <div class="palette-dot" style="background:#888"></div>
+          <div class="palette-item-info"><div class="palette-item-name">Description</div><div class="palette-item-hint">Body copy</div></div>
+        </div>
+        <div class="palette-item" draggable="true" ondragstart="dragElement('footer',event)">
+          <div class="palette-dot" style="background:#555"></div>
+          <div class="palette-item-info"><div class="palette-item-name">Footer</div><div class="palette-item-hint">Bottom zone</div></div>
+        </div>
+        <div class="palette-item" draggable="true" ondragstart="dragElement('visualhook',event)">
+          <div class="palette-dot" style="background:#e05a5a"></div>
+          <div class="palette-item-info"><div class="palette-item-name">Visual Hook</div><div class="palette-item-hint">Image / CTA zone</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANVAS -->
+
+  <div class="canvas-wrap" id="canvas-wrap" ondragover="event.preventDefault()" ondrop="handleDrop(event)" onclick="canvasClick(event)">
+    <div class="canvas-bg-dots"></div>
+    <div id="canvas">
+      <div class="grid-info-badge" id="grid-badge">Column Grid · 12×6 · 16px</div>
+      <div class="grid-canvas" id="grid"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+
+  <div class="right-panel">
+    <div class="right-tabs">
+      <button class="right-tab active" onclick="switchTab('properties',this)">Properties</button>
+      <button class="right-tab" onclick="switchTab('code',this)">Code</button>
+    </div>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab-properties">
+        <div id="props-no-sel" class="no-selection">
+          <div class="no-selection-icon">◱</div>
+          <div>Select an element<br>to edit properties</div>
+        </div>
+        <div id="props-form" style="display:none">
+          <div class="prop-row">
+            <div class="prop-label">Type</div>
+            <div id="prop-type" style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--accent);padding:2px 0"></div>
+          </div>
+          <div class="prop-row">
+            <div class="prop-label">Content</div>
+            <input class="prop-input" id="prop-content" oninput="updateElContent('desktop')">
+          </div>
+          <div class="prop-row"><div class="prop-label">Col Start</div><input class="prop-input" id="prop-cs" type="number" min="1" oninput="updateElGrid('desktop')"></div>
+          <div class="prop-row"><div class="prop-label">Col Span</div><input class="prop-input" id="prop-csp" type="number" min="1" oninput="updateElGrid('desktop')"></div>
+          <div class="prop-row"><div class="prop-label">Row Start</div><input class="prop-input" id="prop-rs" type="number" min="1" oninput="updateElGrid('desktop')"></div>
+          <div class="prop-row"><div class="prop-label">Row Span</div><input class="prop-input" id="prop-rsp" type="number" min="1" oninput="updateElGrid('desktop')"></div>
+          <button class="btn btn-danger" style="width:100%;margin-top:4px;padding:10px" onclick="deleteSelected()">Delete Element</button>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-code">
+        <div class="code-block">
+          <div class="code-block-label">HTML</div>
+          <div class="code-text" id="code-html"></div>
+          <button class="copy-code-btn" onclick="copyHTML()">Copy HTML</button>
+        </div>
+        <div class="code-block">
+          <div class="code-block-label">CSS</div>
+          <div class="code-text" id="code-css"></div>
+          <button class="copy-code-btn" onclick="copyCSS()">Copy CSS</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+
+<nav class="mobile-bottom-nav">
+  <div class="mobile-nav-items">
+    <button class="mobile-nav-item" onclick="openDrawer('grid')" id="mnav-grid">
+      <span class="mobile-nav-icon">⊞</span>Grid
+    </button>
+    <button class="mobile-nav-item" onclick="openDrawer('elements')" id="mnav-elements">
+      <span class="mobile-nav-icon">＋</span>Add
+    </button>
+    <button class="mobile-nav-item" onclick="openDrawer('props')" id="mnav-props">
+      <span class="mobile-nav-icon">◱</span>Props
+    </button>
+    <button class="mobile-nav-item" onclick="openDrawer('code')" id="mnav-code">
+      <span class="mobile-nav-icon">{}</span>Code
+    </button>
+  </div>
 </nav>
+
+<!-- OVERLAY -->
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER: GRID -->
+
+<div class="drawer" id="drawer-grid">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <div class="drawer-title">Grid Settings</div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+    <div class="panel-section-title" style="margin-bottom:8px">Grid Type</div>
+    <div class="mobile-grid-types">
+      <button class="mobile-grid-type-btn active" onclick="setGridType('column',this,'mobile')">
+        <span class="grid-type-name">Column</span><span class="grid-type-desc">Classic columns</span>
+      </button>
+      <button class="mobile-grid-type-btn" onclick="setGridType('modular',this,'mobile')">
+        <span class="grid-type-name">Modular</span><span class="grid-type-desc">Rows × Cols</span>
+      </button>
+      <button class="mobile-grid-type-btn" onclick="setGridType('hierarchy',this,'mobile')">
+        <span class="grid-type-name">Hierarchy</span><span class="grid-type-desc">Unequal zones</span>
+      </button>
+      <button class="mobile-grid-type-btn" onclick="setGridType('golden',this,'mobile')">
+        <span class="grid-type-name">Golden</span><span class="grid-type-desc">φ 1.618</span>
+      </button>
+    </div>
+    <div style="margin-top:16px">
+      <div class="panel-section-title" style="margin-bottom:8px">Columns <span style="color:var(--accent);font-family:'DM Mono',monospace" id="m-col-val">12</span></div>
+      <input type="range" id="m-col-slider" min="2" max="16" value="12" oninput="syncSlider('col',this.value)">
+    </div>
+    <div style="margin-top:14px" id="m-row-control">
+      <div class="panel-section-title" style="margin-bottom:8px">Rows <span style="color:var(--accent);font-family:'DM Mono',monospace" id="m-row-val">6</span></div>
+      <input type="range" id="m-row-slider" min="2" max="12" value="6" oninput="syncSlider('row',this.value)">
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-section-title" style="margin-bottom:8px">Gap <span style="color:var(--accent);font-family:'DM Mono',monospace" id="m-gap-val">16px</span></div>
+      <input type="range" id="m-gap-slider" min="0" max="40" value="16" oninput="syncSlider('gap',this.value)">
+    </div>
+  </div>
 </div>
-<div class="flex items-center gap-2 lg:gap-3 shrink-0">
-<button class="hidden sm:block material-symbols-outlined text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="help">help</button>
-<button class="material-symbols-outlined lg:hidden text-slate-500 hover:bg-white/5 p-1.5 rounded transition-colors" data-icon="tune" id="mobile-sidebar-toggle">tune</button>
-<div class="hidden sm:block h-4 w-px bg-white/10 mx-1"></div>
-<button class="hidden xs:block px-3 py-1 text-ui-small font-medium text-slate-300 hover:bg-white/5 rounded border border-white/10 transition-all">Preview</button>
-<button class="px-3 py-1 text-ui-small font-bold text-on-primary-container bg-primary-container rounded shadow-sm hover:opacity-90 active:scale-95 transition-all">Deploy</button>
+
+<!-- DRAWER: ELEMENTS -->
+
+<div class="drawer" id="drawer-elements">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <div class="drawer-title">Add Element</div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap an element to add it to the canvas. Then tap it to edit position in Properties.</p>
+    <div class="mobile-element-grid">
+      <div class="mobile-element-item" onclick="mobilePlaceElement('headline')">
+        <div class="mobile-el-icon">𝗛</div>
+        <div class="mobile-el-name">Headline</div>
+        <div class="mobile-el-hint">Primary title</div>
+      </div>
+      <div class="mobile-element-item" onclick="mobilePlaceElement('subheadline')">
+        <div class="mobile-el-icon">𝗦</div>
+        <div class="mobile-el-name">Sub Headline</div>
+        <div class="mobile-el-hint">Supporting</div>
+      </div>
+      <div class="mobile-element-item" onclick="mobilePlaceElement('description')">
+        <div class="mobile-el-icon">≡</div>
+        <div class="mobile-el-name">Description</div>
+        <div class="mobile-el-hint">Body copy</div>
+      </div>
+      <div class="mobile-element-item" onclick="mobilePlaceElement('footer')">
+        <div class="mobile-el-icon">▬</div>
+        <div class="mobile-el-name">Footer</div>
+        <div class="mobile-el-hint">Bottom zone</div>
+      </div>
+      <div class="mobile-element-item full-width" onclick="mobilePlaceElement('visualhook')">
+        <div class="mobile-el-icon">◈</div>
+        <div class="mobile-el-name">Visual Hook</div>
+        <div class="mobile-el-hint">Image / CTA zone</div>
+      </div>
+    </div>
+  </div>
 </div>
-</header>
-<aside class="hidden sm:flex fixed left-0 top-12 bottom-0 flex-col items-center z-40 bg-slate-950 w-16 border-r border-white/10 font-inter text-xs font-medium uppercase tracking-widest">
-<div class="flex flex-col items-center w-full py-4 gap-2">
-<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center mb-4">
-<span class="material-symbols-outlined text-primary" data-icon="token" style="font-variation-settings: 'FILL' 1;">token</span>
+
+<!-- DRAWER: PROPERTIES -->
+
+<div class="drawer" id="drawer-props">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <div class="drawer-title" id="m-prop-title">Properties</div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">
+      Tap any element on the canvas<br>to edit its properties
+    </div>
+    <div id="m-props-form" style="display:none">
+      <div class="mobile-prop-row">
+        <div class="mobile-prop-label">Content / Label</div>
+        <input class="mobile-prop-input" id="m-prop-content" oninput="updateElContent('mobile')">
+      </div>
+      <div class="mobile-prop-row-2">
+        <div class="mobile-prop-mini">
+          <div class="mobile-prop-label">Col Start</div>
+          <input class="mobile-prop-input" id="m-prop-cs" type="number" min="1" oninput="updateElGrid('mobile')">
+        </div>
+        <div class="mobile-prop-mini">
+          <div class="mobile-prop-label">Col Span</div>
+          <input class="mobile-prop-input" id="m-prop-csp" type="number" min="1" oninput="updateElGrid('mobile')">
+        </div>
+      </div>
+      <div class="mobile-prop-row-2">
+        <div class="mobile-prop-mini">
+          <div class="mobile-prop-label">Row Start</div>
+          <input class="mobile-prop-input" id="m-prop-rs" type="number" min="1" oninput="updateElGrid('mobile')">
+        </div>
+        <div class="mobile-prop-mini">
+          <div class="mobile-prop-label">Row Span</div>
+          <input class="mobile-prop-input" id="m-prop-rsp" type="number" min="1" oninput="updateElGrid('mobile')">
+        </div>
+      </div>
+      <button class="btn btn-danger" style="width:100%;padding:12px;font-size:13px" onclick="deleteSelected();closeDrawer()">Delete Element</button>
+    </div>
+  </div>
 </div>
-<button class="flex flex-col items-center justify-center bg-blue-500/10 text-blue-400 border-l-2 border-blue-500 w-full py-4 transition-all duration-200">
-<span class="material-symbols-outlined mb-1" data-icon="layers">layers</span>
-</button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
-<span class="material-symbols-outlined mb-1" data-icon="widgets">widgets</span>
-</button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
-<span class="material-symbols-outlined mb-1" data-icon="database">database</span>
-</button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
-<span class="material-symbols-outlined mb-1" data-icon="palette">palette</span>
-</button>
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
-<span class="material-symbols-outlined mb-1" data-icon="bolt">bolt</span>
-</button>
+
+<!-- DRAWER: CODE -->
+
+<div class="drawer" id="drawer-code">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <div class="drawer-title">Generated Code</div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+    <div class="mobile-code-block">
+      <div class="mobile-code-label">HTML</div>
+      <div class="mobile-code-text" id="m-code-html"></div>
+      <button class="mobile-copy-btn" onclick="copyHTML()">Copy HTML</button>
+    </div>
+    <div class="mobile-code-block">
+      <div class="mobile-code-label">CSS</div>
+      <div class="mobile-code-text" id="m-code-css"></div>
+      <button class="mobile-copy-btn" onclick="copyCSS()">Copy CSS</button>
+    </div>
+  </div>
 </div>
-<div class="mt-auto w-full border-t border-white/10 pt-4 pb-6">
-<button class="flex flex-col items-center justify-center text-slate-500 w-full py-4 hover:bg-white/5 transition-all">
-<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
-</button>
+
+<!-- ELEMENT PICKER (desktop) -->
+
+<div class="element-picker" id="element-picker">
+  <div class="picker-title">Add Element</div>
+  <div class="picker-grid">
+    <div class="picker-item" onclick="placeElement('headline')"><div class="picker-icon">𝗛</div><div class="picker-name">Headline</div><div class="picker-sub">Primary title</div></div>
+    <div class="picker-item" onclick="placeElement('subheadline')"><div class="picker-icon">𝗦</div><div class="picker-name">Sub</div><div class="picker-sub">Supporting</div></div>
+    <div class="picker-item" onclick="placeElement('description')"><div class="picker-icon">≡</div><div class="picker-name">Description</div><div class="picker-sub">Body copy</div></div>
+    <div class="picker-item" onclick="placeElement('footer')"><div class="picker-icon">▬</div><div class="picker-name">Footer</div><div class="picker-sub">Bottom info</div></div>
+    <div class="picker-item" onclick="placeElement('visualhook')" style="grid-column:1/-1"><div class="picker-icon">◈</div><div class="picker-name">Visual Hook</div><div class="picker-sub">Image / CTA zone</div></div>
+  </div>
 </div>
-</aside>
-<main class="sm:ml-16 mr-0 transition-all duration-300 relative h-screen pt-12 flex flex-col lg:flex-row">
-<div class="flex-grow bg-surface-dim canvas-bg flex items-center justify-center p-4 lg:p-12 overflow-auto relative canvas-container" id="canvas-viewport">
-<div class="relative w-[390px] h-[844px] bg-slate-900 rounded-xl shadow-2xl border border-white/5 overflow-hidden flex flex-col group origin-center transition-transform duration-300" id="device-container">
-<div class="px-6 py-3 flex justify-between items-center text-[10px] font-bold text-white/40 pointer-events-none select-none">
-<span>9:41</span>
-<div class="flex gap-1.5">
-<span class="material-symbols-outlined text-[12px]" data-icon="signal_cellular_4_bar">signal_cellular_4_bar</span>
-<span class="material-symbols-outlined text-[12px]" data-icon="wifi">wifi</span>
-<span class="material-symbols-outlined text-[12px]" data-icon="battery_full">battery_full</span>
-</div>
-</div>
-<div class="flex-grow relative flex flex-col p-6 space-y-6 overflow-hidden" id="canvas-content">
-<div class="canvas-item aspect-square w-full rounded-lg overflow-hidden border border-white/10 bg-slate-800 shrink-0" data-id="image-1" id="item-image">
-<img alt="Abstract 3D Shape" class="w-full h-full object-cover pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNHxPgr140pGhq3cvqyBylJhUMmm16tgM9QZsRbsSCzs668aiTNYc8HaV4WwL3Ethr_0AqDdxik-5m5ZymooCC1U4bbEAQo_GstULspNqyQkUXEkN_78SBwH0FZ4SLSXwBp0Nxot6c1VeIyX3eKM2talNSfBylGHczUttycF0Jlg9D1WU-gJjvH_bffCC-93_CPo4gjvUyjpbG7Uj-jvLQflvTbzWWHoc0Uu1NQc5o3wX8KNMCY6s85ijwEh4WyDIJiQL_v72v"/>
-</div>
-<div class="canvas-item space-y-4 overflow-visible" data-id="text-1" id="item-text">
-<h1 class="font-h1 text-h1 text-on-surface text-lg sm:text-h1">Architecting Tomorrow’s Digital Landscapes</h1>
-<p class="font-body-main text-body-main text-on-surface-variant text-sm">Unleash the power of high-performance design systems. Precision, speed, and absolute control at your fingertips.</p>
-</div>
-<div class="canvas-item pt-4 mt-auto" data-id="button-1" id="item-button">
-<button class="w-full py-3 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-opacity">
-                        Get Started
-                    </button>
-</div>
-</div>
-<div class="absolute inset-0 border-2 border-primary/20 pointer-events-none rounded-xl"></div>
-</div>
-<div class="absolute top-4 lg:top-8 left-1/2 -translate-x-1/2 bg-surface-container/90 backdrop-blur-md border border-white/10 rounded-full px-2 py-1.5 flex items-center gap-1 shadow-xl z-20 whitespace-nowrap">
-<div class="hidden xs:flex items-center gap-1 px-2 border-r border-white/10 mr-1">
-<span class="text-label-caps font-label-caps text-slate-500">ZOOM</span>
-<span class="text-body-mono font-body-mono text-primary px-1" id="zoom-label">100%</span>
-</div>
-<button class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary transition-colors" id="focal-mode-btn">
-<span class="material-symbols-outlined text-[18px]" data-icon="center_focus_weak">center_focus_weak</span>
-<span class="text-ui-small font-ui-small hidden sm:inline">Focal Mode</span>
-</button>
-<div class="w-px h-4 bg-white/10 mx-1"></div>
-<button class="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-white/5 text-slate-400 transition-colors" id="ratio-btn">
-<span class="material-symbols-outlined text-[18px]" data-icon="aspect_ratio">aspect_ratio</span>
-<span class="text-ui-small font-ui-small" id="ratio-label">9:16</span>
-</button>
-</div>
-</div>
-<aside class="w-full lg:w-panel-width h-full bg-surface-container-low border-l border-white/10 flex flex-col shrink-0" id="properties-sidebar">
-<header class="h-10 border-b border-white/10 px-4 flex items-center justify-between bg-surface-container shrink-0">
-<span class="text-label-caps font-label-caps text-on-surface">Properties</span>
-<div class="flex gap-2">
-<button class="lg:hidden material-symbols-outlined text-slate-400 hover:text-white" data-icon="close" id="mobile-sidebar-close">close</button>
-<button class="hidden lg:block material-symbols-outlined text-slate-500 hover:text-slate-300" data-icon="close_fullscreen">close_fullscreen</button>
-</div>
-</header>
-<div class="flex-grow overflow-y-auto custom-scrollbar pb-20 lg:pb-0">
-<div class="p-4 border-b border-white/10">
-<span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Alignment</span>
-<div class="grid grid-cols-6 gap-1 bg-surface-container-lowest p-1 rounded-lg border border-white/5">
-<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_horizontal_left">align_horizontal_left</span></button>
-<button class="aspect-square flex items-center justify-center rounded bg-primary/20 text-primary"><span class="material-symbols-outlined text-sm" data-icon="align_horizontal_center">align_horizontal_center</span></button>
-<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_horizontal_right">align_horizontal_right</span></button>
-<div class="w-px h-4 bg-white/10 self-center mx-auto"></div>
-<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_vertical_top">align_vertical_top</span></button>
-<button class="aspect-square flex items-center justify-center rounded hover:bg-white/5 text-slate-400"><span class="material-symbols-outlined text-sm" data-icon="align_vertical_bottom">align_vertical_bottom</span></button>
-</div>
-</div>
-<div class="p-4 border-b border-white/10">
-<span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Layout Geometry</span>
-<div class="grid grid-cols-2 gap-4">
-<div class="space-y-1.5">
-<label class="text-[10px] text-slate-500 font-bold">WIDTH</label>
-<div class="flex items-center bg-surface-container-lowest border border-white/5 rounded px-2 h-7">
-<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" id="width-input" type="text" value="390"/>
-<span class="text-[10px] text-slate-600 ml-1">PX</span>
-</div>
-</div>
-<div class="space-y-1.5">
-<label class="text-[10px] text-slate-500 font-bold">HEIGHT</label>
-<div class="flex items-center bg-surface-container-lowest border border-white/5 rounded px-2 h-7">
-<input class="bg-transparent border-none text-body-mono font-body-mono text-on-surface w-full focus:ring-0 p-0" id="height-input" type="text" value="844"/>
-<span class="text-[10px] text-slate-600 ml-1">PX</span>
-</div>
-</div>
-</div>
-</div>
-<div class="p-4 border-b border-white/10 space-y-4">
-<span class="text-label-caps font-label-caps text-slate-500 block uppercase">Engine Logic</span>
-<div class="flex justify-between items-center group">
-<span class="text-ui-small text-on-surface-variant">Auto-Responsive</span>
-<div class="toggle-switch w-8 h-4 bg-primary/20 rounded-full relative cursor-pointer border border-primary/30 transition-colors toggle-active" id="auto-responsive-toggle">
-<div class="toggle-knob absolute right-0.5 top-0.5 w-3 h-3 bg-primary rounded-full transition-transform" style="transform: translateX(0);"></div>
-</div>
-</div>
-<div class="flex justify-between items-center group">
-<span class="text-ui-small text-on-surface-variant">Focal Snap</span>
-<div class="toggle-switch w-8 h-4 bg-slate-800 rounded-full relative cursor-pointer border border-white/10 transition-colors" id="focal-snap-toggle">
-<div class="toggle-knob absolute left-0.5 top-0.5 w-3 h-3 bg-slate-500 rounded-full transition-transform"></div>
-</div>
-</div>
-<div class="space-y-2">
-<span class="text-ui-small text-slate-500 font-bold block">RATIO PRESET</span>
-<div class="flex flex-wrap gap-2" id="ratio-presets">
-<button class="preset-btn px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface" data-ratio="1:1">1:1</button>
-<button class="preset-btn px-2 py-1 bg-primary/10 border border-primary/30 rounded text-[10px] font-bold text-primary" data-ratio="9:16">9:16</button>
-<button class="preset-btn px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface" data-ratio="4:5">4:5</button>
-<button class="preset-btn px-2 py-1 bg-surface-container-highest border border-white/10 rounded text-[10px] font-bold text-on-surface" data-ratio="16:9">16:9</button>
-</div>
-</div>
-</div>
-<div class="p-4">
-<span class="text-label-caps font-label-caps text-slate-500 block mb-3 uppercase">Appearance</span>
-<div class="space-y-4">
-<div class="flex items-center gap-3">
-<div class="w-6 h-6 rounded bg-[#0b1326] border border-white/10"></div>
-<span class="text-body-mono font-body-mono text-on-surface-variant">#0B1326</span>
-<span class="text-[10px] text-slate-600 ml-auto font-bold">100%</span>
-</div>
-<div class="flex items-center gap-3">
-<div class="w-6 h-6 rounded border border-white/10 flex items-center justify-center">
-<span class="material-symbols-outlined text-xs" data-icon="add">add</span>
-</div>
-<span class="text-ui-small text-slate-500 italic">Add Layer Style...</span>
-</div>
-</div>
-</div>
-</div>
-<div class="p-4 bg-surface-container border-t border-white/10 mt-auto shrink-0">
-<button class="w-full py-2 bg-secondary-container text-on-surface font-bold text-ui-small rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all" id="generate-btn">
-<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
-                Generate Layout
-            </button>
-</div>
-</aside>
-</main>
-<div class="fixed bottom-6 right-6 lg:right-[292px] flex flex-col gap-2 z-50">
-<div class="bg-primary shadow-lg shadow-primary/20 w-12 h-12 lg:w-10 lg:h-10 rounded-full flex items-center justify-center text-on-primary cursor-pointer hover:scale-110 active:scale-95 transition-all">
-<span class="material-symbols-outlined" data-icon="add">add</span>
-</div>
-</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-    // --- State Management ---
-    const state = {
-        zoom: 1,
-        autoResponsive: true,
-        focalSnap: false,
-        activeRatio: '9:16',
-        deviceSize: { width: 390, height: 844 },
-        selectedItemId: null
+// ─── STATE ───
+let gridType='column', cols=12, rows=6, gap=16;
+let elements=[], selectedId=null, pendingCell=null, dragType=null, elemIdCounter=0;
+
+const EL={
+  headline:    {label:'Headline',    defaultContent:'Your Headline', colSpan:6,  rowSpan:1},
+  subheadline: {label:'Sub Headline',defaultContent:'Supporting subtitle', colSpan:4,  rowSpan:1},
+  description: {label:'Description', defaultContent:'Body copy. Describe your content here.', colSpan:4,  rowSpan:2},
+  footer:      {label:'Footer',      defaultContent:'© 2025 Brand · Privacy', colSpan:12, rowSpan:1},
+  visualhook:  {label:'Visual Hook', defaultContent:'◈', colSpan:4,  rowSpan:3},
+};
+const PRESETS={column:{cols:12,rows:6},modular:{cols:6,rows:6},hierarchy:{cols:2,rows:4},golden:{cols:2,rows:3}};
+
+// ─── GRID TYPE ───
+function setGridType(type,btn,ctx){
+  gridType=type;
+  document.querySelectorAll('.grid-type-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mobile-grid-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const p=PRESETS[type]; cols=p.cols; rows=p.rows;
+  ['col-slider','m-col-slider'].forEach(id=>document.getElementById(id).value=cols);
+  ['row-slider','m-row-slider'].forEach(id=>document.getElementById(id).value=rows);
+  updateLabels();
+  const hideRow=(type==='column'||type==='hierarchy'||type==='golden');
+  document.getElementById('row-control').style.display=hideRow?'none':'flex';
+  document.getElementById('m-row-control').style.display=hideRow?'none':'block';
+  elements=[]; selectedId=null;
+  renderGrid(); renderElements(); updateCode(); showProps(null);
+}
+
+function syncSlider(which,val){
+  if(which==='col'){cols=parseInt(val);['col-slider','m-col-slider'].forEach(id=>document.getElementById(id).value=val);}
+  else if(which==='row'){rows=parseInt(val);['row-slider','m-row-slider'].forEach(id=>document.getElementById(id).value=val);}
+  else{gap=parseInt(val);['gap-slider','m-gap-slider'].forEach(id=>document.getElementById(id).value=val);}
+  updateLabels(); renderGrid(); renderElements(); updateCode();
+}
+
+function updateGrid(){
+  cols=parseInt(document.getElementById('col-slider').value);
+  rows=parseInt(document.getElementById('row-slider').value);
+  gap=parseInt(document.getElementById('gap-slider').value);
+  ['m-col-slider','m-row-slider','m-gap-slider'].forEach((id,i)=>{document.getElementById(id).value=[cols,rows,gap][i];});
+  updateLabels(); renderGrid(); renderElements(); updateCode();
+}
+
+function updateLabels(){
+  document.getElementById('col-val').textContent=cols;
+  document.getElementById('row-val').textContent=rows;
+  document.getElementById('gap-val').textContent=gap+'px';
+  document.getElementById('m-col-val').textContent=cols;
+  document.getElementById('m-row-val').textContent=rows;
+  document.getElementById('m-gap-val').textContent=gap+'px';
+}
+
+// ─── CANVAS ───
+function getCanvasSize(){
+  const wrap=document.getElementById('canvas-wrap');
+  const mob=window.innerWidth<=640;
+  const maxW=mob?wrap.clientWidth-20:Math.min(wrap.clientWidth-40,760);
+  const w=Math.max(240,maxW);
+  let h;
+  if(gridType==='golden'){h=Math.round(w/1.618);}
+  else{const er=getER(); h=Math.round(w*(er/getEC())*(mob?.85:1.05)); h=Math.max(260,Math.min(h,mob?460:560));}
+  return{w,h};
+}
+function getEC(){return(gridType==='hierarchy'||gridType==='golden')?2:cols;}
+function getER(){return gridType==='hierarchy'?4:gridType==='golden'?3:rows;}
+
+function renderGrid(){
+  const grid=document.getElementById('grid');
+  const{w,h}=getCanvasSize();
+  const canvas=document.getElementById('canvas');
+  canvas.style.width=w+'px'; canvas.style.height=h+'px';
+  let colTpl,rowTpl;
+  if(gridType==='hierarchy'){
+    colTpl='2fr 1fr';
+    rowTpl=`${Math.round(h*.12)}px ${Math.round(h*.5)}px ${Math.round(h*.18)}px ${Math.round(h*.2)}px`;
+  }else if(gridType==='golden'){
+    colTpl=`${Math.round(w*1.618/2.618)}px 1fr`;
+    rowTpl=`${Math.round(h*1.618/3.236)}px ${Math.round(h/3.236)}px 1fr`;
+  }else{
+    colTpl=`repeat(${cols},1fr)`;
+    rowTpl=`repeat(${rows},1fr)`;
+  }
+  grid.style.cssText=`display:grid;width:100%;height:100%;grid-template-columns:${colTpl};grid-template-rows:${rowTpl};gap:${gap}px;padding:${gap}px;position:relative;`;
+  const ec=getEC(),er=getER();
+  grid.innerHTML='';
+  for(let i=0;i<ec*er;i++){
+    const r=Math.floor(i/ec)+1,c=(i%ec)+1;
+    const cell=document.createElement('div');
+    cell.className='grid-cell'; cell.dataset.row=r; cell.dataset.col=c;
+    const btn=document.createElement('button');
+    btn.className='add-btn'; btn.textContent='+';
+    btn.onclick=(e)=>{e.stopPropagation();showPicker(e,r,c);};
+    cell.appendChild(btn); grid.appendChild(cell);
+  }
+  updateBadge();
+}
+
+function updateBadge(){
+  const names={column:'Column Grid',modular:'Modular Grid',hierarchy:'Hierarchy Grid',golden:'Golden Ratio'};
+  const ec=getEC(),er=getER();
+  const b=document.getElementById('grid-badge');
+  b.textContent=gridType==='golden'?`${names[gridType]} · φ1.618 · ${gap}px`:`${names[gridType]} · ${ec}×${er} · ${gap}px`;
+}
+
+// ─── PICKER ───
+function showPicker(e,row,col){
+  pendingCell={row,col};
+  const picker=document.getElementById('element-picker');
+  picker.style.display='block';
+  const rect=e.target.getBoundingClientRect();
+  let left=rect.left+window.scrollX;
+  let top=rect.bottom+8+window.scrollY;
+  if(left+220>window.innerWidth)left=window.innerWidth-228;
+  if(top+280>window.innerHeight)top=rect.top-260+window.scrollY;
+  picker.style.left=left+'px'; picker.style.top=top+'px';
+  e.stopPropagation();
+}
+function hidePicker(){document.getElementById('element-picker').style.display='none';}
+
+document.addEventListener('click',(e)=>{
+  if(!e.target.closest('#element-picker')&&!e.target.closest('.add-btn'))hidePicker();
+  if(!e.target.closest('.design-element')&&!e.target.closest('.drawer')){
+    selectedId=null; renderElements(); showProps(null);
+  }
+});
+
+function placeElement(type){
+  hidePicker();
+  const cfg=EL[type]; const ec=getEC();
+  const el={
+    id:++elemIdCounter,type,content:cfg.defaultContent,
+    colStart:pendingCell?pendingCell.col:1,
+    rowStart:pendingCell?pendingCell.row:1,
+    colSpan:Math.min(cfg.colSpan,ec-(pendingCell?pendingCell.col-1:0)),
+    rowSpan:cfg.rowSpan,
+  };
+  elements.push(el); selectedId=el.id;
+  renderElements(); showProps(el); updateCode();
+  showToast(cfg.label+' added ✓');
+}
+
+function mobilePlaceElement(type){
+  pendingCell={row:1,col:1}; closeDrawer();
+  placeElement(type);
+  setTimeout(()=>openDrawer('props'),320);
+}
+
+// ─── DRAG ───
+function dragElement(type,e){dragType=type;e.dataTransfer.setData('text/plain',type);}
+function handleDrop(e){
+  if(!dragType)return;
+  const grid=document.getElementById('grid'); const gr=grid.getBoundingClientRect();
+  const relX=e.clientX-gr.left,relY=e.clientY-gr.top;
+  const ec=getEC(),er=getER();
+  const cw=(gr.width-gap*(ec+1))/ec,ch=(gr.height-gap*(er+1))/er;
+  const col=Math.max(1,Math.min(ec,Math.ceil(relX/(cw+gap))));
+  const row=Math.max(1,Math.min(er,Math.ceil(relY/(ch+gap))));
+  pendingCell={row,col}; placeElement(dragType); dragType=null;
+}
+
+// ─── RENDER ELEMENTS ───
+function renderElements(){
+  document.querySelectorAll('.design-element').forEach(el=>el.remove());
+  const grid=document.getElementById('grid');
+  elements.forEach(el=>{
+    const div=document.createElement('div');
+    div.className=`design-element el-${el.type}${el.id===selectedId?' selected':''}`;
+    div.dataset.id=el.id;
+    div.style.cssText=`grid-column:${el.colStart}/span ${el.colSpan};grid-row:${el.rowStart}/span ${el.rowSpan};position:relative;`;
+    const lbl=document.createElement('div'); lbl.className='element-label'; lbl.textContent=EL[el.type].label;
+    const prev=document.createElement('div'); prev.className='element-preview'; prev.textContent=el.content;
+    const close=document.createElement('button'); close.className='element-close'; close.textContent='×';
+    close.onclick=(e)=>{e.stopPropagation();deleteElement(el.id);};
+    div.appendChild(lbl); div.appendChild(prev); div.appendChild(close);
+    div.onclick=(e)=>{
+      e.stopPropagation(); selectedId=el.id; renderElements(); showProps(el);
+      if(window.innerWidth<=640)openDrawer('props');
     };
+    grid.appendChild(div);
+  });
+}
 
-    // --- DOM Elements ---
-    const deviceContainer = document.getElementById('device-container');
-    const zoomLabel = document.getElementById('zoom-label');
-    const widthInput = document.getElementById('width-input');
-    const heightInput = document.getElementById('height-input');
-    const ratioLabel = document.getElementById('ratio-label');
-    const canvasViewport = document.getElementById('canvas-viewport');
-    const sidebar = document.getElementById('properties-sidebar');
+// ─── PROPS ───
+function showProps(el){
+  if(!el){
+    document.getElementById('props-no-sel').style.display='flex';
+    document.getElementById('props-form').style.display='none';
+    document.getElementById('m-no-sel').style.display='block';
+    document.getElementById('m-props-form').style.display='none';
+    return;
+  }
+  document.getElementById('props-no-sel').style.display='none';
+  document.getElementById('props-form').style.display='block';
+  document.getElementById('prop-type').textContent=EL[el.type].label;
+  document.getElementById('prop-content').value=el.content;
+  document.getElementById('prop-cs').value=el.colStart;
+  document.getElementById('prop-csp').value=el.colSpan;
+  document.getElementById('prop-rs').value=el.rowStart;
+  document.getElementById('prop-rsp').value=el.rowSpan;
+  document.getElementById('m-no-sel').style.display='none';
+  document.getElementById('m-props-form').style.display='block';
+  document.getElementById('m-prop-title').textContent=EL[el.type].label;
+  document.getElementById('m-prop-content').value=el.content;
+  document.getElementById('m-prop-cs').value=el.colStart;
+  document.getElementById('m-prop-csp').value=el.colSpan;
+  document.getElementById('m-prop-rs').value=el.rowStart;
+  document.getElementById('m-prop-rsp').value=el.rowSpan;
+}
 
-    // --- Core Logic: Focal Point Engine (Canvas Scaling) ---
-    function updateCanvasScaling() {
-        const viewportWidth = canvasViewport.clientWidth - 48; // Padding
-        const viewportHeight = canvasViewport.clientHeight - 48;
-        
-        const scaleX = viewportWidth / state.deviceSize.width;
-        const scaleY = viewportHeight / state.deviceSize.height;
-        const scale = Math.min(scaleX, scaleY, 1); // Max scale 100% for editor precision
-        
-        state.zoom = scale;
-        deviceContainer.style.transform = `scale(${scale})`;
-        zoomLabel.textContent = `${Math.round(scale * 100)}%`;
-    }
+function updateElContent(src){
+  const el=elements.find(e=>e.id===selectedId); if(!el)return;
+  if(src==='mobile') el.content=document.getElementById('m-prop-content').value;
+  else el.content=document.getElementById('prop-content').value;
+  renderElements(); updateCode();
+}
+function updateElGrid(src){
+  const el=elements.find(e=>e.id===selectedId); if(!el)return;
+  const p=src==='mobile'?'m-prop':'prop';
+  el.colStart=parseInt(document.getElementById(p+'-cs').value)||1;
+  el.colSpan=parseInt(document.getElementById(p+'-csp').value)||1;
+  el.rowStart=parseInt(document.getElementById(p+'-rs').value)||1;
+  el.rowSpan=parseInt(document.getElementById(p+'-rsp').value)||1;
+  renderElements(); updateCode();
+}
+function deleteElement(id){
+  elements=elements.filter(e=>e.id!==id);
+  if(selectedId===id){selectedId=null;showProps(null);}
+  renderElements(); updateCode();
+}
+function deleteSelected(){if(selectedId)deleteElement(selectedId);}
 
-    // --- UI Interactions ---
-    function toggleMobileSidebar() {
-        sidebar.classList.toggle('open');
-    }
+// ─── CODE GEN ───
+function updateCode(){
+  let ct,rt;
+  if(gridType==='hierarchy'){ct='2fr 1fr';rt='auto 1fr auto auto';}
+  else if(gridType==='golden'){ct='1.618fr 1fr';rt='1.618fr 1fr 1fr';}
+  else{ct=`repeat(${cols},1fr)`;rt=`repeat(${rows},1fr)`;}
+  const names={column:'column',modular:'modular',hierarchy:'hierarchy',golden:'golden-ratio'};
+  const prefix=names[gridType];
+  let html=`<div class="${prefix}-layout">\n`;
+  elements.forEach(el=>{html+=`  <div class="${el.type}">${el.content}</div>\n`;});
+  html+=`</div>`;
+  let css=`.${prefix}-layout {\n  display: grid;\n  grid-template-columns: ${ct};\n  grid-template-rows: ${rt};\n  gap: ${gap}px;\n}\n`;
+  elements.forEach(el=>{css+=`\n.${el.type} {\n  grid-column: ${el.colStart} / span ${el.colSpan};\n  grid-row: ${el.rowStart} / span ${el.rowSpan};\n}\n`;});
+  ['code-html','m-code-html'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=html;});
+  ['code-css','m-code-css'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=css;});
+}
 
-    // Toggles
-    function setupToggles() {
-        const autoToggle = document.getElementById('auto-responsive-toggle');
-        autoToggle.addEventListener('click', () => {
-            state.autoResponsive = !state.autoResponsive;
-            autoToggle.classList.toggle('toggle-active');
-            const knob = autoToggle.querySelector('.toggle-knob');
-            knob.style.transform = state.autoResponsive ? 'translateX(100%)' : 'translateX(0)';
-            knob.style.right = state.autoResponsive ? '2px' : 'auto';
-            knob.style.left = state.autoResponsive ? 'auto' : '2px';
-        });
+// ─── TABS ───
+function switchTab(name,btn){
+  document.querySelectorAll('.right-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='code')updateCode();
+}
 
-        const snapToggle = document.getElementById('focal-snap-toggle');
-        snapToggle.addEventListener('click', () => {
-            state.focalSnap = !state.focalSnap;
-            snapToggle.classList.toggle('toggle-active');
-            const knob = snapToggle.querySelector('.toggle-knob');
-            knob.style.transform = state.focalSnap ? 'translateX(100%)' : 'translateX(0)';
-            knob.style.right = state.focalSnap ? '2px' : 'auto';
-            knob.style.left = state.focalSnap ? 'auto' : '2px';
-            if (state.focalSnap) knob.classList.add('bg-primary');
-            else knob.classList.remove('bg-primary');
-        });
-    }
+// ─── DRAWER ───
+function openDrawer(name){
+  closeDrawer(true);
+  const overlay=document.getElementById('drawer-overlay');
+  const drawer=document.getElementById('drawer-'+name);
+  overlay.style.display='block';
+  requestAnimationFrame(()=>{overlay.classList.add('visible');drawer.classList.add('open');});
+  if(name==='code')updateCode();
+  document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
+  const nav=document.getElementById('mnav-'+name);
+  if(nav)nav.classList.add('active');
+}
+function closeDrawer(silent){
+  const overlay=document.getElementById('drawer-overlay');
+  overlay.classList.remove('visible');
+  document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('open'));
+  if(!silent){
+    document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
+    setTimeout(()=>{overlay.style.display='none';},300);
+  }
+}
 
-    // Ratio Presets
-    function setupRatios() {
-        const presets = {
-            '1:1': [400, 400],
-            '9:16': [390, 844],
-            '4:5': [400, 500],
-            '16:9': [844, 475]
-        };
+// ─── COPY ───
+function copyHTML(){
+  const txt=document.getElementById('code-html').textContent||document.getElementById('m-code-html').textContent;
+  navigator.clipboard.writeText(txt);showToast('HTML copied!');
+}
+function copyCSS(){
+  updateCode();
+  const txt=document.getElementById('code-css').textContent||document.getElementById('m-code-css').textContent;
+  navigator.clipboard.writeText(txt);showToast('CSS copied!');
+}
 
-        document.querySelectorAll('.preset-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const ratio = btn.dataset.ratio;
-                state.activeRatio = ratio;
-                const [w, h] = presets[ratio];
-                
-                state.deviceSize.width = w;
-                state.deviceSize.height = h;
-                
-                widthInput.value = w;
-                heightInput.value = h;
-                deviceContainer.style.width = `${w}px`;
-                deviceContainer.style.height = `${h}px`;
-                ratioLabel.textContent = ratio;
-                
-                // Highlight active preset
-                document.querySelectorAll('.preset-btn').forEach(b => {
-                    b.classList.remove('bg-primary/10', 'border-primary/30', 'text-primary');
-                    b.classList.add('bg-surface-container-highest', 'border-white/10', 'text-on-surface');
-                });
-                btn.classList.add('bg-primary/10', 'border-primary/30', 'text-primary');
-                btn.classList.remove('bg-surface-container-highest', 'border-white/10', 'text-on-surface');
-                
-                updateCanvasScaling();
-            });
-        });
-    }
+// ─── RESET ───
+function resetCanvas(){
+  elements=[];selectedId=null;renderElements();showProps(null);updateCode();showToast('Canvas reset');
+}
 
-    // --- Interaction System: Selection & Simulated Drag ---
-    function setupInteractions() {
-        const items = document.querySelectorAll('.canvas-item');
-        
-        items.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                items.forEach(i => i.classList.remove('selected'));
-                item.classList.add('selected');
-                state.selectedItemId = item.dataset.id;
-            });
-        });
+// ─── TOAST ───
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
 
-        canvasViewport.addEventListener('click', () => {
-            items.forEach(i => i.classList.remove('selected'));
-            state.selectedItemId = null;
-        });
+function canvasClick(e){
+  if(e.target===document.getElementById('canvas-wrap')||e.target===document.getElementById('canvas')){
+    selectedId=null;renderElements();showProps(null);
+  }
+}
 
-        // Basic Resize simulation via inputs
-        widthInput.addEventListener('input', (e) => {
-            const val = parseInt(e.target.value) || 0;
-            state.deviceSize.width = val;
-            deviceContainer.style.width = `${val}px`;
-            updateCanvasScaling();
-        });
-
-        heightInput.addEventListener('input', (e) => {
-            const val = parseInt(e.target.value) || 0;
-            state.deviceSize.height = val;
-            deviceContainer.style.height = `${val}px`;
-            updateCanvasScaling();
-        });
-    }
-
-    // --- Initialize ---
-    window.addEventListener('resize', updateCanvasScaling);
-    document.getElementById('mobile-sidebar-toggle').addEventListener('click', toggleMobileSidebar);
-    document.getElementById('mobile-sidebar-close').addEventListener('click', toggleMobileSidebar);
-    
-    document.getElementById('generate-btn').addEventListener('click', () => {
-        const btn = document.getElementById('generate-btn');
-        const icon = btn.querySelector('.material-symbols-outlined');
-        icon.textContent = 'refresh';
-        icon.classList.add('animate-spin');
-        setTimeout(() => {
-            icon.textContent = 'auto_awesome';
-            icon.classList.remove('animate-spin');
-        }, 1500);
-    });
-
-    setupToggles();
-    setupRatios();
-    setupInteractions();
-    updateCanvasScaling();
-
+// ─── INIT ───
+window.addEventListener('load',()=>{renderGrid();updateCode();});
+window.addEventListener('resize',()=>{renderGrid();renderElements();});
 </script>
-</body></html>
+
+</body>
+</html>
