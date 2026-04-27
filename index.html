@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -23,284 +24,308 @@ html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
 /* HEADER */
-header{height:52px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:10}
-.logo{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
-.logo-box{width:26px;height:26px;background:var(--text);border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:5px}
+header{height:52px;background:var(–panel);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:10}
+.logo{display:flex;align-items:center;gap:8px;font-family:‘DM Mono’,monospace;font-size:13px;font-weight:500}
+.logo-box{width:26px;height:26px;background:var(–text);border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:5px}
 .logo-box span{background:white;border-radius:1px;display:block}
-.header-div{width:1px;height:22px;background:var(--border)}
+.header-div{width:1px;height:22px;background:var(–border)}
 .header-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.btn-reset{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
-.btn-reset:active{border-color:var(--text);color:var(--text)}
-.btn-css{padding:8px 18px;background:var(--text);color:#fff;border:none;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.btn-reset{width:34px;height:34px;border-radius:50%;border:1px solid var(–border);background:transparent;cursor:pointer;color:var(–muted);font-size:16px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.btn-reset:active{border-color:var(–text);color:var(–text)}
+.btn-css{padding:8px 18px;background:var(–text);color:#fff;border:none;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .btn-css:active{background:#333}
 
 /* APP LAYOUT */
 .app-body{flex:1;display:grid;grid-template-columns:260px 1fr 280px;overflow:hidden;min-height:0}
 
 /* LEFT PANEL */
-.left-panel{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
-.ps{padding:14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.left-panel{background:var(–panel);border-right:1px solid var(–border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.ps{padding:14px;border-bottom:1px solid var(–border);flex-shrink:0}
 .ps:last-child{border-bottom:none}
-.ps-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.ps-title{font-family:‘DM Mono’,monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(–muted);margin-bottom:10px}
 
 /* Size presets */
 .size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
-.sz-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;color:var(--text);-webkit-tap-highlight-color:transparent}
-.sz-btn.active{border-color:var(--text);background:var(--text);color:#fff}
-.sz-r{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;display:block;line-height:1.1}
+.sz-btn{background:transparent;border:1px solid var(–border);border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;color:var(–text);-webkit-tap-highlight-color:transparent}
+.sz-btn.active{border-color:var(–text);background:var(–text);color:#fff}
+.sz-r{font-family:‘DM Mono’,monospace;font-size:13px;font-weight:500;display:block;line-height:1.1}
 .sz-l{font-size:9px;opacity:.6;display:block;margin-top:2px}
 .sz-btn.active .sz-l{opacity:.7}
 .custom-wh{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.cw-inp{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:7px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;width:100%;text-align:center;transition:border-color .15s}
-.cw-inp:focus{border-color:var(--text)}
+.cw-inp{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:7px 8px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:11px;outline:none;width:100%;text-align:center;transition:border-color .15s}
+.cw-inp:focus{border-color:var(–text)}
 
 /* Grid system selector */
 .grid-sys-list{display:flex;flex-direction:column;gap:5px}
-.gs-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.gs-btn.active{border-color:var(--text);background:rgba(26,26,26,.05)}
-.gs-name{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;display:block;margin-bottom:1px}
-.gs-desc{font-size:9px;color:var(--muted);line-height:1.4}
+.gs-btn{background:transparent;border:1px solid var(–border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(–text);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.gs-btn.active{border-color:var(–text);background:rgba(26,26,26,.05)}
+.gs-name{font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;display:block;margin-bottom:1px}
+.gs-desc{font-size:9px;color:var(–muted);line-height:1.4}
 
 /* Grid controls */
 .col-row-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .nr-wrap{display:flex;flex-direction:column;gap:4px}
-.nr-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-.nr-row{display:flex;align-items:center;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:#f5f0eb}
-.nr-btn{width:30px;height:32px;border:none;background:transparent;cursor:pointer;font-size:16px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .1s;font-weight:300}
+.nr-label{font-family:‘DM Mono’,monospace;font-size:9px;color:var(–muted);text-transform:uppercase;letter-spacing:.12em}
+.nr-row{display:flex;align-items:center;border:1px solid var(–border);border-radius:7px;overflow:hidden;background:#f5f0eb}
+.nr-btn{width:30px;height:32px;border:none;background:transparent;cursor:pointer;font-size:16px;color:var(–text);display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .1s;font-weight:300}
 .nr-btn:active{background:rgba(0,0,0,.08)}
-.nr-val{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;border:none;background:transparent;outline:none;color:var(--text)}
+.nr-val{flex:1;text-align:center;font-family:‘DM Mono’,monospace;font-size:13px;font-weight:500;border:none;background:transparent;outline:none;color:var(–text)}
 .gap-wrap{display:flex;flex-direction:column;gap:5px}
-.gap-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;justify-content:space-between}
-.gap-val-disp{color:var(--text);font-weight:500}
-input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:2px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--text);border-radius:50%;cursor:pointer}
+.gap-label{font-family:‘DM Mono’,monospace;font-size:9px;color:var(–muted);text-transform:uppercase;letter-spacing:.12em;display:flex;justify-content:space-between}
+.gap-val-disp{color:var(–text);font-weight:500}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(–border);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(–text);border-radius:50%;cursor:pointer}
 
 /* Element palette */
 .pal-list{display:flex;flex-direction:column;gap:5px}
-.pal-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;border:1px solid var(--border);cursor:grab;transition:all .15s;background:white;-webkit-tap-highlight-color:transparent}
-.pal-item:active{border-color:var(--text);cursor:grabbing}
+.pal-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;border:1px solid var(–border);cursor:grab;transition:all .15s;background:white;-webkit-tap-highlight-color:transparent}
+.pal-item:active{border-color:var(–text);cursor:grabbing}
 .pal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.pal-name{font-size:12px;font-weight:500;color:var(--text)}
-.pal-hint{font-size:10px;color:var(--muted)}
+.pal-name{font-size:12px;font-weight:500;color:var(–text)}
+.pal-hint{font-size:10px;color:var(–muted)}
 
 /* CANVAS AREA */
-.canvas-area{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;position:relative;padding:20px;-webkit-overflow-scrolling:touch;gap:10px}
+.canvas-area{background:var(–bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;position:relative;padding:20px;-webkit-overflow-scrolling:touch;gap:10px}
 
-.canvas-size-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;letter-spacing:.06em}
+.canvas-size-label{font-family:‘DM Mono’,monospace;font-size:10px;color:var(–muted);flex-shrink:0;letter-spacing:.06em}
 
 /* THE CANVAS */
 #canvas{
-  position:relative;
-  background:#ffffff;
-  box-shadow:0 1px 4px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.07);
-  border-radius:4px;
-  flex-shrink:0;
-  overflow:hidden;
-  touch-action:none;
-  user-select:none;
+position:relative;
+background:#ffffff;
+box-shadow:0 1px 4px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.07);
+border-radius:4px;
+flex-shrink:0;
+overflow:hidden;
+touch-action:none;
+user-select:none;
 }
 
 /* GRID OVERLAY — cream cells */
 .grid-overlay{
-  position:absolute;inset:0;
-  pointer-events:none;
-  z-index:1;
+position:absolute;inset:0;
+pointer-events:none;
+z-index:1;
 }
 .grid-cell-bg{
-  position:absolute;
-  background:var(--cell-bg);
-  border-radius:2px;
-  /* pointer events added per cell */
-  pointer-events:all;
-  cursor:crosshair;
-  transition:background .1s;
-  display:flex;align-items:center;justify-content:center;
+position:absolute;
+background:var(–cell-bg);
+border-radius:2px;
+/* pointer events added per cell */
+pointer-events:all;
+cursor:crosshair;
+transition:background .1s;
+display:flex;align-items:center;justify-content:center;
 }
 .grid-cell-bg:hover{background:rgba(0,0,0,.18)}
 .add-btn{
-  width:26px;height:26px;border-radius:50%;
-  background:rgba(255,255,255,.55);
-  border:1.5px solid rgba(0,0,0,.18);
-  color:rgba(0,0,0,.45);
-  font-size:17px;font-weight:300;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;opacity:0;
-  transition:opacity .12s;
-  -webkit-tap-highlight-color:transparent;
-  line-height:1;
+width:26px;height:26px;border-radius:50%;
+background:rgba(255,255,255,.55);
+border:1.5px solid rgba(0,0,0,.18);
+color:rgba(0,0,0,.45);
+font-size:17px;font-weight:300;
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;opacity:0;
+transition:opacity .12s;
+-webkit-tap-highlight-color:transparent;
+line-height:1;
 }
 .grid-cell-bg:hover .add-btn{opacity:1}
 @media(hover:none){.add-btn{opacity:.45!important}}
 
 /* DESIGN ELEMENTS */
 .design-el{
-  position:absolute;
-  background:#ffffff;
-  border:1.5px solid rgba(0,0,0,.13);
-  border-radius:3px;
-  z-index:10;
-  touch-action:none;
-  cursor:move;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
-  overflow:hidden;
-  transition:border-color .1s;
+position:absolute;
+background:#ffffff;
+border:1.5px solid rgba(0,0,0,.13);
+border-radius:3px;
+z-index:10;
+touch-action:none;
+cursor:move;
+display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
+overflow:hidden;
+transition:border-color .1s;
 }
 .design-el.selected{
-  border-color:var(--text);
-  z-index:20;
+border-color:var(–text);
+z-index:20;
 }
 .design-el.dragging{opacity:.88;z-index:100;cursor:grabbing}
 
 /* element content */
-.el-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.35);pointer-events:none;line-height:1}
-.el-prev{font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(0,0,0,.65);text-align:center;padding:0 6px;pointer-events:none;line-height:1.35;max-width:100%;overflow:hidden;word-break:break-word}
+.el-lbl{font-family:‘DM Mono’,monospace;font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.35);pointer-events:none;line-height:1}
+.el-prev{font-family:‘DM Sans’,sans-serif;font-size:11px;color:rgba(0,0,0,.65);text-align:center;padding:0 6px;pointer-events:none;line-height:1.35;max-width:100%;overflow:hidden;word-break:break-word}
 
 /* CLOSE button — pink circle */
 .el-close{
-  position:absolute;top:-10px;right:-10px;
-  width:22px;height:22px;border-radius:50%;
-  background:var(--pink);border:2px solid #fff;
-  color:#fff;font-size:11px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:50;
-  box-shadow:0 1px 4px rgba(0,0,0,.25);
-  opacity:0;transition:opacity .15s;
-  -webkit-tap-highlight-color:transparent;
-  line-height:1;
+position:absolute;top:-10px;right:-10px;
+width:22px;height:22px;border-radius:50%;
+background:var(–pink);border:2px solid #fff;
+color:#fff;font-size:11px;
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;z-index:50;
+box-shadow:0 1px 4px rgba(0,0,0,.25);
+opacity:0;transition:opacity .15s;
+-webkit-tap-highlight-color:transparent;
+line-height:1;
 }
 .design-el.selected .el-close,
 .design-el:hover .el-close{opacity:1}
 
 /* RESIZE handle — bottom-right L-bracket */
 .el-resize{
-  position:absolute;bottom:-6px;right:-6px;
-  width:18px;height:18px;
-  cursor:se-resize;z-index:50;
-  opacity:0;transition:opacity .15s;
-  touch-action:none;
+position:absolute;bottom:-6px;right:-6px;
+width:18px;height:18px;
+cursor:se-resize;z-index:50;
+opacity:0;transition:opacity .15s;
+touch-action:none;
 }
 .design-el.selected .el-resize,
 .design-el:hover .el-resize{opacity:1}
 .el-resize::before{
-  content:'';position:absolute;
-  bottom:3px;right:3px;
-  width:9px;height:9px;
-  border-right:2.5px solid var(--text);
-  border-bottom:2.5px solid var(--text);
-  border-radius:0 0 2px 0;
+content:’’;position:absolute;
+bottom:3px;right:3px;
+width:9px;height:9px;
+border-right:2.5px solid var(–text);
+border-bottom:2.5px solid var(–text);
+border-radius:0 0 2px 0;
 }
 
 /* element type styles */
-.el-headline .el-prev{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#1a1a1a}
+.el-headline .el-prev{font-family:‘Playfair Display’,serif;font-size:15px;font-weight:700;color:#1a1a1a}
 .el-subheadline .el-prev{font-size:12px;color:#333}
 .el-description .el-prev{font-size:10px;color:#888;line-height:1.5}
-.el-footer .el-prev{font-family:'DM Mono',monospace;font-size:9px;color:#999}
+.el-footer .el-prev{font-family:‘DM Mono’,monospace;font-size:9px;color:#999}
 .el-visualhook{background:rgba(233,30,140,.04)!important;border-color:rgba(233,30,140,.25)!important}
-.el-visualhook .el-prev{font-size:20px;color:var(--pink)}
+.el-visualhook .el-prev{font-size:20px;color:var(–pink)}
 
 /* RIGHT PANEL */
-.right-panel{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.r-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.r-tab{flex:1;padding:14px 8px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.r-tab.active{color:var(--text);border-bottom:2px solid var(--text)}
+.right-panel{background:var(–panel);border-left:1px solid var(–border);display:flex;flex-direction:column;overflow:hidden}
+.r-tabs{display:flex;border-bottom:1px solid var(–border);flex-shrink:0}
+.r-tab{flex:1;padding:14px 8px;font-size:10px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(–muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.r-tab.active{color:var(–text);border-bottom:2px solid var(–text)}
 .tab-body{flex:1;overflow-y:auto;padding:16px 14px}
 .tp{display:none}
 .tp.active{display:block}
-.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;color:var(--muted);font-size:11px;text-align:center;gap:10px;line-height:1.6}
+.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;color:var(–muted);font-size:11px;text-align:center;gap:10px;line-height:1.6}
 .no-sel-icon{font-size:28px;opacity:.18}
 .pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.pr-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
-.pr-inp{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
-.pr-inp:focus{border-color:var(--text)}
+.pr-label{font-size:9px;color:var(–muted);font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.12em}
+.pr-inp{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:8px 10px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.pr-inp:focus{border-color:var(–text)}
 .pr2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .pm{display:flex;flex-direction:column;gap:4px}
 .pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.pos-box{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center}
-.pos-box-l{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
-.pos-box-v{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);font-weight:500}
-.code-blk{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:10px}
-.code-lbl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:7px}
-.code-txt{font-family:'DM Mono',monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:180px;overflow-y:auto}
-.copy-btn{width:100%;margin-top:8px;padding:8px;background:var(--text);border:none;border-radius:20px;color:#fff;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:background .15s}
+.pos-box{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:8px;text-align:center}
+.pos-box-l{font-family:‘DM Mono’,monospace;font-size:8px;color:var(–muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
+.pos-box-v{font-family:‘DM Mono’,monospace;font-size:13px;color:var(–text);font-weight:500}
+.code-blk{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:12px;margin-bottom:10px}
+.code-lbl{font-family:‘DM Mono’,monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:7px}
+.code-txt{font-family:‘DM Mono’,monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:180px;overflow-y:auto}
+.copy-btn{width:100%;margin-top:8px;padding:8px;background:var(–text);border:none;border-radius:20px;color:#fff;font-family:‘DM Mono’,monospace;font-size:10px;cursor:pointer;transition:background .15s}
 .copy-btn:active{background:#444}
-.del-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--accent2);border-radius:20px;color:var(--accent2);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;margin-top:4px;transition:all .15s}
-.del-btn:active{background:var(--accent2);color:#fff}
+.del-btn{width:100%;padding:10px;background:transparent;border:1px solid var(–accent2);border-radius:20px;color:var(–accent2);font-family:‘DM Mono’,monospace;font-size:11px;cursor:pointer;margin-top:4px;transition:all .15s}
+.del-btn:active{background:var(–accent2);color:#fff}
 
 /* ELEMENT PICKER */
-.picker{position:fixed;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;z-index:3000;box-shadow:0 8px 32px rgba(0,0,0,.12);display:none;width:195px;animation:pickerIn .12s ease}
+.picker{position:fixed;background:#fff;border:1px solid var(–border);border-radius:12px;padding:12px;z-index:3000;box-shadow:0 8px 32px rgba(0,0,0,.12);display:none;width:195px;animation:pickerIn .12s ease}
 @keyframes pickerIn{from{opacity:0;transform:scale(.93) translateY(-4px)}to{opacity:1;transform:none}}
-.picker-ttl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:8px}
+.picker-ttl{font-family:‘DM Mono’,monospace;font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(–muted);margin-bottom:8px}
 .picker-list{display:flex;flex-direction:column;gap:4px}
-.picker-itm{padding:8px 10px;border-radius:7px;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:9px;transition:all .1s;-webkit-tap-highlight-color:transparent}
-.picker-itm:active{border-color:var(--text);background:#f5f0eb}
+.picker-itm{padding:8px 10px;border-radius:7px;border:1px solid var(–border);cursor:pointer;display:flex;align-items:center;gap:9px;transition:all .1s;-webkit-tap-highlight-color:transparent}
+.picker-itm:active{border-color:var(–text);background:#f5f0eb}
 .picker-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.picker-n{font-size:12px;font-weight:500;color:var(--text)}
-.picker-s{font-size:9px;color:var(--muted)}
+.picker-n{font-size:12px;font-weight:500;color:var(–text)}
+.picker-s{font-size:9px;color:var(–muted)}
 
 /* MOBILE NAV */
-.mob-nav{display:none;height:56px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
+.mob-nav{display:none;height:56px;background:var(–panel);border-top:1px solid var(–border);flex-shrink:0}
 .mob-nav-items{display:flex;height:56px}
-.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(--muted);font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;-webkit-tap-highlight-color:transparent;transition:color .15s}
-.mob-nav-btn.active{color:var(--text)}
+.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(–muted);font-size:9px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.05em;-webkit-tap-highlight-color:transparent;transition:color .15s}
+.mob-nav-btn.active{color:var(–text)}
 .mob-nav-ico{font-size:18px;line-height:1}
 
 /* DRAWER */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;opacity:0;transition:opacity .22s}
 .overlay.vis{opacity:1}
-.drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);max-height:86vh;display:flex;flex-direction:column;padding-bottom:calc(var(--safe-bottom)+8px)}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(–border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);max-height:86vh;display:flex;flex-direction:column;padding-bottom:calc(var(–safe-bottom)+8px)}
 .drawer.open{transform:translateY(0)}
-.drw-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
-.drw-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;flex-shrink:0;border-bottom:1px solid var(--border)}
-.drw-title{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em}
-.drw-cls{width:28px;height:28px;border-radius:50%;background:var(--border);border:none;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.drw-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.drw-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;flex-shrink:0;border-bottom:1px solid var(–border)}
+.drw-title{font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em}
+.drw-cls{width:28px;height:28px;border-radius:50%;background:var(–border);border:none;color:var(–muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
 
 /* mobile shared */
 .m-sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px}
 .m-col-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .m-el-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.m-el-item{padding:13px 8px;border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s;background:white}
-.m-el-item:active{border-color:var(--text);background:#f5f0eb}
+.m-el-item{padding:13px 8px;border:1px solid var(–border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s;background:white}
+.m-el-item:active{border-color:var(–text);background:#f5f0eb}
 .m-el-item.fw{grid-column:1/-1}
 .m-el-ico{font-size:20px}
 .m-el-n{font-size:11px;font-weight:500}
-.m-el-h{font-size:9px;color:var(--muted)}
+.m-el-h{font-size:9px;color:var(–muted)}
 .m-pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.m-prl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em}
-.m-pri{background:#f5f0eb;border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%}
+.m-prl{font-size:9px;color:var(–muted);font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.12em}
+.m-pri{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:10px 12px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:13px;outline:none;width:100%}
 .m-pr2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .m-pm{display:flex;flex-direction:column;gap:5px}
-.m-cb{background:#f5f0eb;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
-.m-cl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:8px}
-.m-ct{font-family:'DM Mono',monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto}
-.m-cpb{width:100%;margin-top:10px;padding:12px;background:var(--text);color:#fff;border:none;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.m-cb{background:#f5f0eb;border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:12px}
+.m-cl{font-family:‘DM Mono’,monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:8px}
+.m-ct{font-family:‘DM Mono’,monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto}
+.m-cpb{width:100%;margin-top:10px;padding:12px;background:var(–text);color:#fff;border:none;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
 
 /* mobile grid sys */
 .m-gs-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.m-gs-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.m-gs-btn.active{border-color:var(--text);background:rgba(26,26,26,.05)}
+.m-gs-btn{background:transparent;border:1px solid var(–border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(–text);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.m-gs-btn.active{border-color:var(–text);background:rgba(26,26,26,.05)}
 
 /* TOAST */
-.toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:#fff;padding:9px 20px;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(60px);background:var(–text);color:#fff;padding:9px 20px;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+::-webkit-scrollbar-thumb{background:var(–border);border-radius:2px}
+
+/* ── SNAP GUIDE LINES ── */
+.snap-guide{
+position:absolute;
+pointer-events:none;
+z-index:200;
+background:#e05a5a;
+opacity:0;
+transition:opacity .06s;
+}
+.snap-guide.vis{opacity:1}
+.snap-guide.h{left:0;right:0;height:1px}
+.snap-guide.v{top:0;bottom:0;width:1px}
+/* ghost preview cell highlight */
+.snap-preview{
+position:absolute;
+pointer-events:none;
+z-index:90;
+border:1.5px dashed #e05a5a;
+border-radius:3px;
+background:rgba(224,90,90,.07);
+display:none;
+}
 
 @media(max-width:900px){
-  .app-body{grid-template-columns:240px 1fr}
-  .right-panel{display:none}
+.app-body{grid-template-columns:240px 1fr}
+.right-panel{display:none}
 }
 @media(max-width:640px){
-  header{padding:0 12px}
-  .app-body{grid-template-columns:1fr}
-  .left-panel,.right-panel{display:none}
-  .mob-nav{display:block}
-  .canvas-area{padding:10px;align-items:flex-start}
-  .toast{bottom:64px}
+header{padding:0 12px}
+.app-body{grid-template-columns:1fr}
+.left-panel,.right-panel{display:none}
+.mob-nav{display:block}
+.canvas-area{padding:10px;align-items:flex-start}
+.toast{bottom:64px}
 }
 </style>
+
 </head>
 <body>
 
@@ -319,9 +344,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 <div class="app-body">
 
 <!-- ══ LEFT ══ -->
+
 <div class="left-panel">
 
   <!-- Canvas Size -->
+
   <div class="ps">
     <div class="ps-title">Canvas Size</div>
     <div class="size-grid">
@@ -337,6 +364,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   </div>
 
   <!-- Grid System -->
+
   <div class="ps">
     <div class="ps-title">Grid System</div>
     <div class="grid-sys-list">
@@ -360,6 +388,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   </div>
 
   <!-- Grid Controls -->
+
   <div class="ps" id="manual-ctrl">
     <div class="ps-title">Grid</div>
     <div class="col-row-wrap">
@@ -387,6 +416,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   </div>
 
   <!-- Elements -->
+
   <div class="ps">
     <div class="ps-title">Elements — drag to canvas</div>
     <div class="pal-list">
@@ -415,6 +445,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <!-- ══ CANVAS ══ -->
+
 <div class="canvas-area" id="canvas-area"
      ondragover="event.preventDefault()"
      ondrop="palDrop(event)"
@@ -422,10 +453,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   <div class="canvas-size-label" id="cv-lbl">540 × 400 px</div>
   <div id="canvas">
     <div class="grid-overlay" id="grid-overlay"></div>
+    <div id="snap-guide-layer" style="position:absolute;inset:0;pointer-events:none;z-index:200;overflow:hidden"></div>
+    <div class="snap-preview" id="snap-preview"></div>
   </div>
 </div>
 
 <!-- ══ RIGHT ══ -->
+
 <div class="right-panel">
   <div class="r-tabs">
     <button class="r-tab active" onclick="switchTab('props',this)">Properties</button>
@@ -471,6 +505,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <!-- MOBILE NAV -->
+
 <nav class="mob-nav">
   <div class="mob-nav-items">
     <button class="mob-nav-btn" onclick="openDrw('grid')" id="mn-grid"><span class="mob-nav-ico">⊞</span>Grid</button>
@@ -483,6 +518,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 <div class="overlay" id="overlay" onclick="closeDrw()"></div>
 
 <!-- DRAWER: GRID -->
+
 <div class="drawer" id="drw-grid">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Grid & Canvas</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
@@ -528,6 +564,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <!-- DRAWER: ADD -->
+
 <div class="drawer" id="drw-add">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Add Element</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
@@ -544,6 +581,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <!-- DRAWER: PROPS -->
+
 <div class="drawer" id="drw-props">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title" id="m-prop-title">Properties</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
@@ -565,6 +603,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <!-- DRAWER: CODE -->
+
 <div class="drawer" id="drw-code">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Generated Code</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
@@ -575,6 +614,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <!-- PICKER -->
+
 <div class="picker" id="picker">
   <div class="picker-ttl">Add Element</div>
   <div class="picker-list">
@@ -783,65 +823,234 @@ function computeCells(){
   return cells;
 }
 
-// ════════════════════════════════
-//  SNAP — finds nearest cell edges
-// ════════════════════════════════
-function snapRect(x,y,w,h){
-  const cells=computeCells();
-  // build unique X and Y boundary arrays from cells
-  const xs=new Set(), ys=new Set();
-  cells.forEach(c=>{xs.add(c.x);xs.add(c.x+c.w);ys.add(c.y);ys.add(c.y+c.h);});
-  const xArr=[...xs].sort((a,b)=>a-b);
-  const yArr=[...ys].sort((a,b)=>a-b);
-  const SNAP=22;
+// ════════════════════════════════════════════════════════════
+//  HYBRID SNAP ENGINE
+//  snapRect / autoSnapToCell removed — replaced by:
+//    strictSnap()    — hard cell-boundary snap on release
+//    getSnapLines()  — proximity guide lines during drag
+//    drawSnapLines() — renders / clears guide SVG lines
+// ════════════════════════════════════════════════════════════
 
-  function nearest(arr,val){
-    let best=val,bd=SNAP;
-    arr.forEach(v=>{const d=Math.abs(v-val);if(d<bd){bd=d;best=v;}});
-    return best;
-  }
+// Cache: invalidated whenever computeCells() inputs change (buildGrid calls this)
+let _snapCache = null;
 
-  const nx=nearest(xArr,x);
-  const ny=nearest(yArr,y);
-  // snap right/bottom edge too
-  const snappedRight=nearest(xArr,x+w);
-  const snappedBottom=nearest(yArr,y+h);
-
-  let nw=snappedRight-nx;
-  let nh=snappedBottom-ny;
-  if(nw<20) nw=w; // fallback
-  if(nh<16) nh=h;
-
-  return{
-    x:Math.max(0,nx),
-    y:Math.max(0,ny),
-    w:Math.max(20,nw),
-    h:Math.max(16,nh)
+function _buildSnapCache(){
+  const cells = computeCells();
+  const xSet = new Set(), ySet = new Set();
+  cells.forEach(c => {
+    xSet.add(c.x);
+    xSet.add(c.x + c.w);
+    ySet.add(c.y);
+    ySet.add(c.y + c.h);
+  });
+  _snapCache = {
+    cells,
+    xs: [...xSet].sort((a,b)=>a-b),
+    ys: [...ySet].sort((a,b)=>a-b),
   };
 }
 
-// Auto-snap: find the cell the element center falls in, snap to that cell
-function autoSnapToCell(x,y,w,h){
-  const cells=computeCells();
-  const cx=x+w/2, cy=y+h/2;
-  // find nearest cell center
-  let best=null,bestD=Infinity;
-  cells.forEach(c=>{
-    const ccx=c.x+c.w/2, ccy=c.y+c.h/2;
-    const d=Math.hypot(cx-ccx,cy-ccy);
-    if(d<bestD){bestD=d;best=c;}
-  });
-  if(best && bestD<Math.max(best.w,best.h)*1.2){
-    // snap element left/top to this cell; keep width/height spanning as many cells as fit
-    return snapRect(best.x, best.y, w, h);
+function _getCache(){
+  if(!_snapCache) _buildSnapCache();
+  return _snapCache;
+}
+
+// Call this whenever the grid changes so cache is rebuilt next access
+function invalidateSnapCache(){ _snapCache = null; }
+
+// ── strictSnap ────────────────────────────────────────────
+// Hard snap on pointer release.
+// Strategy:
+//   1. Find the cell whose top-left corner is nearest the element's top-left.
+//   2. Span right/down to cover as many cells as the original pixel size suggests.
+//   3. Return exact cell-boundary rect (x, y, w, h).
+function strictSnap(x, y, w, h){
+  const { cells, xs, ys } = _getCache();
+
+  // Find nearest cell whose origin is closest to (x, y)
+  let best = null, bestD = Infinity;
+  for(let i = 0; i < cells.length; i++){
+    const c = cells[i];
+    const d = Math.hypot(x - c.x, y - c.y);
+    if(d < bestD){ bestD = d; best = c; }
   }
-  return snapRect(x,y,w,h);
+  if(!best) best = cells[0];
+
+  // Snap origin to this cell's top-left
+  const sx = best.x;
+  const sy = best.y;
+
+  // Find the furthest cell boundary that the original right/bottom edge reaches
+  // Walk xs right from sx to cover the original width
+  const targetRight = x + w;
+  let snapRight = sx + best.w;  // minimum: at least one cell wide
+  for(let i = 0; i < xs.length; i++){
+    if(xs[i] > sx && xs[i] <= targetRight + best.w * 0.6){
+      snapRight = xs[i];
+    }
+  }
+
+  const targetBottom = y + h;
+  let snapBottom = sy + best.h;
+  for(let i = 0; i < ys.length; i++){
+    if(ys[i] > sy && ys[i] <= targetBottom + best.h * 0.6){
+      snapBottom = ys[i];
+    }
+  }
+
+  const nw = Math.max(best.w, snapRight - sx);
+  const nh = Math.max(best.h, snapBottom - sy);
+
+  return {
+    x: Math.max(0, sx),
+    y: Math.max(0, sy),
+    w: Math.min(nw, canvasW - sx),
+    h: Math.min(nh, canvasH - sy),
+  };
+}
+
+// ── strictSnapSize ─────────────────────────────────────────
+// Used during resize release: keep x/y fixed, snap right+bottom edges only.
+function strictSnapSize(x, y, w, h){
+  const { xs, ys, cells } = _getCache();
+
+  // Anchor cell for origin (needed to get minimum span)
+  let anchor = null, bestD = Infinity;
+  for(let i = 0; i < cells.length; i++){
+    const c = cells[i];
+    if(x >= c.x - 2 && y >= c.y - 2){
+      const d = Math.hypot(x - c.x, y - c.y);
+      if(d < bestD){ bestD = d; anchor = c; }
+    }
+  }
+  if(!anchor) anchor = cells[0];
+
+  const targetRight  = x + w;
+  const targetBottom = y + h;
+
+  // Nearest X boundary to the right of x
+  let snapRight = anchor.x + anchor.w;
+  let minDx = Infinity;
+  for(let i = 0; i < xs.length; i++){
+    if(xs[i] > x){
+      const d = Math.abs(xs[i] - targetRight);
+      if(d < minDx){ minDx = d; snapRight = xs[i]; }
+    }
+  }
+
+  // Nearest Y boundary below y
+  let snapBottom = anchor.y + anchor.h;
+  let minDy = Infinity;
+  for(let i = 0; i < ys.length; i++){
+    if(ys[i] > y){
+      const d = Math.abs(ys[i] - targetBottom);
+      if(d < minDy){ minDy = d; snapBottom = ys[i]; }
+    }
+  }
+
+  return {
+    x,
+    y,
+    w: Math.max(anchor.w, snapRight - x),
+    h: Math.max(anchor.h, snapBottom - y),
+  };
+}
+
+// ── getSnapLines ──────────────────────────────────────────
+// Returns {vLines:[x,...], hLines:[y,...]} of grid boundaries
+// within GUIDE_THRESHOLD pixels of the element's edges.
+const GUIDE_THRESHOLD = 18; // px — how close to trigger a visual guide
+
+function getSnapLines(x, y, w, h){
+  const { xs, ys } = _getCache();
+  const vLines = [], hLines = [];
+  const edges = { x: [x, x+w], y: [y, y+h] };
+
+  for(let i = 0; i < xs.length; i++){
+    const gx = xs[i];
+    if(Math.abs(gx - edges.x[0]) < GUIDE_THRESHOLD ||
+       Math.abs(gx - edges.x[1]) < GUIDE_THRESHOLD){
+      vLines.push(gx);
+    }
+  }
+  for(let i = 0; i < ys.length; i++){
+    const gy = ys[i];
+    if(Math.abs(gy - edges.y[0]) < GUIDE_THRESHOLD ||
+       Math.abs(gy - edges.y[1]) < GUIDE_THRESHOLD){
+      hLines.push(gy);
+    }
+  }
+  return { vLines, hLines };
+}
+
+// ── drawSnapLines ─────────────────────────────────────────
+// Renders red guide lines inside #snap-guide-layer.
+// Pass null to clear all guides.
+let _guideEls = [];
+
+function drawSnapLines(snapLines){
+  const layer = document.getElementById('snap-guide-layer');
+  if(!layer) return;
+
+  // Clear previous guides efficiently (reuse DOM nodes)
+  if(!snapLines){
+    _guideEls.forEach(el => el.classList.remove('vis'));
+    // Delay removal so CSS transition fades out
+    setTimeout(()=>{
+      _guideEls.forEach(el => el.remove());
+      _guideEls = [];
+    }, 80);
+    return;
+  }
+
+  // Remove stale guides
+  _guideEls.forEach(el => el.remove());
+  _guideEls = [];
+
+  const { vLines, hLines } = snapLines;
+
+  vLines.forEach(gx => {
+    const el = document.createElement('div');
+    el.className = 'snap-guide v';
+    el.style.left = gx + 'px';
+    layer.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('vis'));
+    _guideEls.push(el);
+  });
+
+  hLines.forEach(gy => {
+    const el = document.createElement('div');
+    el.className = 'snap-guide h';
+    el.style.top = gy + 'px';
+    layer.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('vis'));
+    _guideEls.push(el);
+  });
+}
+
+// ── showSnapPreview ───────────────────────────────────────
+// Ghost cell highlight showing where element will land on release
+function showSnapPreview(x, y, w, h){
+  const p = document.getElementById('snap-preview');
+  if(!p) return;
+  const s = strictSnap(x, y, w, h);
+  p.style.display = 'block';
+  p.style.left   = s.x + 'px';
+  p.style.top    = s.y + 'px';
+  p.style.width  = s.w + 'px';
+  p.style.height = s.h + 'px';
+}
+
+function hideSnapPreview(){
+  const p = document.getElementById('snap-preview');
+  if(p) p.style.display = 'none';
 }
 
 // ════════════════════════════════
 //  BUILD GRID OVERLAY
 // ════════════════════════════════
 function buildGrid(){
+  invalidateSnapCache();
   const ov=document.getElementById('grid-overlay');
   ov.innerHTML='';
   const cells=computeCells();
@@ -897,8 +1106,8 @@ function placeEl(type, dropX, dropY){
   const def=EL_DEF[type];
   const ew=Math.round(canvasW*def.fw);
   const eh=Math.round(canvasH*def.fh);
-  // auto-snap to nearest grid cell
-  const s=autoSnapToCell(dropX, dropY, ew, eh);
+  // strict-snap to nearest grid cell
+  const s=strictSnap(dropX, dropY, ew, eh);
   const el={
     id:++eid, type,
     content:def.content,
@@ -991,7 +1200,7 @@ function renderEls(){
 }
 
 // ════════════════════════════════
-//  MOVE
+//  MOVE — Hybrid: smooth pixel drag + strict snap on release
 // ════════════════════════════════
 function startMove(e,el){
   const canvas=document.getElementById('canvas');
@@ -999,42 +1208,64 @@ function startMove(e,el){
   const sx=e.clientX, sy=e.clientY;
   const ox=el.x, oy=el.y;
   let moved=false;
+  let rafId=null;
 
   div.classList.add('dragging');
   div.setPointerCapture(e.pointerId);
 
+  // Throttle guide updates to rAF for performance
+  let pendX=ox, pendY=oy;
+
+  function applyFrame(){
+    rafId=null;
+    const nx=Math.max(0,Math.min(pendX,canvasW-el.w));
+    const ny=Math.max(0,Math.min(pendY,canvasH-el.h));
+    // Move element freely at pixel level
+    div.style.left=nx+'px';
+    div.style.top =ny+'px';
+    // Guide lines near grid boundaries
+    const lines=getSnapLines(nx,ny,el.w,el.h);
+    drawSnapLines(lines);
+    // Ghost preview of snap target
+    showSnapPreview(nx,ny,el.w,el.h);
+    // Keep el state in sync (used by showProps)
+    el.x=nx; el.y=ny;
+    showProps(el);
+  }
+
   function onMove(ev){
     if(ev.pointerId!==e.pointerId) return;
     moved=true;
-    const dx=ev.clientX-sx, dy=ev.clientY-sy;
-    let nx=ox+dx, ny=oy+dy;
-    // live snap while dragging
-    const s=snapRect(nx,ny,el.w,el.h);
-    el.x=Math.max(0,Math.min(s.x,canvasW-el.w));
-    el.y=Math.max(0,Math.min(s.y,canvasH-el.h));
-    div.style.left=el.x+'px'; div.style.top=el.y+'px';
-    showProps(el);
+    pendX=ox+(ev.clientX-sx);
+    pendY=oy+(ev.clientY-sy);
+    if(!rafId) rafId=requestAnimationFrame(applyFrame);
   }
+
   function onUp(ev){
     if(ev.pointerId!==e.pointerId) return;
+    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
     div.removeEventListener('pointermove',onMove);
     div.removeEventListener('pointerup',onUp);
     div.classList.remove('dragging');
-    // final: auto-snap to nearest cell
+    drawSnapLines(null);   // clear guides
+    hideSnapPreview();
+
     if(moved){
-      const s=autoSnapToCell(el.x,el.y,el.w,el.h);
-      el.x=Math.max(0,Math.min(s.x,canvasW-el.w));
-      el.y=Math.max(0,Math.min(s.y,canvasH-el.h));
+      // STRICT snap: all final positions derived solely from computeCells()
+      const s=strictSnap(el.x,el.y,el.w,el.h);
+      el.x=Math.max(0,Math.min(s.x,canvasW-s.w));
+      el.y=Math.max(0,Math.min(s.y,canvasH-s.h));
       el.w=s.w; el.h=s.h;
       renderEls(); showProps(el); genCode();
     }
   }
+
   div.addEventListener('pointermove',onMove,{passive:false});
   div.addEventListener('pointerup',onUp);
 }
 
 // ════════════════════════════════
-//  RESIZE
+//  RESIZE — free during, strict grid-span snap on release
 // ════════════════════════════════
 function startResize(e,el){
   const canvas=document.getElementById('canvas');
@@ -1043,28 +1274,46 @@ function startResize(e,el){
   const sx=e.clientX, sy=e.clientY;
   const ow=el.w, oh=el.h;
   const MIN_W=20, MIN_H=16;
+  let rafId=null;
+  let pendW=ow, pendH=oh;
 
   rh.setPointerCapture(e.pointerId);
 
-  function onMove(ev){
-    if(ev.pointerId!==e.pointerId) return;
-    const dx=ev.clientX-sx, dy=ev.clientY-sy;
-    let nw=Math.max(MIN_W,ow+dx);
-    let nh=Math.max(MIN_H,oh+dy);
-    nw=Math.min(nw,canvasW-el.x);
-    nh=Math.min(nh,canvasH-el.y);
-    // snap right + bottom edges
-    const s=snapRect(el.x,el.y,nw,nh);
-    el.w=Math.max(MIN_W,s.w); el.h=Math.max(MIN_H,s.h);
-    div.style.width=el.w+'px'; div.style.height=el.h+'px';
+  function applyFrame(){
+    rafId=null;
+    const nw=Math.max(MIN_W,Math.min(pendW,canvasW-el.x));
+    const nh=Math.max(MIN_H,Math.min(pendH,canvasH-el.y));
+    // Free pixel resize during interaction
+    div.style.width =nw+'px';
+    div.style.height=nh+'px';
+    el.w=nw; el.h=nh;
+    // Guide lines on right/bottom edges
+    const lines=getSnapLines(el.x,el.y,nw,nh);
+    drawSnapLines(lines);
     showProps(el);
   }
+
+  function onMove(ev){
+    if(ev.pointerId!==e.pointerId) return;
+    pendW=ow+(ev.clientX-sx);
+    pendH=oh+(ev.clientY-sy);
+    if(!rafId) rafId=requestAnimationFrame(applyFrame);
+  }
+
   function onUp(ev){
     if(ev.pointerId!==e.pointerId) return;
+    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
     rh.removeEventListener('pointermove',onMove);
     rh.removeEventListener('pointerup',onUp);
-    renderEls(); genCode();
+    drawSnapLines(null);
+
+    // STRICT snap: snap right/bottom to nearest cell boundary
+    const s=strictSnapSize(el.x,el.y,el.w,el.h);
+    el.w=Math.max(MIN_W,s.w);
+    el.h=Math.max(MIN_H,s.h);
+    renderEls(); showProps(el); genCode();
   }
+
   rh.addEventListener('pointermove',onMove,{passive:false});
   rh.addEventListener('pointerup',onUp);
 }
@@ -1234,5 +1483,6 @@ window.addEventListener('load',()=>{
 });
 window.addEventListener('resize',()=>{applyRatio();});
 </script>
+
 </body>
 </html>
