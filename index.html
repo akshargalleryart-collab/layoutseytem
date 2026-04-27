@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -18,170 +17,225 @@ html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
 /* ═══ HEADER ═══ */
-header{height:52px;background:var(–panel);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:10}
-.logo{font-family:‘Playfair Display’,serif;font-size:17px;font-weight:900;color:var(–accent);letter-spacing:-.3px}
-.logo span{color:var(–text)}
-.header-sep{width:1px;height:24px;background:var(–border);flex-shrink:0}
-.header-tagline{font-size:10px;color:var(–muted);letter-spacing:.08em;text-transform:uppercase}
+header{height:52px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:10}
+.logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:var(--accent);letter-spacing:-.3px}
+.logo span{color:var(--text)}
+.header-sep{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.header-tagline{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .header-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
-.btn{padding:6px 14px;border-radius:5px;font-size:11px;font-family:‘DM Mono’,monospace;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
-.btn-ghost{background:transparent;border:1px solid var(–border);color:var(–muted)}
-.btn-ghost:active{border-color:var(–accent);color:var(–accent)}
-.btn-primary{background:var(–accent);color:#0e0e0e;font-weight:500}
+.btn{padding:6px 14px;border-radius:5px;font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:active{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);color:#0e0e0e;font-weight:500}
 .btn-primary:active{background:#fce070}
-.btn-danger{background:transparent;border:1px solid var(–accent2);color:var(–accent2)}
-.btn-danger:active{background:var(–accent2);color:#fff}
-.btn-icon{width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font-size:15px;border-radius:6px;background:transparent;border:1px solid var(–border);color:var(–muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.btn-icon:active{border-color:var(–accent);color:var(–accent)}
+.btn-danger{background:transparent;border:1px solid var(--accent2);color:var(--accent2)}
+.btn-danger:active{background:var(--accent2);color:#fff}
+.btn-icon{width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font-size:15px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.btn-icon:active{border-color:var(--accent);color:var(--accent)}
 
 /* ═══ APP BODY ═══ */
 .app-body{flex:1;display:grid;grid-template-columns:260px 1fr 280px;overflow:hidden;min-height:0}
 
 /* ═══ LEFT PANEL ═══ */
-.left-panel{background:var(–panel);border-right:1px solid var(–border);padding:16px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:20px}
-.panel-section-title{font-family:‘DM Mono’,monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(–muted);margin-bottom:10px}
+.left-panel{background:var(--panel);border-right:1px solid var(--border);padding:16px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:20px}
+.panel-section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .grid-types{display:flex;flex-direction:column;gap:5px}
-.grid-type-btn{background:transparent;border:1px solid var(–border);border-radius:7px;padding:10px 12px;cursor:pointer;text-align:left;transition:all .15s;color:var(–text);-webkit-tap-highlight-color:transparent}
-.grid-type-btn.active{border-color:var(–accent);background:rgba(240,208,96,.08)}
-.grid-type-name{font-family:‘Playfair Display’,serif;font-size:13px;font-weight:700;display:block;margin-bottom:2px}
-.grid-type-desc{font-size:10px;color:var(–muted);line-height:1.4}
+.grid-type-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:10px 12px;cursor:pointer;text-align:left;transition:all .15s;color:var(--text);-webkit-tap-highlight-color:transparent}
+.grid-type-btn.active{border-color:var(--accent);background:rgba(240,208,96,.08)}
+.grid-type-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;display:block;margin-bottom:2px}
+.grid-type-desc{font-size:10px;color:var(--muted);line-height:1.4}
 .control-group{display:flex;flex-direction:column;gap:10px}
 .control-row{display:flex;flex-direction:column;gap:5px}
-.control-label{font-family:‘DM Mono’,monospace;font-size:11px;color:var(–muted);display:flex;justify-content:space-between}
-.control-val{color:var(–accent)}
-input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(–border);border-radius:2px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(–accent);border-radius:50%;cursor:pointer}
+.control-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.control-val{color:var(--accent)}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;cursor:pointer}
 .element-palette{display:flex;flex-direction:column;gap:5px}
-.palette-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;border:1px solid var(–border);cursor:grab;transition:all .15s;font-size:12px;-webkit-tap-highlight-color:transparent}
-.palette-item:active{border-color:var(–accent);background:rgba(240,208,96,.06)}
+.palette-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;border:1px solid var(--border);cursor:grab;transition:all .15s;font-size:12px;-webkit-tap-highlight-color:transparent}
+.palette-item:active{border-color:var(--accent);background:rgba(240,208,96,.06)}
 .palette-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .palette-item-info{flex:1}
-.palette-item-name{font-weight:500;color:var(–text);font-size:12px}
-.palette-item-hint{font-size:10px;color:var(–muted)}
+.palette-item-name{font-weight:500;color:var(--text);font-size:12px}
+.palette-item-hint{font-size:10px;color:var(--muted)}
+
+/* mode toggle */
+.mode-toggle{display:flex;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;padding:3px;gap:3px}
+.mode-btn{flex:1;padding:5px 8px;border-radius:4px;border:none;background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s;text-align:center}
+.mode-btn.active{background:var(--accent);color:#0e0e0e;font-weight:500}
+.mode-hint{font-size:10px;color:var(--muted);line-height:1.5;padding:6px 8px;background:rgba(240,208,96,.04);border:1px solid rgba(240,208,96,.1);border-radius:5px}
 
 /* ═══ CANVAS ═══ */
 .canvas-wrap{background:#090909;display:flex;align-items:center;justify-content:center;overflow:auto;position:relative;padding:20px;-webkit-overflow-scrolling:touch}
 .canvas-bg-dots{position:absolute;inset:0;background-image:radial-gradient(circle,#1e1e1e 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
-#canvas{position:relative;background:#161616;box-shadow:0 0 0 1px var(–border),0 24px 48px rgba(0,0,0,.6);border-radius:4px;flex-shrink:0}
-.grid-canvas{display:grid;width:100%;height:100%;position:relative}
-.grid-cell{border:1px solid var(–grid-line);position:relative;transition:background .1s;cursor:crosshair;min-height:32px}
-.grid-cell:hover{background:var(–cell-hover)}
-.grid-cell .add-btn{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(–accent);color:#0e0e0e;border:none;font-size:20px;line-height:30px;text-align:center;cursor:pointer;font-weight:700}
+#canvas{position:relative;background:#161616;box-shadow:0 0 0 1px var(--border),0 24px 48px rgba(0,0,0,.6);border-radius:4px;flex-shrink:0;overflow:hidden}
+.grid-canvas{display:grid;width:100%;height:100%;position:absolute;top:0;left:0;pointer-events:none}
+.grid-cell{border:1px solid var(--grid-line);position:relative;transition:background .1s;pointer-events:all;cursor:crosshair;min-height:32px}
+.grid-cell.drop-target{background:rgba(240,208,96,0.06)}
+.grid-cell.add-hover{background:var(--cell-hover)}
+.grid-cell .add-btn{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(--accent);color:#0e0e0e;border:none;font-size:20px;line-height:30px;text-align:center;cursor:pointer;font-weight:700;z-index:5}
 .grid-cell:hover .add-btn{display:block}
 @media(hover:none){.grid-cell .add-btn{display:block!important}}
-.grid-info-badge{position:absolute;top:8px;left:8px;background:rgba(240,208,96,.1);border:1px solid rgba(240,208,96,.2);border-radius:4px;padding:3px 8px;font-family:‘DM Mono’,monospace;font-size:9px;color:var(–accent);letter-spacing:.08em;z-index:5;pointer-events:none}
-.design-element{border-radius:4px;cursor:pointer;user-select:none;transition:box-shadow .15s;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;position:relative}
-.design-element.selected{box-shadow:0 0 0 2px var(–accent);z-index:30}
-.element-label{font-family:‘DM Mono’,monospace;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;opacity:.8;pointer-events:none}
-.element-preview{font-family:‘Playfair Display’,serif;text-align:center;padding:0 8px;pointer-events:none;opacity:.7;font-size:11px;line-height:1.3;max-width:100%;overflow:hidden;word-break:break-word}
-.element-close{position:absolute;top:3px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.5);border:none;color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;z-index:2}
+.grid-info-badge{position:absolute;top:8px;left:8px;background:rgba(240,208,96,.1);border:1px solid rgba(240,208,96,.2);border-radius:4px;padding:3px 8px;font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:.08em;z-index:5;pointer-events:none}
+
+/* ═══ DESIGN ELEMENTS ═══ */
+.design-element{
+  position:absolute;
+  border-radius:4px;
+  cursor:move;
+  user-select:none;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
+  overflow:hidden;
+  transition:box-shadow .1s;
+  z-index:10;
+}
+.design-element.selected{
+  box-shadow:0 0 0 2px var(--accent), 0 4px 20px rgba(240,208,96,.15);
+  z-index:20;
+}
+.design-element.dragging{
+  opacity:.85;
+  box-shadow:0 8px 32px rgba(0,0,0,.6), 0 0 0 2px var(--accent);
+  z-index:100;
+  cursor:grabbing;
+}
+.design-element.snapping{
+  transition:left .08s, top .08s, width .08s, height .08s;
+}
+.element-label{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;opacity:.8;pointer-events:none}
+.element-preview{font-family:'Playfair Display',serif;text-align:center;padding:0 8px;pointer-events:none;opacity:.7;font-size:11px;line-height:1.3;max-width:100%;overflow:hidden;word-break:break-word}
+.element-close{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:12px;line-height:20px;text-align:center;cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+.design-element:hover .element-close,
+.design-element.selected .element-close{opacity:1}
+
+/* resize handles */
+.resize-handle{
+  position:absolute;
+  z-index:30;
+  background:var(--accent);
+  border-radius:2px;
+  opacity:0;
+  transition:opacity .15s;
+}
+.design-element.selected .resize-handle,
+.design-element:hover .resize-handle{opacity:1}
+
+/* corners */
+.rh-nw{top:-4px;left:-4px;width:10px;height:10px;border-radius:3px;cursor:nw-resize}
+.rh-ne{top:-4px;right:-4px;width:10px;height:10px;border-radius:3px;cursor:ne-resize}
+.rh-sw{bottom:-4px;left:-4px;width:10px;height:10px;border-radius:3px;cursor:sw-resize}
+.rh-se{bottom:-4px;right:-4px;width:10px;height:10px;border-radius:3px;cursor:se-resize}
+/* edges */
+.rh-n{top:-3px;left:20px;right:20px;height:6px;cursor:n-resize;border-radius:2px}
+.rh-s{bottom:-3px;left:20px;right:20px;height:6px;cursor:s-resize;border-radius:2px}
+.rh-w{left:-3px;top:20px;bottom:20px;width:6px;cursor:w-resize;border-radius:2px}
+.rh-e{right:-3px;top:20px;bottom:20px;width:6px;cursor:e-resize;border-radius:2px}
+
 .el-headline{background:rgba(240,208,96,.14);border:1px solid rgba(240,208,96,.3)}
-.el-headline .element-preview{font-size:16px;font-weight:900;color:var(–accent)}
+.el-headline .element-preview{font-size:16px;font-weight:900;color:var(--accent)}
 .el-subheadline{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
-.el-subheadline .element-preview{font-size:12px;color:#ccc;font-family:‘DM Sans’}
+.el-subheadline .element-preview{font-size:12px;color:#ccc;font-family:'DM Sans'}
 .el-description{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.1)}
-.el-description .element-preview{font-size:10px;color:var(–muted);font-family:‘DM Sans’}
+.el-description .element-preview{font-size:10px;color:var(--muted);font-family:'DM Sans'}
 .el-footer{background:rgba(100,100,100,.1);border:1px solid rgba(255,255,255,.08)}
-.el-footer .element-preview{font-family:‘DM Mono’,monospace;font-size:9px;color:var(–muted)}
+.el-footer .element-preview{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
 .el-visualhook{background:rgba(224,90,90,.12);border:1px solid rgba(224,90,90,.3)}
 .el-visualhook .element-preview{font-size:24px}
 
+/* snap line */
+.snap-line{position:absolute;pointer-events:none;z-index:200;background:rgba(240,208,96,.5)}
+.snap-line.h{height:1px;left:0;right:0}
+.snap-line.v{width:1px;top:0;bottom:0}
+
 /* ═══ RIGHT PANEL ═══ */
-.right-panel{background:var(–panel);border-left:1px solid var(–border);display:flex;flex-direction:column;overflow:hidden}
-.right-tabs{display:flex;border-bottom:1px solid var(–border);flex-shrink:0}
-.right-tab{flex:1;padding:13px;font-size:10px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(–muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.right-tab.active{color:var(–accent);border-bottom:2px solid var(–accent)}
+.right-panel{background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.right-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.right-tab{flex:1;padding:13px;font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.right-tab.active{color:var(--accent);border-bottom:2px solid var(--accent)}
 .tab-content{flex:1;overflow-y:auto;padding:16px 14px}
 .tab-pane{display:none}
 .tab-pane.active{display:block}
-.no-selection{display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(–muted);font-size:12px;text-align:center;gap:10px}
+.no-selection{display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;color:var(--muted);font-size:12px;text-align:center;gap:10px}
 .no-selection-icon{font-size:32px;opacity:.25}
 .prop-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.prop-label{font-size:10px;color:var(–muted);font-family:‘DM Mono’,monospace}
-.prop-input{background:#0a0a0a;border:1px solid var(–border);border-radius:4px;padding:8px 10px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
-.prop-input:focus{border-color:var(–accent)}
-.code-block{background:#0a0a0a;border:1px solid var(–border);border-radius:6px;padding:12px;margin-bottom:10px}
-.code-block-label{font-family:‘DM Mono’,monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:7px}
-.code-text{font-family:‘DM Mono’,monospace;font-size:10px;color:#a8e6a8;line-height:1.7;white-space:pre-wrap;word-break:break-all}
-.copy-code-btn{width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid var(–border);border-radius:4px;color:var(–muted);font-family:‘DM Mono’,monospace;font-size:10px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.copy-code-btn:active{border-color:var(–accent);color:var(–accent)}
+.prop-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+.prop-input{background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.prop-input:focus{border-color:var(--accent)}
+.prop-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.prop-mini{display:flex;flex-direction:column;gap:5px}
+.pos-display{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px}
+.pos-item{text-align:center}
+.pos-item-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.pos-item-val{font-family:'DM Mono',monospace;font-size:14px;color:var(--accent);margin-top:2px}
+.code-block{background:#0a0a0a;border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:10px}
+.code-block-label{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:7px}
+.code-text{font-family:'DM Mono',monospace;font-size:10px;color:#a8e6a8;line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.copy-code-btn{width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.copy-code-btn:active{border-color:var(--accent);color:var(--accent)}
 
 /* ═══ ELEMENT PICKER ═══ */
-.element-picker{position:fixed;background:#1c1c1c;border:1px solid var(–border);border-radius:12px;padding:14px;z-index:2000;box-shadow:0 20px 60px rgba(0,0,0,.8);display:none;width:210px;animation:pickerIn .14s ease}
+.element-picker{position:fixed;background:#1c1c1c;border:1px solid var(--border);border-radius:12px;padding:14px;z-index:2000;box-shadow:0 20px 60px rgba(0,0,0,.8);display:none;width:210px;animation:pickerIn .14s ease}
 @keyframes pickerIn{from{opacity:0;transform:scale(.92) translateY(-6px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.picker-title{font-family:‘DM Mono’,monospace;font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:var(–muted);margin-bottom:10px}
+.picker-title{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:10px}
 .picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.picker-item{padding:10px 6px;border-radius:8px;border:1px solid var(–border);cursor:pointer;text-align:center;transition:all .12s;-webkit-tap-highlight-color:transparent}
-.picker-item:active{border-color:var(–accent);background:rgba(240,208,96,.1)}
+.picker-item{padding:10px 6px;border-radius:8px;border:1px solid var(--border);cursor:pointer;text-align:center;transition:all .12s;-webkit-tap-highlight-color:transparent}
+.picker-item:active{border-color:var(--accent);background:rgba(240,208,96,.1)}
 .picker-icon{font-size:20px;margin-bottom:4px}
-.picker-name{font-size:10px;font-weight:500;color:var(–text)}
-.picker-sub{font-size:9px;color:var(–muted);margin-top:1px}
+.picker-name{font-size:10px;font-weight:500;color:var(--text)}
+.picker-sub{font-size:9px;color:var(--muted);margin-top:1px}
 
 /* ═══ MOBILE BOTTOM NAV ═══ */
-.mobile-bottom-nav{display:none;height:56px;background:var(–panel);border-top:1px solid var(–border);flex-shrink:0}
+.mobile-bottom-nav{display:none;height:56px;background:var(--panel);border-top:1px solid var(--border);flex-shrink:0}
 .mobile-nav-items{display:flex;height:56px}
-.mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(–muted);font-size:9px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.06em;-webkit-tap-highlight-color:transparent;transition:color .15s}
-.mobile-nav-item.active{color:var(–accent)}
+.mobile-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(--muted);font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;-webkit-tap-highlight-color:transparent;transition:color .15s}
+.mobile-nav-item.active{color:var(--accent)}
 .mobile-nav-icon{font-size:18px;line-height:1}
 
 /* ═══ DRAWER ═══ */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;opacity:0;transition:opacity .25s}
 .drawer-overlay.visible{opacity:1}
-.drawer{position:fixed;bottom:0;left:0;right:0;background:var(–panel2);border-top:1px solid var(–border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:82vh;display:flex;flex-direction:column;padding-bottom:calc(var(–safe-bottom) + 8px)}
+.drawer{position:fixed;bottom:0;left:0;right:0;background:var(--panel2);border-top:1px solid var(--border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:82vh;display:flex;flex-direction:column;padding-bottom:calc(var(--safe-bottom) + 8px)}
 .drawer.open{transform:translateY(0)}
-.drawer-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.drawer-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
 .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px;flex-shrink:0}
-.drawer-title{font-family:‘Playfair Display’,serif;font-size:15px;font-weight:700;color:var(–text)}
-.drawer-close{width:28px;height:28px;border-radius:50%;background:var(–border);border:none;color:var(–muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.drawer-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--text)}
+.drawer-close{width:28px;height:28px;border-radius:50%;background:var(--border);border:none;color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .drawer-body{flex:1;overflow-y:auto;padding:0 16px 16px;-webkit-overflow-scrolling:touch}
-
-/* Mobile grid type horizontal scroll */
 .mobile-grid-types{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .mobile-grid-types::-webkit-scrollbar{display:none}
-.mobile-grid-type-btn{flex-shrink:0;background:transparent;border:1px solid var(–border);border-radius:8px;padding:10px 14px;cursor:pointer;text-align:center;color:var(–text);min-width:105px;-webkit-tap-highlight-color:transparent}
-.mobile-grid-type-btn.active{border-color:var(–accent);background:rgba(240,208,96,.08)}
-.mobile-grid-type-btn .grid-type-name{font-family:‘Playfair Display’,serif;font-size:12px;font-weight:700;display:block;margin-bottom:2px}
-.mobile-grid-type-btn .grid-type-desc{font-size:9px;color:var(–muted);line-height:1.3}
-
-/* Mobile element grid 2-col */
+.mobile-grid-type-btn{flex-shrink:0;background:transparent;border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;text-align:center;color:var(--text);min-width:105px;-webkit-tap-highlight-color:transparent}
+.mobile-grid-type-btn.active{border-color:var(--accent);background:rgba(240,208,96,.08)}
+.mobile-grid-type-btn .grid-type-name{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;display:block;margin-bottom:2px}
+.mobile-grid-type-btn .grid-type-desc{font-size:9px;color:var(--muted);line-height:1.3}
 .mobile-element-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.mobile-element-item{padding:14px 10px;border:1px solid var(–border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s}
-.mobile-element-item:active{border-color:var(–accent);background:rgba(240,208,96,.06)}
+.mobile-element-item{padding:14px 10px;border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s}
+.mobile-element-item:active{border-color:var(--accent);background:rgba(240,208,96,.06)}
 .mobile-element-item.full-width{grid-column:1/-1}
 .mobile-el-icon{font-size:24px}
-.mobile-el-name{font-size:11px;font-weight:500;color:var(–text)}
-.mobile-el-hint{font-size:9px;color:var(–muted)}
-
-/* Mobile props */
+.mobile-el-name{font-size:11px;font-weight:500;color:var(--text)}
+.mobile-el-hint{font-size:9px;color:var(--muted)}
 .mobile-prop-row{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.mobile-prop-label{font-size:10px;color:var(–muted);font-family:‘DM Mono’,monospace}
-.mobile-prop-input{background:#0a0a0a;border:1px solid var(–border);border-radius:6px;padding:10px 12px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:13px;outline:none;width:100%}
-.mobile-prop-input:focus{border-color:var(–accent)}
+.mobile-prop-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+.mobile-prop-input{background:#0a0a0a;border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%}
+.mobile-prop-input:focus{border-color:var(--accent)}
 .mobile-prop-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .mobile-prop-mini{display:flex;flex-direction:column;gap:5px}
-
-/* Mobile code */
-.mobile-code-block{background:#0a0a0a;border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:12px}
-.mobile-code-label{font-family:‘DM Mono’,monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:8px}
-.mobile-code-text{font-family:‘DM Mono’,monospace;font-size:10px;color:#a8e6a8;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:150px;overflow-y:auto}
-.mobile-copy-btn{width:100%;margin-top:10px;padding:11px;background:var(–accent);color:#0e0e0e;border:none;border-radius:6px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mobile-code-block{background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
+.mobile-code-label{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:8px}
+.mobile-code-text{font-family:'DM Mono',monospace;font-size:10px;color:#a8e6a8;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:150px;overflow-y:auto}
+.mobile-copy-btn{width:100%;margin-top:10px;padding:11px;background:var(--accent);color:#0e0e0e;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
 
 /* ═══ TOAST ═══ */
-.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(60px);background:var(–accent);color:#0e0e0e;padding:9px 20px;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--accent);color:#0e0e0e;padding:9px 20px;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-/* ═══ SCROLLBAR ═══ */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(–border);border-radius:2px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-/* ═══ TABLET ═══ */
 @media(max-width:900px){
 .app-body{grid-template-columns:220px 1fr}
 .right-panel{display:none}
 }
-
-/* ═══ MOBILE ═══ */
 @media(max-width:640px){
 header{padding:0 12px;gap:8px}
 .header-sep,.header-tagline{display:none}
@@ -192,7 +246,6 @@ header{padding:0 12px;gap:8px}
 .toast{bottom:68px}
 }
 </style>
-
 </head>
 <body>
 
@@ -209,7 +262,6 @@ header{padding:0 12px;gap:8px}
 <div class="app-body">
 
   <!-- LEFT PANEL -->
-
   <div class="left-panel">
     <div>
       <div class="panel-section-title">Grid Type</div>
@@ -250,7 +302,16 @@ header{padding:0 12px;gap:8px}
       </div>
     </div>
     <div>
-      <div class="panel-section-title">Elements — click + on grid</div>
+      <div class="panel-section-title" style="margin-bottom:8px">Snap Mode</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-snap-grid" onclick="setSnapMode('grid')">Grid</button>
+        <button class="mode-btn" id="btn-snap-free" onclick="setSnapMode('free')">Free</button>
+        <button class="mode-btn" id="btn-snap-px" onclick="setSnapMode('px')">8px</button>
+      </div>
+      <div class="mode-hint" style="margin-top:8px" id="snap-hint">Snaps to grid cells</div>
+    </div>
+    <div>
+      <div class="panel-section-title">Elements — click + or drag</div>
       <div class="element-palette">
         <div class="palette-item" draggable="true" ondragstart="dragElement('headline',event)">
           <div class="palette-dot" style="background:#f0d060"></div>
@@ -277,17 +338,19 @@ header{padding:0 12px;gap:8px}
   </div>
 
   <!-- CANVAS -->
-
-  <div class="canvas-wrap" id="canvas-wrap" ondragover="event.preventDefault()" ondrop="handleDrop(event)" onclick="canvasClick(event)">
+  <div class="canvas-wrap" id="canvas-wrap"
+       ondragover="event.preventDefault()"
+       ondrop="handlePaletteDrop(event)"
+       onclick="canvasClick(event)">
     <div class="canvas-bg-dots"></div>
     <div id="canvas">
       <div class="grid-info-badge" id="grid-badge">Column Grid · 12×6 · 16px</div>
       <div class="grid-canvas" id="grid"></div>
+      <!-- elements render here as absolute positioned divs -->
     </div>
   </div>
 
   <!-- RIGHT PANEL -->
-
   <div class="right-panel">
     <div class="right-tabs">
       <button class="right-tab active" onclick="switchTab('properties',this)">Properties</button>
@@ -308,10 +371,21 @@ header{padding:0 12px;gap:8px}
             <div class="prop-label">Content</div>
             <input class="prop-input" id="prop-content" oninput="updateElContent('desktop')">
           </div>
-          <div class="prop-row"><div class="prop-label">Col Start</div><input class="prop-input" id="prop-cs" type="number" min="1" oninput="updateElGrid('desktop')"></div>
-          <div class="prop-row"><div class="prop-label">Col Span</div><input class="prop-input" id="prop-csp" type="number" min="1" oninput="updateElGrid('desktop')"></div>
-          <div class="prop-row"><div class="prop-label">Row Start</div><input class="prop-input" id="prop-rs" type="number" min="1" oninput="updateElGrid('desktop')"></div>
-          <div class="prop-row"><div class="prop-label">Row Span</div><input class="prop-input" id="prop-rsp" type="number" min="1" oninput="updateElGrid('desktop')"></div>
+          <div class="prop-label" style="margin-bottom:6px">Position & Size</div>
+          <div class="pos-display">
+            <div class="pos-item"><div class="pos-item-label">X</div><div class="pos-item-val" id="pos-x">0</div></div>
+            <div class="pos-item"><div class="pos-item-label">Y</div><div class="pos-item-val" id="pos-y">0</div></div>
+            <div class="pos-item"><div class="pos-item-label">W</div><div class="pos-item-val" id="pos-w">0</div></div>
+            <div class="pos-item"><div class="pos-item-label">H</div><div class="pos-item-val" id="pos-h">0</div></div>
+          </div>
+          <div class="prop-row-2">
+            <div class="prop-mini"><div class="prop-label">X</div><input class="prop-input" id="prop-x" type="number" oninput="updateElPos()"></div>
+            <div class="prop-mini"><div class="prop-label">Y</div><input class="prop-input" id="prop-y" type="number" oninput="updateElPos()"></div>
+          </div>
+          <div class="prop-row-2">
+            <div class="prop-mini"><div class="prop-label">Width</div><input class="prop-input" id="prop-w" type="number" oninput="updateElPos()"></div>
+            <div class="prop-mini"><div class="prop-label">Height</div><input class="prop-input" id="prop-h" type="number" oninput="updateElPos()"></div>
+          </div>
           <button class="btn btn-danger" style="width:100%;margin-top:4px;padding:10px" onclick="deleteSelected()">Delete Element</button>
         </div>
       </div>
@@ -332,7 +406,6 @@ header{padding:0 12px;gap:8px}
 </div>
 
 <!-- MOBILE BOTTOM NAV -->
-
 <nav class="mobile-bottom-nav">
   <div class="mobile-nav-items">
     <button class="mobile-nav-item" onclick="openDrawer('grid')" id="mnav-grid">
@@ -350,12 +423,9 @@ header{padding:0 12px;gap:8px}
   </div>
 </nav>
 
-<!-- OVERLAY -->
-
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 
 <!-- DRAWER: GRID -->
-
 <div class="drawer" id="drawer-grid">
   <div class="drawer-handle"></div>
   <div class="drawer-header">
@@ -394,7 +464,6 @@ header{padding:0 12px;gap:8px}
 </div>
 
 <!-- DRAWER: ELEMENTS -->
-
 <div class="drawer" id="drawer-elements">
   <div class="drawer-handle"></div>
   <div class="drawer-header">
@@ -402,7 +471,7 @@ header{padding:0 12px;gap:8px}
     <button class="drawer-close" onclick="closeDrawer()">×</button>
   </div>
   <div class="drawer-body">
-    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap an element to add it to the canvas. Then tap it to edit position in Properties.</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap to add. Then drag to reposition or drag handles to resize.</p>
     <div class="mobile-element-grid">
       <div class="mobile-element-item" onclick="mobilePlaceElement('headline')">
         <div class="mobile-el-icon">𝗛</div>
@@ -434,7 +503,6 @@ header{padding:0 12px;gap:8px}
 </div>
 
 <!-- DRAWER: PROPERTIES -->
-
 <div class="drawer" id="drawer-props">
   <div class="drawer-handle"></div>
   <div class="drawer-header">
@@ -452,22 +520,22 @@ header{padding:0 12px;gap:8px}
       </div>
       <div class="mobile-prop-row-2">
         <div class="mobile-prop-mini">
-          <div class="mobile-prop-label">Col Start</div>
-          <input class="mobile-prop-input" id="m-prop-cs" type="number" min="1" oninput="updateElGrid('mobile')">
+          <div class="mobile-prop-label">X (px)</div>
+          <input class="mobile-prop-input" id="m-prop-x" type="number" oninput="updateElPosMobile()">
         </div>
         <div class="mobile-prop-mini">
-          <div class="mobile-prop-label">Col Span</div>
-          <input class="mobile-prop-input" id="m-prop-csp" type="number" min="1" oninput="updateElGrid('mobile')">
+          <div class="mobile-prop-label">Y (px)</div>
+          <input class="mobile-prop-input" id="m-prop-y" type="number" oninput="updateElPosMobile()">
         </div>
       </div>
       <div class="mobile-prop-row-2">
         <div class="mobile-prop-mini">
-          <div class="mobile-prop-label">Row Start</div>
-          <input class="mobile-prop-input" id="m-prop-rs" type="number" min="1" oninput="updateElGrid('mobile')">
+          <div class="mobile-prop-label">Width</div>
+          <input class="mobile-prop-input" id="m-prop-w" type="number" oninput="updateElPosMobile()">
         </div>
         <div class="mobile-prop-mini">
-          <div class="mobile-prop-label">Row Span</div>
-          <input class="mobile-prop-input" id="m-prop-rsp" type="number" min="1" oninput="updateElGrid('mobile')">
+          <div class="mobile-prop-label">Height</div>
+          <input class="mobile-prop-input" id="m-prop-h" type="number" oninput="updateElPosMobile()">
         </div>
       </div>
       <button class="btn btn-danger" style="width:100%;padding:12px;font-size:13px" onclick="deleteSelected();closeDrawer()">Delete Element</button>
@@ -476,7 +544,6 @@ header{padding:0 12px;gap:8px}
 </div>
 
 <!-- DRAWER: CODE -->
-
 <div class="drawer" id="drawer-code">
   <div class="drawer-handle"></div>
   <div class="drawer-header">
@@ -497,16 +564,15 @@ header{padding:0 12px;gap:8px}
   </div>
 </div>
 
-<!-- ELEMENT PICKER (desktop) -->
-
+<!-- ELEMENT PICKER -->
 <div class="element-picker" id="element-picker">
   <div class="picker-title">Add Element</div>
   <div class="picker-grid">
-    <div class="picker-item" onclick="placeElement('headline')"><div class="picker-icon">𝗛</div><div class="picker-name">Headline</div><div class="picker-sub">Primary title</div></div>
-    <div class="picker-item" onclick="placeElement('subheadline')"><div class="picker-icon">𝗦</div><div class="picker-name">Sub</div><div class="picker-sub">Supporting</div></div>
-    <div class="picker-item" onclick="placeElement('description')"><div class="picker-icon">≡</div><div class="picker-name">Description</div><div class="picker-sub">Body copy</div></div>
-    <div class="picker-item" onclick="placeElement('footer')"><div class="picker-icon">▬</div><div class="picker-name">Footer</div><div class="picker-sub">Bottom info</div></div>
-    <div class="picker-item" onclick="placeElement('visualhook')" style="grid-column:1/-1"><div class="picker-icon">◈</div><div class="picker-name">Visual Hook</div><div class="picker-sub">Image / CTA zone</div></div>
+    <div class="picker-item" onclick="placeElementAtCell()"><div class="picker-icon">𝗛</div><div class="picker-name">Headline</div><div class="picker-sub">Primary title</div></div>
+    <div class="picker-item" onclick="placeElementAtCell('subheadline')"><div class="picker-icon">𝗦</div><div class="picker-name">Sub</div><div class="picker-sub">Supporting</div></div>
+    <div class="picker-item" onclick="placeElementAtCell('description')"><div class="picker-icon">≡</div><div class="picker-name">Description</div><div class="picker-sub">Body copy</div></div>
+    <div class="picker-item" onclick="placeElementAtCell('footer')"><div class="picker-icon">▬</div><div class="picker-name">Footer</div><div class="picker-sub">Bottom info</div></div>
+    <div class="picker-item" onclick="placeElementAtCell('visualhook')" style="grid-column:1/-1"><div class="picker-icon">◈</div><div class="picker-name">Visual Hook</div><div class="picker-sub">Image / CTA zone</div></div>
   </div>
 </div>
 
@@ -515,16 +581,106 @@ header{padding:0 12px;gap:8px}
 <script>
 // ─── STATE ───
 let gridType='column', cols=12, rows=6, gap=16;
-let elements=[], selectedId=null, pendingCell=null, dragType=null, elemIdCounter=0;
+let elements=[], selectedId=null, elemIdCounter=0;
+let pendingCellPx={x:0,y:0};
+let dragFromPalette=null;
+let snapMode='grid'; // 'grid'|'free'|'px'
+const PX_SNAP=8;
 
 const EL={
-  headline:    {label:'Headline',    defaultContent:'Your Headline', colSpan:6,  rowSpan:1},
-  subheadline: {label:'Sub Headline',defaultContent:'Supporting subtitle', colSpan:4,  rowSpan:1},
-  description: {label:'Description', defaultContent:'Body copy. Describe your content here.', colSpan:4,  rowSpan:2},
-  footer:      {label:'Footer',      defaultContent:'© 2025 Brand · Privacy', colSpan:12, rowSpan:1},
-  visualhook:  {label:'Visual Hook', defaultContent:'◈', colSpan:4,  rowSpan:3},
+  headline:    {label:'Headline',    defaultContent:'Your Headline',              w:0.5,  h:0.12},
+  subheadline: {label:'Sub Headline',defaultContent:'Supporting subtitle',        w:0.35, h:0.1},
+  description: {label:'Description', defaultContent:'Body copy. Describe content.',w:0.35,h:0.22},
+  footer:      {label:'Footer',      defaultContent:'© 2025 Brand · Privacy',     w:1,    h:0.1},
+  visualhook:  {label:'Visual Hook', defaultContent:'◈',                          w:0.33, h:0.4},
 };
 const PRESETS={column:{cols:12,rows:6},modular:{cols:6,rows:6},hierarchy:{cols:2,rows:4},golden:{cols:2,rows:3}};
+const SNAP_HINTS={grid:'Snaps to grid cells',free:'Freely positioned, no snap',px:'Snaps to 8px pixel grid'};
+
+// ─── SNAP MODE ───
+function setSnapMode(mode){
+  snapMode=mode;
+  ['grid','free','px'].forEach(m=>{
+    document.getElementById('btn-snap-'+m).classList.toggle('active',m===mode);
+  });
+  document.getElementById('snap-hint').textContent=SNAP_HINTS[mode];
+}
+
+// ─── CANVAS GEOMETRY ───
+function getCanvasEl(){return document.getElementById('canvas');}
+function getCanvasRect(){return getCanvasEl().getBoundingClientRect();}
+function getCanvasSize(){
+  const wrap=document.getElementById('canvas-wrap');
+  const mob=window.innerWidth<=640;
+  const maxW=mob?wrap.clientWidth-20:Math.min(wrap.clientWidth-40,760);
+  const w=Math.max(240,maxW);
+  let h;
+  if(gridType==='golden'){h=Math.round(w/1.618);}
+  else{const er=getER(); h=Math.round(w*(er/getEC())*(mob?.85:1.05)); h=Math.max(260,Math.min(h,mob?460:560));}
+  return{w,h};
+}
+function getEC(){return(gridType==='hierarchy'||gridType==='golden')?2:cols;}
+function getER(){return gridType==='hierarchy'?4:gridType==='golden'?3:rows;}
+
+// get pixel boundaries of each grid column/row for snapping
+function getGridLines(){
+  const canvas=getCanvasEl();
+  const w=canvas.offsetWidth, h=canvas.offsetHeight;
+  const ec=getEC(), er=getER();
+  const colLines=[], rowLines=[];
+  if(gridType==='hierarchy'){
+    const cw=[w*2/3,w/3];
+    let x=gap;
+    colLines.push(x);
+    x+=cw[0]; colLines.push(x);
+    x+=gap; colLines.push(x);
+    x+=cw[1]; colLines.push(x);
+    const rh=[h*.12,h*.5,h*.18,h*.2];
+    let y=gap;
+    rowLines.push(y);
+    rh.forEach(rhi=>{y+=rhi; rowLines.push(y); y+=gap; rowLines.push(y);});
+  } else if(gridType==='golden'){
+    const cw=[w*1.618/2.618, w/2.618];
+    let x=gap;
+    colLines.push(x);
+    x+=cw[0]; colLines.push(x); x+=gap; colLines.push(x); x+=cw[1]; colLines.push(x);
+    const rh=[h*1.618/3.236, h/3.236, h-h*1.618/3.236-h/3.236-2*gap];
+    let y=gap;
+    rowLines.push(y);
+    rh.forEach(rhi=>{y+=rhi; rowLines.push(y); y+=gap; rowLines.push(y);});
+  } else {
+    const cw=(w-gap*(ec+1))/ec;
+    for(let i=0;i<=ec;i++){colLines.push(gap+i*(cw+gap));}
+    const rh=(h-gap*(er+1))/er;
+    for(let i=0;i<=er;i++){rowLines.push(gap+i*(rh+gap));}
+  }
+  return{colLines,rowLines,ec,er};
+}
+
+function snapToGrid(x,y,w,h){
+  if(snapMode==='free') return{x,y,w,h};
+  if(snapMode==='px'){
+    return{
+      x:Math.round(x/PX_SNAP)*PX_SNAP,
+      y:Math.round(y/PX_SNAP)*PX_SNAP,
+      w:Math.max(40,Math.round(w/PX_SNAP)*PX_SNAP),
+      h:Math.max(24,Math.round(h/PX_SNAP)*PX_SNAP)
+    };
+  }
+  // grid snap
+  const{colLines,rowLines}=getGridLines();
+  const snapDist=20;
+  function nearestLine(lines,val){
+    let best=val,bestDist=snapDist;
+    lines.forEach(l=>{const d=Math.abs(l-val);if(d<bestDist){bestDist=d;best=l;}});
+    return best;
+  }
+  const nx=nearestLine(colLines,x);
+  const ny=nearestLine(rowLines,y);
+  const nw=nearestLine(colLines,x+w)-nx;
+  const nh=nearestLine(rowLines,y+h)-ny;
+  return{x:nx,y:ny,w:Math.max(40,nw||w),h:Math.max(24,nh||h)};
+}
 
 // ─── GRID TYPE ───
 function setGridType(type,btn,ctx){
@@ -544,9 +700,9 @@ function setGridType(type,btn,ctx){
 }
 
 function syncSlider(which,val){
-  if(which==='col'){cols=parseInt(val);['col-slider','m-col-slider'].forEach(id=>document.getElementById(id).value=val);}
-  else if(which==='row'){rows=parseInt(val);['row-slider','m-row-slider'].forEach(id=>document.getElementById(id).value=val);}
-  else{gap=parseInt(val);['gap-slider','m-gap-slider'].forEach(id=>document.getElementById(id).value=val);}
+  if(which==='col'){cols=parseInt(val);['col-slider','m-col-slider'].forEach(id=>{document.getElementById(id).value=val;});}
+  else if(which==='row'){rows=parseInt(val);['row-slider','m-row-slider'].forEach(id=>{document.getElementById(id).value=val;});}
+  else{gap=parseInt(val);['gap-slider','m-gap-slider'].forEach(id=>{document.getElementById(id).value=val;});}
   updateLabels(); renderGrid(); renderElements(); updateCode();
 }
 
@@ -567,24 +723,11 @@ function updateLabels(){
   document.getElementById('m-gap-val').textContent=gap+'px';
 }
 
-// ─── CANVAS ───
-function getCanvasSize(){
-  const wrap=document.getElementById('canvas-wrap');
-  const mob=window.innerWidth<=640;
-  const maxW=mob?wrap.clientWidth-20:Math.min(wrap.clientWidth-40,760);
-  const w=Math.max(240,maxW);
-  let h;
-  if(gridType==='golden'){h=Math.round(w/1.618);}
-  else{const er=getER(); h=Math.round(w*(er/getEC())*(mob?.85:1.05)); h=Math.max(260,Math.min(h,mob?460:560));}
-  return{w,h};
-}
-function getEC(){return(gridType==='hierarchy'||gridType==='golden')?2:cols;}
-function getER(){return gridType==='hierarchy'?4:gridType==='golden'?3:rows;}
-
+// ─── RENDER GRID ───
 function renderGrid(){
   const grid=document.getElementById('grid');
   const{w,h}=getCanvasSize();
-  const canvas=document.getElementById('canvas');
+  const canvas=getCanvasEl();
   canvas.style.width=w+'px'; canvas.style.height=h+'px';
   let colTpl,rowTpl;
   if(gridType==='hierarchy'){
@@ -597,17 +740,25 @@ function renderGrid(){
     colTpl=`repeat(${cols},1fr)`;
     rowTpl=`repeat(${rows},1fr)`;
   }
-  grid.style.cssText=`display:grid;width:100%;height:100%;grid-template-columns:${colTpl};grid-template-rows:${rowTpl};gap:${gap}px;padding:${gap}px;position:relative;`;
+  grid.style.cssText=`display:grid;width:100%;height:100%;grid-template-columns:${colTpl};grid-template-rows:${rowTpl};gap:${gap}px;padding:${gap}px;position:absolute;top:0;left:0;pointer-events:none;`;
   const ec=getEC(),er=getER();
   grid.innerHTML='';
   for(let i=0;i<ec*er;i++){
     const r=Math.floor(i/ec)+1,c=(i%ec)+1;
     const cell=document.createElement('div');
     cell.className='grid-cell'; cell.dataset.row=r; cell.dataset.col=c;
+    cell.style.pointerEvents='all';
     const btn=document.createElement('button');
     btn.className='add-btn'; btn.textContent='+';
-    btn.onclick=(e)=>{e.stopPropagation();showPicker(e,r,c);};
-    cell.appendChild(btn); grid.appendChild(cell);
+    btn.onclick=(e)=>{
+      e.stopPropagation();
+      const cr=cell.getBoundingClientRect();
+      const cvr=getCanvasRect();
+      pendingCellPx={x:cr.left-cvr.left,y:cr.top-cvr.top,w:cr.width,h:cr.height};
+      showPicker(e);
+    };
+    cell.appendChild(btn);
+    grid.appendChild(cell);
   }
   updateBadge();
 }
@@ -615,41 +766,65 @@ function renderGrid(){
 function updateBadge(){
   const names={column:'Column Grid',modular:'Modular Grid',hierarchy:'Hierarchy Grid',golden:'Golden Ratio'};
   const ec=getEC(),er=getER();
-  const b=document.getElementById('grid-badge');
-  b.textContent=gridType==='golden'?`${names[gridType]} · φ1.618 · ${gap}px`:`${names[gridType]} · ${ec}×${er} · ${gap}px`;
+  document.getElementById('grid-badge').textContent=
+    gridType==='golden'?`${names[gridType]} · φ1.618 · ${gap}px`:`${names[gridType]} · ${ec}×${er} · ${gap}px`;
 }
 
 // ─── PICKER ───
-function showPicker(e,row,col){
-  pendingCell={row,col};
+function showPicker(e){
   const picker=document.getElementById('element-picker');
   picker.style.display='block';
   const rect=e.target.getBoundingClientRect();
   let left=rect.left+window.scrollX;
   let top=rect.bottom+8+window.scrollY;
-  if(left+220>window.innerWidth)left=window.innerWidth-228;
-  if(top+280>window.innerHeight)top=rect.top-260+window.scrollY;
+  if(left+220>window.innerWidth) left=window.innerWidth-228;
+  if(top+280>window.innerHeight) top=rect.top-260+window.scrollY;
   picker.style.left=left+'px'; picker.style.top=top+'px';
   e.stopPropagation();
 }
 function hidePicker(){document.getElementById('element-picker').style.display='none';}
 
 document.addEventListener('click',(e)=>{
-  if(!e.target.closest('#element-picker')&&!e.target.closest('.add-btn'))hidePicker();
-  if(!e.target.closest('.design-element')&&!e.target.closest('.drawer')){
+  if(!e.target.closest('#element-picker')&&!e.target.closest('.add-btn')) hidePicker();
+  if(!e.target.closest('.design-element')&&!e.target.closest('.drawer')&&!e.target.closest('#element-picker')){
     selectedId=null; renderElements(); showProps(null);
   }
 });
 
-function placeElement(type){
+// ─── PLACE ELEMENT ───
+function placeElementAtCell(type='headline'){
   hidePicker();
-  const cfg=EL[type]; const ec=getEC();
+  const canvas=getCanvasEl();
+  const cfg=EL[type];
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+  const ew=Math.round(cw*cfg.w), eh=Math.round(ch*cfg.h);
+  // place at cell center if pendingCellPx available
+  let x=pendingCellPx.x, y=pendingCellPx.y;
+  const snapped=snapToGrid(x,y,ew,eh);
   const el={
-    id:++elemIdCounter,type,content:cfg.defaultContent,
-    colStart:pendingCell?pendingCell.col:1,
-    rowStart:pendingCell?pendingCell.row:1,
-    colSpan:Math.min(cfg.colSpan,ec-(pendingCell?pendingCell.col-1:0)),
-    rowSpan:cfg.rowSpan,
+    id:++elemIdCounter, type,
+    content:cfg.defaultContent,
+    x:Math.max(0,Math.min(snapped.x,cw-snapped.w)),
+    y:Math.max(0,Math.min(snapped.y,ch-snapped.h)),
+    w:snapped.w, h:snapped.h
+  };
+  elements.push(el); selectedId=el.id;
+  renderElements(); showProps(el); updateCode();
+  showToast(cfg.label+' added ✓');
+}
+
+function placeElementFree(type,px,py){
+  const canvas=getCanvasEl();
+  const cfg=EL[type];
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+  const ew=Math.round(cw*cfg.w), eh=Math.round(ch*cfg.h);
+  const snapped=snapToGrid(px-ew/2,py-eh/2,ew,eh);
+  const el={
+    id:++elemIdCounter, type,
+    content:cfg.defaultContent,
+    x:Math.max(0,Math.min(snapped.x,cw-snapped.w)),
+    y:Math.max(0,Math.min(snapped.y,ch-snapped.h)),
+    w:snapped.w, h:snapped.h
   };
   elements.push(el); selectedId=el.id;
   renderElements(); showProps(el); updateCode();
@@ -657,44 +832,216 @@ function placeElement(type){
 }
 
 function mobilePlaceElement(type){
-  pendingCell={row:1,col:1}; closeDrawer();
-  placeElement(type);
+  closeDrawer();
+  const canvas=getCanvasEl();
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+  pendingCellPx={x:gap,y:gap};
+  placeElementAtCell(type);
   setTimeout(()=>openDrawer('props'),320);
 }
 
-// ─── DRAG ───
-function dragElement(type,e){dragType=type;e.dataTransfer.setData('text/plain',type);}
-function handleDrop(e){
-  if(!dragType)return;
-  const grid=document.getElementById('grid'); const gr=grid.getBoundingClientRect();
-  const relX=e.clientX-gr.left,relY=e.clientY-gr.top;
-  const ec=getEC(),er=getER();
-  const cw=(gr.width-gap*(ec+1))/ec,ch=(gr.height-gap*(er+1))/er;
-  const col=Math.max(1,Math.min(ec,Math.ceil(relX/(cw+gap))));
-  const row=Math.max(1,Math.min(er,Math.ceil(relY/(ch+gap))));
-  pendingCell={row,col}; placeElement(dragType); dragType=null;
+// ─── PALETTE DRAG to canvas ───
+function dragElement(type,e){
+  dragFromPalette=type;
+  e.dataTransfer.setData('text/plain',type);
+}
+function handlePaletteDrop(e){
+  if(!dragFromPalette) return;
+  e.preventDefault();
+  const cvr=getCanvasRect();
+  const px=e.clientX-cvr.left, py=e.clientY-cvr.top;
+  placeElementFree(dragFromPalette,px,py);
+  dragFromPalette=null;
 }
 
 // ─── RENDER ELEMENTS ───
 function renderElements(){
   document.querySelectorAll('.design-element').forEach(el=>el.remove());
-  const grid=document.getElementById('grid');
+  const canvas=getCanvasEl();
   elements.forEach(el=>{
     const div=document.createElement('div');
     div.className=`design-element el-${el.type}${el.id===selectedId?' selected':''}`;
     div.dataset.id=el.id;
-    div.style.cssText=`grid-column:${el.colStart}/span ${el.colSpan};grid-row:${el.rowStart}/span ${el.rowSpan};position:relative;`;
+    div.style.left=el.x+'px';
+    div.style.top=el.y+'px';
+    div.style.width=el.w+'px';
+    div.style.height=el.h+'px';
+
     const lbl=document.createElement('div'); lbl.className='element-label'; lbl.textContent=EL[el.type].label;
     const prev=document.createElement('div'); prev.className='element-preview'; prev.textContent=el.content;
     const close=document.createElement('button'); close.className='element-close'; close.textContent='×';
     close.onclick=(e)=>{e.stopPropagation();deleteElement(el.id);};
     div.appendChild(lbl); div.appendChild(prev); div.appendChild(close);
-    div.onclick=(e)=>{
-      e.stopPropagation(); selectedId=el.id; renderElements(); showProps(el);
-      if(window.innerWidth<=640)openDrawer('props');
-    };
-    grid.appendChild(div);
+
+    // resize handles
+    const handles=['nw','ne','sw','se','n','s','w','e'];
+    handles.forEach(dir=>{
+      const h=document.createElement('div');
+      h.className=`resize-handle rh-${dir}`;
+      h.dataset.dir=dir;
+      attachResizeHandle(h,el,div);
+      div.appendChild(h);
+    });
+
+    // click to select
+    div.addEventListener('mousedown',(e)=>{
+      if(e.target.classList.contains('resize-handle')||e.target.classList.contains('element-close')) return;
+      e.stopPropagation();
+      selectedId=el.id; renderElements(); showProps(el);
+      startDragElement(e,el);
+    });
+    div.addEventListener('touchstart',(e)=>{
+      if(e.target.classList.contains('resize-handle')||e.target.classList.contains('element-close')) return;
+      e.stopPropagation();
+      selectedId=el.id; renderElements(); showProps(el);
+      startDragElementTouch(e,el);
+    },{passive:true});
+    div.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      if(window.innerWidth<=640) openDrawer('props');
+    });
+
+    canvas.appendChild(div);
   });
+}
+
+// ─── DRAG ELEMENT ───
+function startDragElement(e,el){
+  if(e.button!==0) return;
+  const canvas=getCanvasEl();
+  const startX=e.clientX, startY=e.clientY;
+  const ox=el.x, oy=el.y;
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+
+  const div=canvas.querySelector(`.design-element[data-id="${el.id}"]`);
+  if(div) div.classList.add('dragging');
+
+  let moved=false;
+  function onMove(ev){
+    moved=true;
+    const dx=ev.clientX-startX, dy=ev.clientY-startY;
+    let nx=ox+dx, ny=oy+dy;
+    const snapped=snapToGrid(nx,ny,el.w,el.h);
+    el.x=Math.max(0,Math.min(snapped.x,cw-el.w));
+    el.y=Math.max(0,Math.min(snapped.y,ch-el.h));
+    if(div){div.style.left=el.x+'px';div.style.top=el.y+'px';}
+    showProps(el);
+  }
+  function onUp(){
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    if(div) div.classList.remove('dragging');
+    if(moved){renderElements();updateCode();}
+  }
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+
+function startDragElementTouch(e,el){
+  const canvas=getCanvasEl();
+  const touch=e.touches[0];
+  const startX=touch.clientX, startY=touch.clientY;
+  const ox=el.x, oy=el.y;
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+  const div=canvas.querySelector(`.design-element[data-id="${el.id}"]`);
+  if(div) div.classList.add('dragging');
+
+  function onMove(ev){
+    const t=ev.touches[0];
+    const dx=t.clientX-startX, dy=t.clientY-startY;
+    let nx=ox+dx, ny=oy+dy;
+    const snapped=snapToGrid(nx,ny,el.w,el.h);
+    el.x=Math.max(0,Math.min(snapped.x,cw-el.w));
+    el.y=Math.max(0,Math.min(snapped.y,ch-el.h));
+    if(div){div.style.left=el.x+'px';div.style.top=el.y+'px';}
+    showProps(el);
+  }
+  function onEnd(){
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+    if(div) div.classList.remove('dragging');
+    renderElements(); updateCode();
+  }
+  document.addEventListener('touchmove',onMove,{passive:true});
+  document.addEventListener('touchend',onEnd);
+}
+
+// ─── RESIZE HANDLE ───
+function attachResizeHandle(handle,el,div){
+  handle.addEventListener('mousedown',(e)=>{
+    e.stopPropagation(); e.preventDefault();
+    startResize(e,el,div,handle.dataset.dir);
+  });
+  handle.addEventListener('touchstart',(e)=>{
+    e.stopPropagation();
+    startResizeTouch(e,el,div,handle.dataset.dir);
+  },{passive:false});
+}
+
+function startResize(e,el,div,dir){
+  const canvas=getCanvasEl();
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+  const startX=e.clientX, startY=e.clientY;
+  const ox=el.x, oy=el.y, ow=el.w, oh=el.h;
+  const MIN_W=40, MIN_H=24;
+
+  function onMove(ev){
+    const dx=ev.clientX-startX, dy=ev.clientY-startY;
+    let nx=ox,ny=oy,nw=ow,nh=oh;
+    if(dir.includes('e')) nw=Math.max(MIN_W,ow+dx);
+    if(dir.includes('s')) nh=Math.max(MIN_H,oh+dy);
+    if(dir.includes('w')){nw=Math.max(MIN_W,ow-dx);nx=ox+ow-nw;}
+    if(dir.includes('n')){nh=Math.max(MIN_H,oh-dy);ny=oy+oh-nh;}
+    // clamp
+    nx=Math.max(0,nx); ny=Math.max(0,ny);
+    nw=Math.min(nw,cw-nx); nh=Math.min(nh,ch-ny);
+    // snap
+    if(snapMode==='grid'||snapMode==='px'){
+      const s=snapToGrid(nx,ny,nw,nh);
+      nx=s.x;ny=s.y;nw=s.w;nh=s.h;
+    }
+    el.x=nx;el.y=ny;el.w=nw;el.h=nh;
+    div.style.left=nx+'px';div.style.top=ny+'px';div.style.width=nw+'px';div.style.height=nh+'px';
+    showProps(el);
+  }
+  function onUp(){
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    renderElements(); updateCode();
+  }
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+
+function startResizeTouch(e,el,div,dir){
+  const canvas=getCanvasEl();
+  const cw=canvas.offsetWidth, ch=canvas.offsetHeight;
+  const touch=e.touches[0];
+  const startX=touch.clientX, startY=touch.clientY;
+  const ox=el.x, oy=el.y, ow=el.w, oh=el.h;
+  const MIN_W=40, MIN_H=24;
+
+  function onMove(ev){
+    const t=ev.touches[0];
+    const dx=t.clientX-startX, dy=t.clientY-startY;
+    let nx=ox,ny=oy,nw=ow,nh=oh;
+    if(dir.includes('e')) nw=Math.max(MIN_W,ow+dx);
+    if(dir.includes('s')) nh=Math.max(MIN_H,oh+dy);
+    if(dir.includes('w')){nw=Math.max(MIN_W,ow-dx);nx=ox+ow-nw;}
+    if(dir.includes('n')){nh=Math.max(MIN_H,oh-dy);ny=oy+oh-nh;}
+    nx=Math.max(0,nx);ny=Math.max(0,ny);
+    nw=Math.min(nw,cw-nx);nh=Math.min(nh,ch-ny);
+    el.x=nx;el.y=ny;el.w=nw;el.h=nh;
+    div.style.left=nx+'px';div.style.top=ny+'px';div.style.width=nw+'px';div.style.height=nh+'px';
+    showProps(el);
+  }
+  function onEnd(){
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+    renderElements();updateCode();
+  }
+  document.addEventListener('touchmove',onMove,{passive:false});
+  document.addEventListener('touchend',onEnd);
 }
 
 // ─── PROPS ───
@@ -710,55 +1057,68 @@ function showProps(el){
   document.getElementById('props-form').style.display='block';
   document.getElementById('prop-type').textContent=EL[el.type].label;
   document.getElementById('prop-content').value=el.content;
-  document.getElementById('prop-cs').value=el.colStart;
-  document.getElementById('prop-csp').value=el.colSpan;
-  document.getElementById('prop-rs').value=el.rowStart;
-  document.getElementById('prop-rsp').value=el.rowSpan;
+  document.getElementById('prop-x').value=Math.round(el.x);
+  document.getElementById('prop-y').value=Math.round(el.y);
+  document.getElementById('prop-w').value=Math.round(el.w);
+  document.getElementById('prop-h').value=Math.round(el.h);
+  document.getElementById('pos-x').textContent=Math.round(el.x);
+  document.getElementById('pos-y').textContent=Math.round(el.y);
+  document.getElementById('pos-w').textContent=Math.round(el.w);
+  document.getElementById('pos-h').textContent=Math.round(el.h);
   document.getElementById('m-no-sel').style.display='none';
   document.getElementById('m-props-form').style.display='block';
   document.getElementById('m-prop-title').textContent=EL[el.type].label;
   document.getElementById('m-prop-content').value=el.content;
-  document.getElementById('m-prop-cs').value=el.colStart;
-  document.getElementById('m-prop-csp').value=el.colSpan;
-  document.getElementById('m-prop-rs').value=el.rowStart;
-  document.getElementById('m-prop-rsp').value=el.rowSpan;
+  document.getElementById('m-prop-x').value=Math.round(el.x);
+  document.getElementById('m-prop-y').value=Math.round(el.y);
+  document.getElementById('m-prop-w').value=Math.round(el.w);
+  document.getElementById('m-prop-h').value=Math.round(el.h);
 }
 
 function updateElContent(src){
-  const el=elements.find(e=>e.id===selectedId); if(!el)return;
-  if(src==='mobile') el.content=document.getElementById('m-prop-content').value;
-  else el.content=document.getElementById('prop-content').value;
+  const el=elements.find(e=>e.id===selectedId); if(!el) return;
+  el.content=src==='mobile'
+    ?document.getElementById('m-prop-content').value
+    :document.getElementById('prop-content').value;
   renderElements(); updateCode();
 }
-function updateElGrid(src){
-  const el=elements.find(e=>e.id===selectedId); if(!el)return;
-  const p=src==='mobile'?'m-prop':'prop';
-  el.colStart=parseInt(document.getElementById(p+'-cs').value)||1;
-  el.colSpan=parseInt(document.getElementById(p+'-csp').value)||1;
-  el.rowStart=parseInt(document.getElementById(p+'-rs').value)||1;
-  el.rowSpan=parseInt(document.getElementById(p+'-rsp').value)||1;
-  renderElements(); updateCode();
+
+function updateElPos(){
+  const el=elements.find(e=>e.id===selectedId); if(!el) return;
+  el.x=parseFloat(document.getElementById('prop-x').value)||0;
+  el.y=parseFloat(document.getElementById('prop-y').value)||0;
+  el.w=Math.max(40,parseFloat(document.getElementById('prop-w').value)||40);
+  el.h=Math.max(24,parseFloat(document.getElementById('prop-h').value)||24);
+  renderElements(); showProps(el); updateCode();
 }
+
+function updateElPosMobile(){
+  const el=elements.find(e=>e.id===selectedId); if(!el) return;
+  el.x=parseFloat(document.getElementById('m-prop-x').value)||0;
+  el.y=parseFloat(document.getElementById('m-prop-y').value)||0;
+  el.w=Math.max(40,parseFloat(document.getElementById('m-prop-w').value)||40);
+  el.h=Math.max(24,parseFloat(document.getElementById('m-prop-h').value)||24);
+  renderElements(); showProps(el); updateCode();
+}
+
 function deleteElement(id){
   elements=elements.filter(e=>e.id!==id);
   if(selectedId===id){selectedId=null;showProps(null);}
   renderElements(); updateCode();
 }
-function deleteSelected(){if(selectedId)deleteElement(selectedId);}
+function deleteSelected(){if(selectedId) deleteElement(selectedId);}
 
 // ─── CODE GEN ───
 function updateCode(){
-  let ct,rt;
-  if(gridType==='hierarchy'){ct='2fr 1fr';rt='auto 1fr auto auto';}
-  else if(gridType==='golden'){ct='1.618fr 1fr';rt='1.618fr 1fr 1fr';}
-  else{ct=`repeat(${cols},1fr)`;rt=`repeat(${rows},1fr)`;}
   const names={column:'column',modular:'modular',hierarchy:'hierarchy',golden:'golden-ratio'};
   const prefix=names[gridType];
   let html=`<div class="${prefix}-layout">\n`;
   elements.forEach(el=>{html+=`  <div class="${el.type}">${el.content}</div>\n`;});
   html+=`</div>`;
-  let css=`.${prefix}-layout {\n  display: grid;\n  grid-template-columns: ${ct};\n  grid-template-rows: ${rt};\n  gap: ${gap}px;\n}\n`;
-  elements.forEach(el=>{css+=`\n.${el.type} {\n  grid-column: ${el.colStart} / span ${el.colSpan};\n  grid-row: ${el.rowStart} / span ${el.rowSpan};\n}\n`;});
+  let css=`.${prefix}-layout {\n  position: relative;\n  width: ${getCanvasEl().offsetWidth}px;\n  height: ${getCanvasEl().offsetHeight}px;\n}\n`;
+  elements.forEach(el=>{
+    css+=`\n.${el.type} {\n  position: absolute;\n  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n}\n`;
+  });
   ['code-html','m-code-html'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=html;});
   ['code-css','m-code-css'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=css;});
 }
@@ -769,7 +1129,7 @@ function switchTab(name,btn){
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
-  if(name==='code')updateCode();
+  if(name==='code') updateCode();
 }
 
 // ─── DRAWER ───
@@ -779,10 +1139,10 @@ function openDrawer(name){
   const drawer=document.getElementById('drawer-'+name);
   overlay.style.display='block';
   requestAnimationFrame(()=>{overlay.classList.add('visible');drawer.classList.add('open');});
-  if(name==='code')updateCode();
+  if(name==='code') updateCode();
   document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
   const nav=document.getElementById('mnav-'+name);
-  if(nav)nav.classList.add('active');
+  if(nav) nav.classList.add('active');
 }
 function closeDrawer(silent){
   const overlay=document.getElementById('drawer-overlay');
@@ -797,12 +1157,12 @@ function closeDrawer(silent){
 // ─── COPY ───
 function copyHTML(){
   const txt=document.getElementById('code-html').textContent||document.getElementById('m-code-html').textContent;
-  navigator.clipboard.writeText(txt);showToast('HTML copied!');
+  navigator.clipboard.writeText(txt); showToast('HTML copied!');
 }
 function copyCSS(){
   updateCode();
   const txt=document.getElementById('code-css').textContent||document.getElementById('m-code-css').textContent;
-  navigator.clipboard.writeText(txt);showToast('CSS copied!');
+  navigator.clipboard.writeText(txt); showToast('CSS copied!');
 }
 
 // ─── RESET ───
@@ -812,15 +1172,36 @@ function resetCanvas(){
 
 // ─── TOAST ───
 function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2000);
 }
 
 function canvasClick(e){
-  if(e.target===document.getElementById('canvas-wrap')||e.target===document.getElementById('canvas')){
-    selectedId=null;renderElements();showProps(null);
+  if(e.target===document.getElementById('canvas-wrap')||e.target===getCanvasEl()){
+    selectedId=null; renderElements(); showProps(null);
   }
 }
+
+// ─── KEYBOARD ───
+document.addEventListener('keydown',(e)=>{
+  if(e.key==='Delete'||e.key==='Backspace'){
+    if(document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){
+      deleteSelected();
+    }
+  }
+  if(e.key==='Escape'){selectedId=null;renderElements();showProps(null);}
+  // nudge with arrow keys
+  if(selectedId&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
+    const el=elements.find(e2=>e2.id===selectedId); if(!el) return;
+    const step=e.shiftKey?10:1;
+    if(e.key==='ArrowLeft') el.x-=step;
+    if(e.key==='ArrowRight') el.x+=step;
+    if(e.key==='ArrowUp') el.y-=step;
+    if(e.key==='ArrowDown') el.y+=step;
+    e.preventDefault();
+    renderElements(); showProps(el); updateCode();
+  }
+});
 
 // ─── INIT ───
 window.addEventListener('load',()=>{renderGrid();updateCode();});
