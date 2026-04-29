@@ -22,12 +22,15 @@
   --text2:#444;
   --muted:#888;
   --muted2:#aaa;
-  --cell-bg:rgba(180,168,155,0.38);
-  --grid-line:rgba(100,80,60,0.28);
-  --grid-line-strong:rgba(100,80,60,0.55);
+  /* FIX 1: Grid warna merah */
+  --grid-cell-bg:rgba(220,50,50,0.07);
+  --grid-line:rgba(200,40,40,0.30);
+  --grid-line-strong:rgba(180,30,30,0.55);
+  --grid-line-preview:rgba(200,30,30,0.55);
   --pink:#e91e8c;
   --green:#16a34a;
   --blue:#2563eb;
+  --red:#dc2626;
   --safe-bottom:env(safe-area-inset-bottom,0px);
   --shadow:0 2px 8px rgba(0,0,0,0.10),0 0 0 1px rgba(0,0,0,0.06);
   --shadow-lg:0 8px 32px rgba(0,0,0,0.14),0 0 0 1px rgba(0,0,0,0.06);
@@ -60,7 +63,6 @@ header{
 .btn-icon:hover{border-color:var(--border2);background:var(--border);color:var(--text)}
 .btn-icon:active{transform:scale(.94)}
 .btn-icon.active{border-color:var(--blue);background:#eff6ff;color:var(--blue)}
-.btn-icon.danger:active{border-color:var(--accent2);color:var(--accent2)}
 
 .btn-primary{
   padding:8px 16px;background:var(--text);color:#fff;border:none;border-radius:8px;
@@ -72,9 +74,11 @@ header{
 .btn-primary:active{transform:scale(.96)}
 .btn-primary.green{background:var(--green)}
 .btn-primary.green:hover{background:#15803d}
+.btn-primary.red-outline{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+.btn-primary.red-outline:hover{background:var(--red);color:#fff}
 
 /* ══ APP LAYOUT ══ */
-.app-body{flex:1;display:grid;grid-template-columns:264px 1fr 284px;overflow:hidden;min-height:0}
+.app-body{flex:1;display:grid;grid-template-columns:264px 1fr 300px;overflow:hidden;min-height:0}
 
 /* ══ LEFT PANEL ══ */
 .left-panel{
@@ -154,6 +158,16 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .pal-name{font-size:12px;font-weight:500;color:var(--text)}
 .pal-hint{font-size:10px;color:var(--muted)}
 
+/* Auto Layout button */
+.auto-layout-btn{
+  width:100%;padding:10px;background:var(--panel2);border:1.5px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;
+  font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;
+  justify-content:center;gap:6px;margin-top:8px;
+}
+.auto-layout-btn:hover{background:var(--text);color:#fff;border-color:var(--text)}
+.auto-layout-btn:active{transform:scale(.97)}
+
 /* ══ CANVAS AREA ══ */
 .canvas-area{
   background:var(--bg);display:flex;flex-direction:column;align-items:center;
@@ -165,7 +179,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 #canvas{
   position:relative;background:#ffffff;
   box-shadow:var(--shadow-lg);border-radius:4px;flex-shrink:0;
-  overflow:hidden; /* FIX: was overflow:visible — caused elements to render outside bounds */
+  overflow:hidden;
   touch-action:none;user-select:none;
 }
 
@@ -213,7 +227,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   max-width:100%;overflow:hidden;word-break:break-word;
 }
 
-/* CLOSE button */
 .el-close{
   position:absolute;top:-10px;right:-10px;width:22px;height:22px;border-radius:50%;
   background:var(--accent2);border:2px solid #fff;color:#fff;font-size:11px;
@@ -224,7 +237,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .design-el.selected .el-close,
 .design-el:hover .el-close{opacity:1}
 
-/* RESIZE handles */
 .el-resize-br,.el-resize-bl{
   position:absolute;bottom:-7px;width:20px;height:20px;
   z-index:50;opacity:0;transition:opacity .15s;touch-action:none;
@@ -255,6 +267,16 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .el-footer .el-prev{font-family:'DM Mono',monospace;font-size:9px;color:#999}
 .el-visualhook{background:rgba(233,30,140,0.05)!important;border-color:rgba(233,30,140,0.3)!important}
 .el-visualhook .el-prev{font-size:22px;color:var(--pink)}
+
+/* FIX 2: Preview mode — sembunyikan grid overlay tapi TAMPILKAN grid lines merah + border elemen */
+#canvas.preview-mode .grid-overlay{display:none!important}
+#canvas.preview-mode #snap-guide-layer{display:none!important}
+#canvas.preview-mode .el-lbl,
+#canvas.preview-mode .el-close,
+#canvas.preview-mode .el-resize-br,
+#canvas.preview-mode .el-resize-bl,
+#canvas.preview-mode .snap-preview{display:none!important}
+/* Grid lines & border tetap terlihat di preview */
 
 /* ══ RIGHT PANEL ══ */
 .right-panel{background:var(--panel);border-left:2px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
@@ -303,6 +325,22 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 }
 .del-btn:hover{background:var(--accent2);color:#fff}
 
+/* FIX 3: Typography section in props */
+.typo-section{margin-bottom:12px}
+.typo-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.typo-select{
+  background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;
+  padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;
+  outline:none;width:100%;transition:border-color .15s;cursor:pointer;
+}
+.typo-select:focus{border-color:var(--accent)}
+.typo-color-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.color-swatch{width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;flex-shrink:0}
+.color-presets{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.color-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;transition:transform .1s;border:2px solid transparent}
+.color-dot:hover{transform:scale(1.2);border-color:rgba(0,0,0,0.2)}
+.color-dot.active{border-color:var(--blue);transform:scale(1.1)}
+
 /* ══ SNAP GUIDES ══ */
 .snap-guide{position:absolute;pointer-events:none;z-index:200;background:#e05a5a;opacity:0;transition:opacity .06s}
 .snap-guide.vis{opacity:1}
@@ -313,19 +351,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   border:2px dashed #2563eb;border-radius:3px;
   background:rgba(37,99,235,0.06);display:none;
 }
-
-/* ══ PREVIEW MODE ══ */
-#canvas.preview-mode .grid-lines-layer,
-#canvas.preview-mode .grid-overlay,
-#canvas.preview-mode #snap-guide-layer{display:none!important}
-#canvas.preview-mode .design-el{
-  border:none!important;box-shadow:none!important;cursor:default;
-}
-#canvas.preview-mode .el-lbl,
-#canvas.preview-mode .el-close,
-#canvas.preview-mode .el-resize-br,
-#canvas.preview-mode .el-resize-bl,
-#canvas.preview-mode .snap-preview{display:none!important}
 
 /* ══ MOBILE NAV ══ */
 .mob-nav{display:none;height:56px;background:var(--panel);border-top:2px solid var(--border);flex-shrink:0;box-shadow:0 -2px 8px rgba(0,0,0,0.06)}
@@ -363,9 +388,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   -webkit-tap-highlight-color:transparent;transition:all .15s;
 }
-.drw-cls:hover{color:var(--text);border-color:var(--border2)}
-.drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
-
 .m-sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px}
 .m-col-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .m-el-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -393,6 +415,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .m-gs-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 .m-gs-btn{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent;width:100%}
 .m-gs-btn.active{border-color:var(--accent);background:rgba(26,26,26,.07);box-shadow:inset 2px 0 0 var(--accent)}
+.drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
 
 /* ══ PICKER ══ */
 .picker{
@@ -410,22 +433,33 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   background:var(--panel2);
 }
 .picker-itm:hover{border-color:var(--border2);background:var(--border)}
-.picker-itm:active{border-color:var(--text);background:var(--panel2)}
 .picker-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .picker-n{font-size:12px;font-weight:500;color:var(--text)}
 .picker-s{font-size:9px;color:var(--muted)}
 
-/* ══ TOAST ══ */
-.toast{
-  position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(60px);
-  background:var(--text);color:#fff;padding:9px 20px;border-radius:20px;
-  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;z-index:9999;
-  transition:transform .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;
-  box-shadow:0 4px 16px rgba(0,0,0,0.2);
+/* FIX 5: Auto Layout modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:4000;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:var(--panel);border-radius:16px;padding:24px;max-width:400px;width:90%;box-shadow:var(--shadow-lg)}
+.modal-title{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;margin-bottom:6px}
+.modal-sub{font-size:11px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.layout-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.layout-opt{
+  padding:14px 10px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;
+  text-align:center;transition:all .15s;background:var(--panel2);
 }
-.toast.show{transform:translateX(-50%) translateY(0)}
+.layout-opt:hover{border-color:var(--text);background:var(--border)}
+.layout-opt:active{transform:scale(.97)}
+.layout-opt.selected{border-color:var(--blue);background:#eff6ff}
+.layout-ico{font-size:22px;margin-bottom:5px}
+.layout-name{font-size:11px;font-weight:500;font-family:'DM Mono',monospace}
+.layout-desc{font-size:9px;color:var(--muted);margin-top:2px}
+.modal-actions{display:flex;gap:8px}
+.modal-cancel{flex:1;padding:10px;background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--text)}
+.modal-apply{flex:2;padding:10px;background:var(--text);border:none;border-radius:8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:#fff}
+.modal-apply:hover{background:#333}
 
-/* ══ LOADING OVERLAY ══ */
+/* ══ LOADING ══ */
 .loading-overlay{
   position:fixed;inset:0;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);
   z-index:9998;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;
@@ -434,6 +468,14 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .loading-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
 .loading-text{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);font-weight:500}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* FIX 5b: Hapus toast — kita ganti dengan status bar kecil di header */
+.status-pill{
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);
+  padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--panel2);opacity:0;transition:opacity .3s;white-space:nowrap;
+}
+.status-pill.show{opacity:1}
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:900px){
@@ -446,7 +488,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   .left-panel,.right-panel{display:none}
   .mob-nav{display:block}
   .canvas-area{padding:10px;align-items:flex-start}
-  .toast{bottom:64px}
 }
 </style>
 </head>
@@ -457,16 +498,52 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   <div class="loading-text" id="loading-text">Exporting PDF…</div>
 </div>
 
+<!-- Auto Layout Modal -->
+<div class="modal-overlay" id="auto-layout-modal">
+  <div class="modal">
+    <div class="modal-title">Auto Layout</div>
+    <div class="modal-sub">Pilih template editorial. Element yang ada akan diatur ulang sesuai canvas.</div>
+    <div class="layout-grid" id="layout-grid">
+      <div class="layout-opt selected" data-layout="magazine" onclick="selectLayout(this)">
+        <div class="layout-ico">📰</div>
+        <div class="layout-name">Magazine</div>
+        <div class="layout-desc">Hero + 3 col</div>
+      </div>
+      <div class="layout-opt" data-layout="editorial" onclick="selectLayout(this)">
+        <div class="layout-ico">📄</div>
+        <div class="layout-name">Editorial</div>
+        <div class="layout-desc">Title + body 2 col</div>
+      </div>
+      <div class="layout-opt" data-layout="poster" onclick="selectLayout(this)">
+        <div class="layout-ico">🗂</div>
+        <div class="layout-name">Poster</div>
+        <div class="layout-desc">Visual hook + text</div>
+      </div>
+      <div class="layout-opt" data-layout="minimal" onclick="selectLayout(this)">
+        <div class="layout-ico">◻</div>
+        <div class="layout-name">Minimal</div>
+        <div class="layout-desc">Centered hierarchy</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeAutoLayout()">Batal</button>
+      <button class="modal-apply" onclick="applyAutoLayout()">Terapkan Layout →</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="logo">
     <div class="logo-box"><span></span><span></span><span></span><span></span></div>
     Grid Design
   </div>
   <div class="header-div"></div>
+  <!-- FIX 5b: Status pill gantikan toast -->
+  <div class="status-pill" id="status-pill">—</div>
   <div class="header-right">
-    <button class="btn-icon danger" onclick="resetCanvas()" title="Reset canvas">↺</button>
-    <button class="btn-icon" id="btn-preview" onclick="togglePreview()" title="Preview mode (hides grid)">◉</button>
-    <button class="btn-primary green" onclick="exportPDF()" title="Export PDF">⬇ Export PDF</button>
+    <button class="btn-icon" onclick="resetCanvas()" title="Reset canvas" style="font-size:13px">↺</button>
+    <button class="btn-icon" id="btn-preview" onclick="togglePreview()" title="Preview mode">◉</button>
+    <button class="btn-primary green" onclick="exportPDF()">⬇ Export PDF</button>
   </div>
 </header>
 
@@ -474,7 +551,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
 <!-- ══ LEFT PANEL ══ -->
 <div class="left-panel">
-
   <div class="ps">
     <div class="ps-title">Canvas Size</div>
     <div class="size-grid">
@@ -493,20 +569,21 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <div class="ps-title">Grid System</div>
     <div class="grid-sys-list">
       <button class="gs-btn active" onclick="setGridSystem('column',this)">
-        <span class="gs-name">Column Grid</span><span class="gs-desc">Editorial columns, same width</span>
+        <span class="gs-name">Column Grid</span><span class="gs-desc">Kolom editorial + row bebas</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('modular',this)">
-        <span class="gs-name">Modular Grid</span><span class="gs-desc">Equal rows × columns matrix</span>
+        <span class="gs-name">Modular Grid</span><span class="gs-desc">Matrix baris × kolom sama</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('hierarchy',this)">
-        <span class="gs-name">Hierarchy Grid</span><span class="gs-desc">Unequal zones — 2fr + 1fr, 4 rows</span>
+        <span class="gs-name">Hierarchy Grid</span><span class="gs-desc">Zona tidak sama — 2fr+1fr, 4 baris</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('golden',this)">
-        <span class="gs-name">Golden Ratio</span><span class="gs-desc">φ = 1.618 harmonic columns</span>
+        <span class="gs-name">Golden Ratio</span><span class="gs-desc">φ = 1.618 kolom harmonis</span>
       </button>
     </div>
   </div>
 
+  <!-- FIX 4: Column Grid sekarang punya rows -->
   <div class="ps" id="manual-ctrl">
     <div class="ps-title">Grid Controls</div>
     <div class="col-row-wrap">
@@ -534,15 +611,15 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   </div>
 
   <div class="ps">
-    <div class="ps-title">Elements — drag or click + on canvas</div>
+    <div class="ps-title">Elements — drag atau klik + di canvas</div>
     <div class="pal-list">
       <div class="pal-item" draggable="true" ondragstart="palDragStart('headline',event)">
         <div class="pal-dot" style="background:#1a1a1a"></div>
-        <div><div class="pal-name">Headline</div><div class="pal-hint">Primary title</div></div>
+        <div><div class="pal-name">Headline</div><div class="pal-hint">Judul utama</div></div>
       </div>
       <div class="pal-item" draggable="true" ondragstart="palDragStart('subheadline',event)">
         <div class="pal-dot" style="background:#555"></div>
-        <div><div class="pal-name">Sub Headline</div><div class="pal-hint">Supporting</div></div>
+        <div><div class="pal-name">Sub Headline</div><div class="pal-hint">Subjudul</div></div>
       </div>
       <div class="pal-item" draggable="true" ondragstart="palDragStart('description',event)">
         <div class="pal-dot" style="background:#888"></div>
@@ -550,13 +627,15 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
       </div>
       <div class="pal-item" draggable="true" ondragstart="palDragStart('footer',event)">
         <div class="pal-dot" style="background:#bbb"></div>
-        <div><div class="pal-name">Footer</div><div class="pal-hint">Bottom zone</div></div>
+        <div><div class="pal-name">Footer</div><div class="pal-hint">Zona bawah</div></div>
       </div>
       <div class="pal-item" draggable="true" ondragstart="palDragStart('visualhook',event)">
         <div class="pal-dot" style="background:#e91e8c"></div>
-        <div><div class="pal-name">Visual Hook</div><div class="pal-hint">Image / CTA</div></div>
+        <div><div class="pal-name">Visual Hook</div><div class="pal-hint">Gambar / CTA</div></div>
       </div>
     </div>
+    <!-- FIX 5: Auto Layout button -->
+    <button class="auto-layout-btn" onclick="openAutoLayout()">⚡ Auto Layout</button>
   </div>
 </div>
 
@@ -584,16 +663,75 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <div class="tp active" id="tp-props">
       <div id="no-sel" class="no-sel">
         <div class="no-sel-icon">◱</div>
-        <div>Select or double-tap an element<br>to edit properties</div>
+        <div>Klik 2x element untuk<br>edit properti & typography</div>
       </div>
       <div id="props-form" style="display:none">
         <div class="pr">
           <div class="pr-label">Type</div>
           <div id="pr-type" style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;padding:2px 0"></div>
         </div>
-        <div class="pr"><div class="pr-label">Content</div>
+        <div class="pr">
+          <div class="pr-label">Content</div>
           <input class="pr-inp" id="pr-content" oninput="updContent('d')">
         </div>
+
+        <!-- FIX 3: Typography controls -->
+        <div class="pr-label" style="margin-bottom:8px">Typography</div>
+        <div class="typo-section">
+          <div class="typo-row">
+            <div class="pm">
+              <div class="pr-label">Font</div>
+              <select class="typo-select" id="pr-font" onchange="updTypo('d')">
+                <option value="'DM Sans',sans-serif">DM Sans</option>
+                <option value="'Playfair Display',serif">Playfair Display</option>
+                <option value="'DM Mono',monospace">DM Mono</option>
+                <option value="Georgia,serif">Georgia</option>
+                <option value="'Times New Roman',serif">Times New Roman</option>
+                <option value="Arial,sans-serif">Arial</option>
+                <option value="Impact,sans-serif">Impact</option>
+              </select>
+            </div>
+            <div class="pm">
+              <div class="pr-label">Size (px)</div>
+              <input class="pr-inp" id="pr-fsize" type="number" value="14" min="8" max="120" oninput="updTypo('d')">
+            </div>
+          </div>
+          <div class="typo-row">
+            <div class="pm">
+              <div class="pr-label">Weight</div>
+              <select class="typo-select" id="pr-fweight" onchange="updTypo('d')">
+                <option value="300">Light</option>
+                <option value="400" selected>Regular</option>
+                <option value="500">Medium</option>
+                <option value="700">Bold</option>
+                <option value="900">Black</option>
+              </select>
+            </div>
+            <div class="pm">
+              <div class="pr-label">Align</div>
+              <select class="typo-select" id="pr-align" onchange="updTypo('d')">
+                <option value="left">Left</option>
+                <option value="center" selected>Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+          </div>
+          <div class="pr-label" style="margin-bottom:6px">Color</div>
+          <div class="typo-color-row">
+            <input type="color" id="pr-color" value="#1a1a1a" style="width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;padding:1px" oninput="updTypo('d')">
+            <div class="color-presets">
+              <div class="color-dot active" style="background:#1a1a1a" onclick="setColor('#1a1a1a','d',this)"></div>
+              <div class="color-dot" style="background:#ffffff;border:1.5px solid #ddd" onclick="setColor('#ffffff','d',this)"></div>
+              <div class="color-dot" style="background:#dc2626" onclick="setColor('#dc2626','d',this)"></div>
+              <div class="color-dot" style="background:#2563eb" onclick="setColor('#2563eb','d',this)"></div>
+              <div class="color-dot" style="background:#16a34a" onclick="setColor('#16a34a','d',this)"></div>
+              <div class="color-dot" style="background:#e91e8c" onclick="setColor('#e91e8c','d',this)"></div>
+              <div class="color-dot" style="background:#888" onclick="setColor('#888','d',this)"></div>
+              <div class="color-dot" style="background:#f59e0b" onclick="setColor('#f59e0b','d',this)"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="pr-label" style="margin-bottom:8px">Position & Size</div>
         <div class="pos-grid">
           <div class="pos-box"><div class="pos-box-l">X</div><div class="pos-box-v" id="pv-x">0</div></div>
@@ -676,7 +814,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     </div>
     <div style="margin-top:14px;display:flex;gap:8px">
       <button class="btn-primary" style="flex:1;justify-content:center" onclick="togglePreview();closeDrw()">◉ Preview</button>
-      <button class="btn-primary green" style="flex:1;justify-content:center" onclick="exportPDF();closeDrw()">⬇ Export PDF</button>
+      <button class="btn-primary green" style="flex:1;justify-content:center" onclick="exportPDF();closeDrw()">⬇ PDF</button>
     </div>
   </div>
 </div>
@@ -686,14 +824,15 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Add Element</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
   <div class="drw-body">
-    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap to place at grid origin. Drag or tap handles to move/resize.</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap untuk tempatkan di grid. Drag/tap handle untuk pindah/resize.</p>
     <div class="m-el-grid">
-      <div class="m-el-item" onclick="mobPlace('headline')"><div class="m-el-ico">𝗛</div><div class="m-el-n">Headline</div><div class="m-el-h">Primary title</div></div>
-      <div class="m-el-item" onclick="mobPlace('subheadline')"><div class="m-el-ico">𝗦</div><div class="m-el-n">Sub Headline</div><div class="m-el-h">Supporting</div></div>
+      <div class="m-el-item" onclick="mobPlace('headline')"><div class="m-el-ico">𝗛</div><div class="m-el-n">Headline</div><div class="m-el-h">Judul utama</div></div>
+      <div class="m-el-item" onclick="mobPlace('subheadline')"><div class="m-el-ico">𝗦</div><div class="m-el-n">Sub Headline</div><div class="m-el-h">Subjudul</div></div>
       <div class="m-el-item" onclick="mobPlace('description')"><div class="m-el-ico">≡</div><div class="m-el-n">Description</div><div class="m-el-h">Body copy</div></div>
-      <div class="m-el-item" onclick="mobPlace('footer')"><div class="m-el-ico">▬</div><div class="m-el-n">Footer</div><div class="m-el-h">Bottom zone</div></div>
-      <div class="m-el-item fw" onclick="mobPlace('visualhook')"><div class="m-el-ico">◈</div><div class="m-el-n">Visual Hook</div><div class="m-el-h">Image / CTA zone</div></div>
+      <div class="m-el-item" onclick="mobPlace('footer')"><div class="m-el-ico">▬</div><div class="m-el-n">Footer</div><div class="m-el-h">Zona bawah</div></div>
+      <div class="m-el-item fw" onclick="mobPlace('visualhook')"><div class="m-el-ico">◈</div><div class="m-el-n">Visual Hook</div><div class="m-el-h">Gambar / CTA</div></div>
     </div>
+    <button class="auto-layout-btn" style="margin-top:14px" onclick="closeDrw();setTimeout(()=>openAutoLayout(),100)">⚡ Auto Layout</button>
   </div>
 </div>
 
@@ -702,9 +841,21 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title" id="m-prop-title">Properties</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
   <div class="drw-body">
-    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Double-tap any element on the canvas<br>to edit its properties</div>
+    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Klik 2x element di canvas untuk edit properti</div>
     <div id="m-props-form" style="display:none">
       <div class="m-pr"><div class="m-prl">Content</div><input class="m-pri" id="m-pr-content" oninput="updContent('m')"></div>
+      <div class="m-pr2">
+        <div class="m-pm"><div class="m-prl">Font Size</div><input class="m-pri" id="m-pr-fsize" type="number" value="14" oninput="updTypo('m')"></div>
+        <div class="m-pm"><div class="m-prl">Weight</div>
+          <select class="m-pri" id="m-pr-fweight" onchange="updTypo('m')">
+            <option value="300">Light</option>
+            <option value="400" selected>Regular</option>
+            <option value="500">Medium</option>
+            <option value="700">Bold</option>
+            <option value="900">Black</option>
+          </select>
+        </div>
+      </div>
       <div class="m-pr2">
         <div class="m-pm"><div class="m-prl">X (px)</div><input class="m-pri" id="m-pr-x" type="number" oninput="updPosInp('m')"></div>
         <div class="m-pm"><div class="m-prl">Y (px)</div><input class="m-pri" id="m-pr-y" type="number" oninput="updPosInp('m')"></div>
@@ -732,15 +883,13 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 <div class="picker" id="picker">
   <div class="picker-ttl">Add Element</div>
   <div class="picker-list">
-    <div class="picker-itm" onclick="pickerPick('headline')"><div class="picker-dot" style="background:#1a1a1a"></div><div><div class="picker-n">Headline</div><div class="picker-s">Primary title</div></div></div>
-    <div class="picker-itm" onclick="pickerPick('subheadline')"><div class="picker-dot" style="background:#555"></div><div><div class="picker-n">Sub Headline</div><div class="picker-s">Supporting</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('headline')"><div class="picker-dot" style="background:#1a1a1a"></div><div><div class="picker-n">Headline</div><div class="picker-s">Judul utama</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('subheadline')"><div class="picker-dot" style="background:#555"></div><div><div class="picker-n">Sub Headline</div><div class="picker-s">Subjudul</div></div></div>
     <div class="picker-itm" onclick="pickerPick('description')"><div class="picker-dot" style="background:#888"></div><div><div class="picker-n">Description</div><div class="picker-s">Body copy</div></div></div>
-    <div class="picker-itm" onclick="pickerPick('footer')"><div class="picker-dot" style="background:#bbb"></div><div><div class="picker-n">Footer</div><div class="picker-s">Bottom zone</div></div></div>
-    <div class="picker-itm" onclick="pickerPick('visualhook')"><div class="picker-dot" style="background:#e91e8c"></div><div><div class="picker-n">Visual Hook</div><div class="picker-s">Image / CTA</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('footer')"><div class="picker-dot" style="background:#bbb"></div><div><div class="picker-n">Footer</div><div class="picker-s">Zona bawah</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('visualhook')"><div class="picker-dot" style="background:#e91e8c"></div><div><div class="picker-n">Visual Hook</div><div class="picker-s">Gambar / CTA</div></div></div>
   </div>
 </div>
-
-<div class="toast" id="toast"></div>
 
 <script>
 // ══════════════════════════════════════
@@ -755,6 +904,7 @@ let pendDrop={x:0,y:0};
 let palType=null;
 let isPreview=false;
 let logicalW=540, logicalH=400;
+let selectedAutoLayout='magazine';
 
 const EL_DEF={
   headline:    {lbl:'Headline',    content:'Your Headline',          fw:.55, fh:.16, dot:'#1a1a1a'},
@@ -764,12 +914,25 @@ const EL_DEF={
   visualhook:  {lbl:'Visual Hook', content:'◈',                      fw:.35, fh:.42, dot:'#e91e8c'},
 };
 
+// FIX 4: Column Grid sekarang tampilkan rows
 const GS={
-  column:   {cols:5,  rows:1,  showRows:false},
-  modular:  {cols:5,  rows:5,  showRows:true},
-  hierarchy:{cols:2,  rows:4,  showRows:false},
-  golden:   {cols:2,  rows:3,  showRows:false},
+  column:   {cols:5, rows:5, showRows:true},
+  modular:  {cols:5, rows:5, showRows:true},
+  hierarchy:{cols:2, rows:4, showRows:false},
+  golden:   {cols:2, rows:3, showRows:false},
 };
+
+// ══════════════════════════════════════
+//  STATUS (gantikan toast)
+// ══════════════════════════════════════
+function showStatus(msg){
+  const p=document.getElementById('status-pill');
+  if(!p) return;
+  p.textContent=msg;
+  p.classList.add('show');
+  clearTimeout(p._t);
+  p._t=setTimeout(()=>p.classList.remove('show'),2500);
+}
 
 // ══════════════════════════════════════
 //  CANVAS SIZE
@@ -783,15 +946,11 @@ function dispW(){
   return Math.max(200,Math.min(mob?area.clientWidth-20:area.clientWidth-48,mob?380:620));
 }
 
-// FIX: setRatio — removed unreliable querySelectorAll toggle, using data-ratio attributes instead
 function setRatio(r,btn,ctx){
   ratio=r;
-  // Toggle desktop size buttons
   document.querySelectorAll('.size-grid .sz-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.m-sz-grid .sz-btn').forEach(b=>b.classList.remove('active'));
-  // Mark clicked button active
   if(btn) btn.classList.add('active');
-
   const cwhEl=document.getElementById('custom-wh');
   if(cwhEl) cwhEl.style.display=r==='custom'?'grid':'none';
   applyRatio(true);
@@ -843,7 +1002,6 @@ function applyRatio(rescaleElements){
 // ══════════════════════════════════════
 function setGridSystem(gs,btn,ctx){
   gridSystem=gs;
-  // FIX: scope selectors to avoid cross-contaminating desktop and mobile buttons
   document.querySelectorAll('.gs-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.m-gs-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -853,11 +1011,12 @@ function setGridSystem(gs,btn,ctx){
   if(gs==='golden') gap=0;
   syncInputs();
 
+  // FIX 4: Selalu tampilkan rows kecuali hierarchy & golden (sudah hardcoded)
   const showR=preset.showRows;
   const rcD=document.getElementById('rows-ctrl');
   const rcM=document.getElementById('m-rows-ctrl');
-  if(rcD) rcD.style.display=showR?'block':'none';
-  if(rcM) rcM.style.display=showR?'block':'none';
+  if(rcD) rcD.style.display=showR?'flex':'none';
+  if(rcM) rcM.style.display=showR?'flex':'none';
 
   elements=[]; selId=null;
   invalidateSnapCache();
@@ -901,7 +1060,6 @@ function computeCells(){
     const cTotal=canvasW-gap*3;
     const c1w=Math.round(cTotal*2/3),c2w=cTotal-c1w;
     const rTotal=canvasH-gap*5;
-    // FIX: guard against negative rTotal
     const safeRT=Math.max(rTotal,40);
     const rH=[
       Math.round(safeRT*.15),Math.round(safeRT*.52),
@@ -937,9 +1095,9 @@ function computeCells(){
       yCur+=rhs[r]+gap;
     }
   } else {
+    // FIX 4: column grid juga pakai rows
     const effCols=Math.max(cols,1);
-    const effRows=(gridSystem==='column')?1:Math.max(rows,1);
-    // FIX: avoid division by zero / negative cell sizes
+    const effRows=Math.max(rows,1);
     const totalGapX=gap*(effCols+1);
     const totalGapY=gap*(effRows+1);
     const cellW=Math.max((canvasW-totalGapX)/effCols,1);
@@ -955,7 +1113,7 @@ function computeCells(){
 }
 
 // ══════════════════════════════════════
-//  DRAW GRID LINES
+//  DRAW GRID LINES (FIX 1 & 2: warna merah, tetap di preview)
 // ══════════════════════════════════════
 function drawGridLines(){
   const cvs=document.getElementById('grid-lines-canvas');
@@ -963,7 +1121,6 @@ function drawGridLines(){
   cvs.width=canvasW; cvs.height=canvasH;
   const ctx=cvs.getContext('2d');
   ctx.clearRect(0,0,canvasW,canvasH);
-  if(isPreview) return;
 
   const cells=computeCells();
   const xs=new Set(),ys=new Set();
@@ -972,21 +1129,23 @@ function drawGridLines(){
     ys.add(c.y);ys.add(c.y+c.h);
   });
 
+  // FIX 1: Sel background warna merah muda
   cells.forEach(c=>{
-    ctx.fillStyle='rgba(170,155,138,0.22)';
+    ctx.fillStyle='rgba(220,38,38,0.06)';
     ctx.fillRect(c.x,c.y,c.w,c.h);
   });
 
+  // FIX 1 & 2: Garis merah, tetap di preview
   ctx.lineWidth=1;
   [...xs].forEach(x=>{
     const isEdge=(x<=gap||x>=canvasW-gap);
-    ctx.strokeStyle=isEdge?'rgba(90,70,50,0.45)':'rgba(90,70,50,0.28)';
+    ctx.strokeStyle=isEdge?'rgba(180,30,30,0.55)':'rgba(210,50,50,0.35)';
     ctx.setLineDash(isEdge?[]:[3,3]);
     ctx.beginPath();ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,canvasH);ctx.stroke();
   });
   [...ys].forEach(y=>{
     const isEdge=(y<=gap||y>=canvasH-gap);
-    ctx.strokeStyle=isEdge?'rgba(90,70,50,0.45)':'rgba(90,70,50,0.28)';
+    ctx.strokeStyle=isEdge?'rgba(180,30,30,0.55)':'rgba(210,50,50,0.35)';
     ctx.setLineDash(isEdge?[]:[3,3]);
     ctx.beginPath();ctx.moveTo(0,y+.5);ctx.lineTo(canvasW,y+.5);ctx.stroke();
   });
@@ -1091,37 +1250,6 @@ function showSnapPreview(x,y,w,h){
 function hideSnapPreview(){const p=document.getElementById('snap-preview');if(p)p.style.display='none';}
 
 // ══════════════════════════════════════
-//  AUTO WRAP — resolve overlaps
-// ══════════════════════════════════════
-function autoWrap(){
-  if(elements.length<2) return;
-  const cells=computeCells();
-  if(!cells.length) return;
-  const usedCells=new Set();
-  const sorted=[...elements].sort((a,b)=>a.id-b.id);
-  sorted.forEach(el=>{
-    let best=null,bestD=Infinity;
-    cells.forEach((c,i)=>{
-      if(usedCells.has(i)) return;
-      const d=Math.hypot(el.x-c.x,el.y-c.y);
-      if(d<bestD){bestD=d;best={c,i};}
-    });
-    if(!best) return;
-    usedCells.add(best.i);
-    const overlaps=sorted.filter(other=>
-      other.id!==el.id &&
-      el.x<other.x+other.w && el.x+el.w>other.x &&
-      el.y<other.y+other.h && el.y+el.h>other.y
-    );
-    if(overlaps.length>0){
-      el.x=best.c.x; el.y=best.c.y;
-      el.w=best.c.w; el.h=best.c.h;
-    }
-  });
-  renderEls();genCode();showToast('Elements repositioned ✓');
-}
-
-// ══════════════════════════════════════
 //  BUILD GRID OVERLAY (+ buttons)
 // ══════════════════════════════════════
 function buildGrid(){
@@ -1170,34 +1298,67 @@ document.addEventListener('click',e=>{
 function pickerPick(type){hidePicker();placeEl(type,pendDrop.x,pendDrop.y);}
 
 // ══════════════════════════════════════
-//  PLACE ELEMENT
+//  PLACE ELEMENT — FIX 5a: tidak replace, cari cell kosong
 // ══════════════════════════════════════
+function findFreeCellForEl(preferX, preferY, ew, eh){
+  const cells=computeCells();
+  // Cari cell terdekat ke posisi yang diinginkan yang TIDAK overlap dengan element yang ada
+  let best=null, bestD=Infinity;
+  for(const c of cells){
+    const cx=c.x,cy=c.y;
+    // Cek apakah ada elemen yang sudah di cell ini
+    const occupied=elements.some(el=>{
+      return el.x<cx+c.w && el.x+el.w>cx &&
+             el.y<cy+c.h && el.y+el.h>cy;
+    });
+    if(occupied) continue;
+    const d=Math.hypot(preferX-cx,preferY-cy);
+    if(d<bestD){bestD=d;best=c;}
+  }
+  // Kalau semua occupied, tetap pakai cell terdekat ke preferX,preferY
+  if(!best){
+    for(const c of cells){
+      const d=Math.hypot(preferX-c.x,preferY-c.y);
+      if(d<bestD){bestD=d;best=c;}
+    }
+  }
+  if(!best) return {x:preferX,y:preferY,w:ew,h:eh};
+  return {x:best.x,y:best.y,w:ew,h:eh};
+}
+
 function placeEl(type,dropX,dropY){
   const def=EL_DEF[type];
   const ew=Math.round(canvasW*def.fw),eh=Math.round(canvasH*def.fh);
-  const s=strictSnap(dropX,dropY,ew,eh);
+
+  // FIX 5a: Cari cell bebas
+  const pos=findFreeCellForEl(dropX,dropY,ew,eh);
+  const s=strictSnap(pos.x,pos.y,ew,eh);
   const el={
     id:++eid,type,content:def.content,
     x:Math.max(0,Math.min(s.x,canvasW-s.w)),
     y:Math.max(0,Math.min(s.y,canvasH-s.h)),
     w:Math.max(s.w,20),h:Math.max(s.h,16),
+    // Typography defaults
+    fontFamily:null, fontSize:null, fontWeight:null, color:null, textAlign:null,
   };
   elements.push(el);selId=el.id;
   renderEls();showProps(el);genCode();
-  const hasOverlap=elements.some(other=>
-    other.id!==el.id &&
-    el.x<other.x+other.w && el.x+el.w>other.x &&
-    el.y<other.y+other.h && el.y+el.h>other.y
-  );
-  if(hasOverlap) setTimeout(()=>autoWrap(),50);
-  else showToast(def.lbl+' added ✓');
+  showStatus(def.lbl+' ditambahkan ✓');
 }
 
 function mobPlace(type){
   closeDrw();
   const cells=computeCells();
-  const c=cells[0]||{x:gap,y:gap};
-  placeEl(type,c.x,c.y);
+  // FIX 5a: Cari cell kosong untuk mobile
+  let targetCell=cells[0]||{x:gap,y:gap};
+  for(const c of cells){
+    const occupied=elements.some(el=>{
+      return el.x<c.x+c.w && el.x+el.w>c.x &&
+             el.y<c.y+c.h && el.y+el.h>c.y;
+    });
+    if(!occupied){targetCell=c;break;}
+  }
+  placeEl(type,targetCell.x,targetCell.y);
   setTimeout(()=>openDrw('props'),280);
 }
 
@@ -1214,11 +1375,8 @@ function palDrop(e){
   e.preventDefault();
   const cvr=document.getElementById('canvas').getBoundingClientRect();
   const px=e.clientX-cvr.left,py=e.clientY-cvr.top;
-  // FIX: check drop is within canvas bounds
   if(px<0||py<0||px>canvasW||py>canvasH){palType=null;return;}
-  const def=EL_DEF[palType];
-  const ew=Math.round(canvasW*def.fw),eh=Math.round(canvasH*def.fh);
-  placeEl(palType,px-ew/2,py-eh/2);
+  placeEl(palType,px,py);
   palType=null;
 }
 
@@ -1227,8 +1385,17 @@ function palDrop(e){
 // ══════════════════════════════════════
 let dblTapLast={};
 
+function applyTypoToEl(div,el){
+  const prev=div.querySelector('.el-prev');
+  if(!prev) return;
+  if(el.fontFamily) prev.style.fontFamily=el.fontFamily;
+  if(el.fontSize) prev.style.fontSize=el.fontSize+'px';
+  if(el.fontWeight) prev.style.fontWeight=el.fontWeight;
+  if(el.color) prev.style.color=el.color;
+  if(el.textAlign) prev.style.textAlign=el.textAlign;
+}
+
 function renderEls(){
-  // FIX: only remove .design-el nodes, not grid/snap elements
   document.querySelectorAll('#canvas > .design-el').forEach(e=>e.remove());
   const canvas=document.getElementById('canvas');
   elements.forEach(el=>{
@@ -1240,6 +1407,9 @@ function renderEls(){
     const lbl=document.createElement('div');lbl.className='el-lbl';lbl.textContent=EL_DEF[el.type].lbl;
     const prev=document.createElement('div');prev.className='el-prev';prev.textContent=el.content;
     div.appendChild(lbl);div.appendChild(prev);
+
+    // Apply typography
+    applyTypoToEl(div,el);
 
     // Close
     const cls=document.createElement('button');cls.className='el-close';cls.innerHTML='&#x2715;';
@@ -1273,18 +1443,24 @@ function renderEls(){
       startMove(e,el);
     });
 
-    // FIX: double-click / double-tap detection
+    // FIX 3: Double-click/tap buka props
     div.addEventListener('click',e=>{
       e.stopPropagation();
       const now=Date.now();
       const id=el.id;
       if(dblTapLast[id]&&(now-dblTapLast[id])<400){
         selId=el.id;renderEls();showProps(el);
-        if(window.innerWidth<=640) openDrw('props');
-        else{
-          const propsTab=document.querySelector('.r-tab');
-          switchTab('props',propsTab);
+        if(window.innerWidth<=640){
+          openDrw('props');
+        } else {
+          // Pastikan tab Properties aktif
+          document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
+          document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+          document.querySelector('.r-tab')?.classList.add('active');
+          document.getElementById('tp-props')?.classList.add('active');
           showProps(el);
+          // Scroll ke props panel
+          document.querySelector('.tab-body')?.scrollTo(0,0);
         }
         dblTapLast[id]=0;
       } else {
@@ -1343,7 +1519,7 @@ function startMove(e,el){
 }
 
 // ══════════════════════════════════════
-//  RESIZE (BR and BL handles)
+//  RESIZE
 // ══════════════════════════════════════
 function startResize(e,el,corner){
   const canvas=document.getElementById('canvas');
@@ -1354,7 +1530,7 @@ function startResize(e,el,corner){
   const sx=e.clientX,sy=e.clientY;
   const ow=el.w,oh=el.h,ox=el.x;
   const MIN_W=20,MIN_H=16;
-  let rafId=null,pendW=ow,pendH=oh,pendX=ox;
+  let rafId=null,pendW=ow,pendH=oh;
 
   handle.setPointerCapture(e.pointerId);
 
@@ -1407,7 +1583,7 @@ function startResize(e,el,corner){
 }
 
 // ══════════════════════════════════════
-//  PROPS PANEL
+//  PROPS PANEL — FIX 3: typography support
 // ══════════════════════════════════════
 function showProps(el){
   const noSelD=document.getElementById('no-sel');
@@ -1416,40 +1592,116 @@ function showProps(el){
   const formM=document.getElementById('m-props-form');
 
   if(!el){
-    if(noSelD) noSelD.style.display='flex';
-    if(formD) formD.style.display='none';
-    if(noSelM) noSelM.style.display='block';
-    if(formM) formM.style.display='none';
+    if(noSelD){noSelD.style.display='flex';}
+    if(formD){formD.style.display='none';}
+    if(noSelM){noSelM.style.display='block';}
+    if(formM){formM.style.display='none';}
     return;
   }
 
-  if(noSelD) noSelD.style.display='none';
-  if(formD) formD.style.display='block';
+  if(noSelD){noSelD.style.display='none';}
+  if(formD){formD.style.display='block';}
   const typeEl=document.getElementById('pr-type');
   if(typeEl) typeEl.textContent=EL_DEF[el.type].lbl;
 
-  const fields={content:el.content,x:Math.round(el.x),y:Math.round(el.y),w:Math.round(el.w),h:Math.round(el.h)};
-  Object.entries(fields).forEach(([k,v])=>{
-    const e=document.getElementById('pr-'+k);if(e)e.value=v;
-  });
-  ['x','y','w','h'].forEach(k=>{
-    const e=document.getElementById('pv-'+k);if(e)e.textContent=Math.round(el[k]);
+  // Content
+  const cD=document.getElementById('pr-content');if(cD) cD.value=el.content;
+  const cM=document.getElementById('m-pr-content');if(cM) cM.value=el.content;
+
+  // Typography
+  const fD=document.getElementById('pr-font');
+  if(fD && el.fontFamily) fD.value=el.fontFamily;
+  const fsD=document.getElementById('pr-fsize');
+  if(fsD) fsD.value=el.fontSize||getDefaultFontSize(el.type);
+  const fwD=document.getElementById('pr-fweight');
+  if(fwD) fwD.value=el.fontWeight||getDefaultWeight(el.type);
+  const faD=document.getElementById('pr-align');
+  if(faD) faD.value=el.textAlign||'center';
+  const fcD=document.getElementById('pr-color');
+  if(fcD) fcD.value=el.color||getDefaultColor(el.type);
+
+  // Update color dots
+  document.querySelectorAll('.color-dot').forEach(dot=>{
+    dot.classList.toggle('active',dot.style.backgroundColor===hexToRgb(el.color||getDefaultColor(el.type)));
   });
 
-  if(noSelM) noSelM.style.display='none';
-  if(formM) formM.style.display='block';
+  // Mobile typography
+  const fsM=document.getElementById('m-pr-fsize');if(fsM) fsM.value=el.fontSize||getDefaultFontSize(el.type);
+  const fwM=document.getElementById('m-pr-fweight');if(fwM) fwM.value=el.fontWeight||getDefaultWeight(el.type);
+
+  // Position
+  ['x','y','w','h'].forEach(k=>{
+    const e=document.getElementById('pv-'+k);if(e) e.textContent=Math.round(el[k]);
+    const i=document.getElementById('pr-'+k);if(i) i.value=Math.round(el[k]);
+    const m=document.getElementById('m-pr-'+k);if(m) m.value=Math.round(el[k]);
+  });
+
+  if(noSelM){noSelM.style.display='none';}
+  if(formM){formM.style.display='block';}
   const titleM=document.getElementById('m-prop-title');
   if(titleM) titleM.textContent=EL_DEF[el.type].lbl;
-  Object.entries(fields).forEach(([k,v])=>{
-    const e=document.getElementById('m-pr-'+k);if(e)e.value=v;
-  });
+}
+
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function getDefaultFontSize(type){
+  return {headline:15,subheadline:12,description:10,footer:9,visualhook:22}[type]||12;
+}
+function getDefaultWeight(type){
+  return {headline:'700',subheadline:'500',description:'400',footer:'400',visualhook:'400'}[type]||'400';
+}
+function getDefaultColor(type){
+  return {headline:'#1a1a1a',subheadline:'#333333',description:'#666666',footer:'#999999',visualhook:'#e91e8c'}[type]||'#1a1a1a';
+}
+
+function updTypo(ctx){
+  const el=elements.find(e=>e.id===selId);if(!el) return;
+  if(ctx==='d'){
+    const font=document.getElementById('pr-font');
+    const fsize=document.getElementById('pr-fsize');
+    const fweight=document.getElementById('pr-fweight');
+    const align=document.getElementById('pr-align');
+    const color=document.getElementById('pr-color');
+    if(font) el.fontFamily=font.value;
+    if(fsize) el.fontSize=parseInt(fsize.value)||14;
+    if(fweight) el.fontWeight=fweight.value;
+    if(align) el.textAlign=align.value;
+    if(color) el.color=color.value;
+  } else {
+    const fsize=document.getElementById('m-pr-fsize');
+    const fweight=document.getElementById('m-pr-fweight');
+    if(fsize) el.fontSize=parseInt(fsize.value)||14;
+    if(fweight) el.fontWeight=fweight.value;
+  }
+  // Update live tanpa full re-render
+  const canvas=document.getElementById('canvas');
+  const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  if(div) applyTypoToEl(div,el);
+  genCode();
+}
+
+function setColor(hex,ctx,dot){
+  const el=elements.find(e=>e.id===selId);if(!el) return;
+  el.color=hex;
+  const colorInput=document.getElementById('pr-color');
+  if(colorInput) colorInput.value=hex;
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));
+  if(dot) dot.classList.add('active');
+  const canvas=document.getElementById('canvas');
+  const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  if(div) applyTypoToEl(div,el);
+  genCode();
 }
 
 function updContent(ctx){
-  const el=elements.find(e=>e.id===selId);if(!el)return;
+  const el=elements.find(e=>e.id===selId);if(!el) return;
   const inp=document.getElementById(ctx==='m'?'m-pr-content':'pr-content');
   if(inp) el.content=inp.value;
-  // FIX: update the preview text directly without full re-render to preserve selection
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
   if(div){
@@ -1460,14 +1712,13 @@ function updContent(ctx){
 }
 
 function updPosInp(ctx){
-  const el=elements.find(e=>e.id===selId);if(!el)return;
+  const el=elements.find(e=>e.id===selId);if(!el) return;
   const p=ctx==='m'?'m-pr':'pr';
   const getV=(id,def)=>{const e=document.getElementById(id);return e?parseFloat(e.value)||def:def;};
   el.x=getV(p+'-x',0);
   el.y=getV(p+'-y',0);
   el.w=Math.max(20,getV(p+'-w',20));
   el.h=Math.max(16,getV(p+'-h',16));
-  // FIX: clamp to canvas bounds
   el.x=Math.max(0,Math.min(el.x,canvasW-el.w));
   el.y=Math.max(0,Math.min(el.y,canvasH-el.h));
   renderEls();showProps(el);genCode();
@@ -1481,7 +1732,112 @@ function delEl(id){
 function deleteSel(){if(selId)delEl(selId);}
 
 // ══════════════════════════════════════
-//  CODE GEN
+//  FIX 5: AUTO LAYOUT
+// ══════════════════════════════════════
+function openAutoLayout(){
+  document.getElementById('auto-layout-modal').classList.add('show');
+}
+function closeAutoLayout(){
+  document.getElementById('auto-layout-modal').classList.remove('show');
+}
+function selectLayout(el){
+  document.querySelectorAll('.layout-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedAutoLayout=el.dataset.layout;
+}
+
+const AUTO_LAYOUTS={
+  magazine:(cW,cH,g)=>{
+    // Hero full width top + 3 col bottom
+    const heroH=Math.round(cH*.45);
+    const bodyH=cH-heroH-g*3;
+    const colW=Math.round((cW-g*4)/3);
+    return [
+      {type:'visualhook',x:g,y:g,w:cW-g*2,h:heroH},
+      {type:'headline',x:g,y:heroH+g*2,w:cW-g*2,h:Math.round(bodyH*.35)},
+      {type:'description',x:g,y:heroH+g*2+Math.round(bodyH*.35)+g,w:colW,h:Math.round(bodyH*.55)},
+      {type:'description',x:g+colW+g,y:heroH+g*2+Math.round(bodyH*.35)+g,w:colW,h:Math.round(bodyH*.55)},
+      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
+    ];
+  },
+  editorial:(cW,cH,g)=>{
+    // Title kiri + body 2 kolom
+    const titleW=Math.round(cW*.38);
+    const bodyW=cW-titleW-g*3;
+    const halfW=Math.round((bodyW-g)/2);
+    return [
+      {type:'headline',x:g,y:g,w:titleW,h:Math.round(cH*.42)},
+      {type:'subheadline',x:g,y:g+Math.round(cH*.42)+g,w:titleW,h:Math.round(cH*.2)},
+      {type:'visualhook',x:titleW+g*2,y:g,w:bodyW,h:Math.round(cH*.52)},
+      {type:'description',x:titleW+g*2,y:Math.round(cH*.52)+g*2,w:halfW,h:cH-Math.round(cH*.52)-g*3-Math.round(cH*.1)},
+      {type:'description',x:titleW+g*2+halfW+g,y:Math.round(cH*.52)+g*2,w:halfW,h:cH-Math.round(cH*.52)-g*3-Math.round(cH*.1)},
+      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
+    ];
+  },
+  poster:(cW,cH,g)=>{
+    // Visual hook besar + text overlay bawah
+    return [
+      {type:'visualhook',x:g,y:g,w:cW-g*2,h:Math.round(cH*.6)},
+      {type:'headline',x:g,y:Math.round(cH*.6)+g*2,w:cW-g*2,h:Math.round(cH*.2)},
+      {type:'subheadline',x:g,y:Math.round(cH*.6)+g*2+Math.round(cH*.2)+g,w:Math.round(cW*.6),h:Math.round(cH*.12)},
+      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
+    ];
+  },
+  minimal:(cW,cH,g)=>{
+    // Terpusat — headline + sub + desc vertikal tengah
+    const elW=Math.round(cW*.7);
+    const startX=Math.round((cW-elW)/2);
+    const totalH=Math.round(cH*.14)+g+Math.round(cH*.1)+g+Math.round(cH*.3);
+    const startY=Math.round((cH-totalH)/2);
+    return [
+      {type:'headline',x:startX,y:startY,w:elW,h:Math.round(cH*.14)},
+      {type:'subheadline',x:startX,y:startY+Math.round(cH*.14)+g,w:elW,h:Math.round(cH*.1)},
+      {type:'description',x:startX,y:startY+Math.round(cH*.14)+g+Math.round(cH*.1)+g,w:elW,h:Math.round(cH*.3)},
+      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
+    ];
+  },
+};
+
+function applyAutoLayout(){
+  closeAutoLayout();
+  const layoutFn=AUTO_LAYOUTS[selectedAutoLayout];
+  if(!layoutFn) return;
+  const specs=layoutFn(canvasW,canvasH,gap);
+
+  // Ambil konten dari element yang ada (reuse jika ada)
+  const existingByType={};
+  elements.forEach(el=>{
+    if(!existingByType[el.type]) existingByType[el.type]=[];
+    existingByType[el.type].push(el);
+  });
+
+  elements=[];
+  const typeCount={};
+  specs.forEach(spec=>{
+    const{type,x,y,w,h}=spec;
+    typeCount[type]=(typeCount[type]||0);
+    // Reuse konten dari element yang ada kalau ada
+    let content=EL_DEF[type].content;
+    const existList=existingByType[type];
+    if(existList && existList[typeCount[type]]){
+      content=existList[typeCount[type]].content;
+    }
+    typeCount[type]++;
+    elements.push({
+      id:++eid,type,content,
+      x:Math.max(0,x),y:Math.max(0,y),
+      w:Math.max(20,w),h:Math.max(16,h),
+      fontFamily:null,fontSize:null,fontWeight:null,color:null,textAlign:null,
+    });
+  });
+
+  selId=null;
+  renderEls();showProps(null);genCode();
+  showStatus('Auto Layout diterapkan ✓');
+}
+
+// ══════════════════════════════════════
+//  CODE GEN — FIX 3: include typography
 // ══════════════════════════════════════
 function genCode(){
   let html=`<div class="layout">\n`;
@@ -1489,7 +1845,15 @@ function genCode(){
   html+=`</div>`;
   let css=`.layout {\n  position: relative;\n  width: ${canvasW}px;\n  height: ${canvasH}px;\n}\n`;
   elements.forEach(el=>{
-    css+=`\n.${el.type} {\n  position: absolute;\n  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n}\n`;
+    css+=`\n.${el.type} {\n  position: absolute;\n`;
+    css+=`  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n`;
+    css+=`  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n`;
+    if(el.fontFamily) css+=`  font-family: ${el.fontFamily};\n`;
+    if(el.fontSize) css+=`  font-size: ${el.fontSize}px;\n`;
+    if(el.fontWeight) css+=`  font-weight: ${el.fontWeight};\n`;
+    if(el.color) css+=`  color: ${el.color};\n`;
+    if(el.textAlign) css+=`  text-align: ${el.textAlign};\n`;
+    css+=`}\n`;
   });
   const setTxt=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
   setTxt('code-html',html);setTxt('m-code-html',html);
@@ -1497,7 +1861,7 @@ function genCode(){
 }
 
 // ══════════════════════════════════════
-//  PREVIEW MODE
+//  PREVIEW MODE — FIX 2: grid tetap tampil
 // ══════════════════════════════════════
 function togglePreview(){
   isPreview=!isPreview;
@@ -1505,19 +1869,20 @@ function togglePreview(){
   const btn=document.getElementById('btn-preview');
   cv.classList.toggle('preview-mode',isPreview);
   btn.classList.toggle('active',isPreview);
-  btn.title=isPreview?'Exit preview':'Preview mode (hides grid)';
+  btn.title=isPreview?'Keluar preview':'Preview mode';
+  // Grid lines tetap draw (tidak disembunyikan)
   drawGridLines();
-  showToast(isPreview?'Preview mode — grid hidden':'Edit mode');
+  showStatus(isPreview?'Preview — grid merah tetap tampil':'Edit mode aktif');
 }
 
 // ══════════════════════════════════════
-//  EXPORT PDF — FIX: properly restore state
+//  EXPORT PDF
 // ══════════════════════════════════════
 async function exportPDF(){
   const loading=document.getElementById('loading-overlay');
   const loadText=document.getElementById('loading-text');
   loading.classList.add('show');
-  loadText.textContent='Preparing canvas…';
+  loadText.textContent='Mempersiapkan canvas…';
 
   const wasPreview=isPreview;
   try{
@@ -1528,23 +1893,17 @@ async function exportPDF(){
       await new Promise(r=>setTimeout(r,100));
     }
 
-    loadText.textContent='Rendering elements…';
+    loadText.textContent='Merender elemen…';
     const cv=document.getElementById('canvas');
     const scale=Math.max(window.devicePixelRatio||1,2);
 
     const canvasImg=await html2canvas(cv,{
-      scale,
-      useCORS:true,
-      logging:false,
-      backgroundColor:'#ffffff',
-      width:canvasW,
-      height:canvasH,
-      // FIX: ignore elements outside canvas
+      scale,useCORS:true,logging:false,backgroundColor:'#ffffff',
+      width:canvasW,height:canvasH,
       ignoreElements:(el)=>el.classList&&(el.classList.contains('snap-guide')||el.classList.contains('snap-preview')),
     });
 
-    loadText.textContent='Building PDF…';
-
+    loadText.textContent='Membuat PDF…';
     const imgData=canvasImg.toDataURL('image/png',1.0);
     const{jsPDF}=window.jspdf;
 
@@ -1561,15 +1920,13 @@ async function exportPDF(){
     const orientation=pdfH>pdfW?'portrait':'landscape';
     const pdf=new jsPDF({orientation,unit:'mm',format:[pdfW,pdfH],compress:true});
     pdf.addImage(imgData,'PNG',0,0,pdfW,pdfH,undefined,'FAST');
-
     const ratioLabel=ratio==='custom'?`${logicalW}x${logicalH}`:ratio.replace(':','-');
     pdf.save(`grid-design-${ratioLabel}.pdf`);
-    showToast('PDF exported ✓');
+    showStatus('PDF berhasil diexport ✓');
   } catch(err){
     console.error('Export error:',err);
-    showToast('Export failed — try again');
+    showStatus('Export gagal — coba lagi');
   } finally{
-    // FIX: always restore preview state in finally block
     if(!wasPreview){
       isPreview=false;
       document.getElementById('canvas').classList.remove('preview-mode');
@@ -1624,13 +1981,13 @@ function closeDrw(silent){
 // ══════════════════════════════════════
 function copyHTML(){
   genCode();
-  const t=document.getElementById('code-html')?.textContent||document.getElementById('m-code-html')?.textContent||'';
-  navigator.clipboard.writeText(t).then(()=>showToast('HTML copied!')).catch(()=>showToast('Copy failed'));
+  const t=document.getElementById('code-html')?.textContent||'';
+  navigator.clipboard.writeText(t).then(()=>showStatus('HTML disalin!')).catch(()=>showStatus('Gagal menyalin'));
 }
 function copyCSS(){
   genCode();
-  const t=document.getElementById('code-css')?.textContent||document.getElementById('m-code-css')?.textContent||'';
-  navigator.clipboard.writeText(t).then(()=>showToast('CSS copied!')).catch(()=>showToast('Copy failed'));
+  const t=document.getElementById('code-css')?.textContent||'';
+  navigator.clipboard.writeText(t).then(()=>showStatus('CSS disalin!')).catch(()=>showStatus('Gagal menyalin'));
 }
 
 // ══════════════════════════════════════
@@ -1643,20 +2000,13 @@ function resetCanvas(){
     document.getElementById('canvas').classList.remove('preview-mode');
     document.getElementById('btn-preview').classList.remove('active');
   }
-  drawGridLines();
-  renderEls();showProps(null);genCode();showToast('Canvas reset');
+  drawGridLines();renderEls();showProps(null);genCode();
+  showStatus('Canvas direset');
 }
 
 // ══════════════════════════════════════
-//  TOAST
+//  AREA CLICK
 // ══════════════════════════════════════
-function showToast(msg){
-  const t=document.getElementById('toast');
-  if(!t) return;
-  t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer=setTimeout(()=>t.classList.remove('show'),2200);
-}
 function areaClick(e){
   if(e.target===document.getElementById('canvas-area')||e.target===document.getElementById('canvas')){
     selId=null;renderEls();showProps(null);
@@ -1668,12 +2018,12 @@ function areaClick(e){
 // ══════════════════════════════════════
 document.addEventListener('keydown',e=>{
   const tag=document.activeElement.tagName;
-  if(tag==='INPUT'||tag==='TEXTAREA') return;
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;
   if(e.key==='Delete'||e.key==='Backspace') deleteSel();
   if(e.key==='Escape'){selId=null;renderEls();showProps(null);hidePicker();}
   if(e.key==='p'&&(e.ctrlKey||e.metaKey)){e.preventDefault();togglePreview();}
   if(selId&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
-    const el=elements.find(e2=>e2.id===selId);if(!el)return;
+    const el=elements.find(e2=>e2.id===selId);if(!el) return;
     const s=e.shiftKey?10:1;
     if(e.key==='ArrowLeft') el.x=Math.max(0,el.x-s);
     if(e.key==='ArrowRight') el.x=Math.min(canvasW-el.w,el.x+s);
@@ -1688,11 +2038,11 @@ document.addEventListener('keydown',e=>{
 // ══════════════════════════════════════
 window.addEventListener('load',()=>{
   document.getElementById('custom-wh').style.display='grid';
-  // Hide rows control initially (column grid has showRows:false)
+  // FIX 4: Column grid tampilkan rows
   const rcD=document.getElementById('rows-ctrl');
   const rcM=document.getElementById('m-rows-ctrl');
-  if(rcD) rcD.style.display='none';
-  if(rcM) rcM.style.display='none';
+  if(rcD) rcD.style.display='flex';
+  if(rcM) rcM.style.display='flex';
   applyRatio(false);
   syncInputs();
   showProps(null);
