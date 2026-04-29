@@ -1,333 +1,486 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Grid Design Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f0ebe4;
+  --bg:#eeeae4;
   --panel:#ffffff;
-  --border:#e0d8d0;
+  --panel2:#f7f4f0;
+  --border:#d8d0c6;
+  --border2:#c8beb2;
   --accent:#1a1a1a;
-  --accent2:#e05a5a;
+  --accent2:#d94f4f;
+  --accent3:#2563eb;
   --text:#1a1a1a;
-  --muted:#999;
-  --cell-bg:#d9d2c9;
+  --text2:#444;
+  --muted:#888;
+  --muted2:#aaa;
+  --cell-bg:rgba(180,168,155,0.38);
+  --grid-line:rgba(100,80,60,0.28);
+  --grid-line-strong:rgba(100,80,60,0.55);
   --pink:#e91e8c;
+  --green:#16a34a;
+  --blue:#2563eb;
   --safe-bottom:env(safe-area-inset-bottom,0px);
+  --shadow:0 2px 8px rgba(0,0,0,0.10),0 0 0 1px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.14),0 0 0 1px rgba(0,0,0,0.06);
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
-/* HEADER */
-header{height:52px;background:var(–panel);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:10}
-.logo{display:flex;align-items:center;gap:8px;font-family:‘DM Mono’,monospace;font-size:13px;font-weight:500}
-.logo-box{width:26px;height:26px;background:var(–text);border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:5px}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ══ HEADER ══ */
+header{
+  height:52px;background:var(--panel);border-bottom:2px solid var(--border);
+  display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:10;
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.logo{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text)}
+.logo-box{width:26px;height:26px;background:var(--text);border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:5px}
 .logo-box span{background:white;border-radius:1px;display:block}
-.header-div{width:1px;height:22px;background:var(–border)}
-.header-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.btn-reset{width:34px;height:34px;border-radius:50%;border:1px solid var(–border);background:transparent;cursor:pointer;color:var(–muted);font-size:16px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
-.btn-reset:active{border-color:var(–text);color:var(–text)}
-.btn-css{padding:8px 18px;background:var(–text);color:#fff;border:none;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
-.btn-css:active{background:#333}
+.header-div{width:1px;height:22px;background:var(--border)}
+.header-right{margin-left:auto;display:flex;gap:6px;align-items:center}
 
-/* APP LAYOUT */
-.app-body{flex:1;display:grid;grid-template-columns:260px 1fr 280px;overflow:hidden;min-height:0}
+.btn-icon{
+  width:34px;height:34px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--panel2);cursor:pointer;color:var(--text2);font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;transition:all .15s;font-weight:500;
+}
+.btn-icon:hover{border-color:var(--border2);background:var(--border);color:var(--text)}
+.btn-icon:active{transform:scale(.94)}
+.btn-icon.active{border-color:var(--blue);background:#eff6ff;color:var(--blue)}
+.btn-icon.danger:active{border-color:var(--accent2);color:var(--accent2)}
 
-/* LEFT PANEL */
-.left-panel{background:var(–panel);border-right:1px solid var(–border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
-.ps{padding:14px;border-bottom:1px solid var(–border);flex-shrink:0}
+.btn-primary{
+  padding:8px 16px;background:var(--text);color:#fff;border:none;border-radius:8px;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.btn-primary:hover{background:#333}
+.btn-primary:active{transform:scale(.96)}
+.btn-primary.green{background:var(--green)}
+.btn-primary.green:hover{background:#15803d}
+
+/* ══ APP LAYOUT ══ */
+.app-body{flex:1;display:grid;grid-template-columns:264px 1fr 284px;overflow:hidden;min-height:0}
+
+/* ══ LEFT PANEL ══ */
+.left-panel{
+  background:var(--panel);border-right:2px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;
+}
+.ps{padding:14px;border-bottom:1.5px solid var(--border);flex-shrink:0}
 .ps:last-child{border-bottom:none}
-.ps-title{font-family:‘DM Mono’,monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(–muted);margin-bottom:10px}
+.ps-title{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:500;
+}
 
 /* Size presets */
 .size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
-.sz-btn{background:transparent;border:1px solid var(–border);border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;color:var(–text);-webkit-tap-highlight-color:transparent}
-.sz-btn.active{border-color:var(–text);background:var(–text);color:#fff}
-.sz-r{font-family:‘DM Mono’,monospace;font-size:13px;font-weight:500;display:block;line-height:1.1}
-.sz-l{font-size:9px;opacity:.6;display:block;margin-top:2px}
-.sz-btn.active .sz-l{opacity:.7}
+.sz-btn{
+  background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;
+  padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;
+  color:var(--text);-webkit-tap-highlight-color:transparent;
+}
+.sz-btn:hover{border-color:var(--border2);background:var(--border)}
+.sz-btn.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.sz-r{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;display:block;line-height:1.1}
+.sz-l{font-size:9px;opacity:.65;display:block;margin-top:2px}
 .custom-wh{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.cw-inp{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:7px 8px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:11px;outline:none;width:100%;text-align:center;transition:border-color .15s}
-.cw-inp:focus{border-color:var(–text)}
+.cw-inp{
+  background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;
+  padding:7px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;
+  outline:none;width:100%;text-align:center;transition:border-color .15s;
+}
+.cw-inp:focus{border-color:var(--accent)}
 
-/* Grid system selector */
+/* Grid system */
 .grid-sys-list{display:flex;flex-direction:column;gap:5px}
-.gs-btn{background:transparent;border:1px solid var(–border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(–text);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.gs-btn.active{border-color:var(–text);background:rgba(26,26,26,.05)}
-.gs-name{font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;display:block;margin-bottom:1px}
-.gs-desc{font-size:9px;color:var(–muted);line-height:1.4}
+.gs-btn{
+  background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;
+  padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);
+  transition:all .15s;-webkit-tap-highlight-color:transparent;
+}
+.gs-btn:hover{border-color:var(--border2);background:var(--border)}
+.gs-btn.active{border-color:var(--accent);background:rgba(26,26,26,.07);box-shadow:inset 2px 0 0 var(--accent)}
+.gs-name{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;display:block;margin-bottom:1px}
+.gs-desc{font-size:9px;color:var(--muted);line-height:1.4}
 
 /* Grid controls */
 .col-row-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .nr-wrap{display:flex;flex-direction:column;gap:4px}
-.nr-label{font-family:‘DM Mono’,monospace;font-size:9px;color:var(–muted);text-transform:uppercase;letter-spacing:.12em}
-.nr-row{display:flex;align-items:center;border:1px solid var(–border);border-radius:7px;overflow:hidden;background:#f5f0eb}
-.nr-btn{width:30px;height:32px;border:none;background:transparent;cursor:pointer;font-size:16px;color:var(–text);display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .1s;font-weight:300}
-.nr-btn:active{background:rgba(0,0,0,.08)}
-.nr-val{flex:1;text-align:center;font-family:‘DM Mono’,monospace;font-size:13px;font-weight:500;border:none;background:transparent;outline:none;color:var(–text)}
+.nr-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.nr-row{
+  display:flex;align-items:center;border:1.5px solid var(--border);
+  border-radius:7px;overflow:hidden;background:var(--panel2);
+}
+.nr-btn{
+  width:30px;height:32px;border:none;background:transparent;cursor:pointer;
+  font-size:16px;color:var(--text2);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:background .1s;font-weight:400;
+}
+.nr-btn:hover{background:var(--border);color:var(--text)}
+.nr-btn:active{background:var(--border2)}
+.nr-val{
+  flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:13px;
+  font-weight:500;border:none;background:transparent;outline:none;color:var(--text);
+}
 .gap-wrap{display:flex;flex-direction:column;gap:5px}
-.gap-label{font-family:‘DM Mono’,monospace;font-size:9px;color:var(–muted);text-transform:uppercase;letter-spacing:.12em;display:flex;justify-content:space-between}
-.gap-val-disp{color:var(–text);font-weight:500}
-input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(–border);border-radius:2px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(–text);border-radius:50%;cursor:pointer}
+.gap-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;justify-content:space-between;font-weight:500}
+.gap-val-disp{color:var(--text);font-weight:600}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--text);border-radius:50%;cursor:pointer;transition:transform .1s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
-/* Element palette */
+/* Palette */
 .pal-list{display:flex;flex-direction:column;gap:5px}
-.pal-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:7px;border:1px solid var(–border);cursor:grab;transition:all .15s;background:white;-webkit-tap-highlight-color:transparent}
-.pal-item:active{border-color:var(–text);cursor:grabbing}
+.pal-item{
+  display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;
+  border:1.5px solid var(--border);cursor:grab;transition:all .15s;background:var(--panel2);
+  -webkit-tap-highlight-color:transparent;
+}
+.pal-item:hover{border-color:var(--border2);background:var(--border)}
+.pal-item:active{border-color:var(--text);cursor:grabbing;transform:scale(.98)}
 .pal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.pal-name{font-size:12px;font-weight:500;color:var(–text)}
-.pal-hint{font-size:10px;color:var(–muted)}
+.pal-name{font-size:12px;font-weight:500;color:var(--text)}
+.pal-hint{font-size:10px;color:var(--muted)}
 
-/* CANVAS AREA */
-.canvas-area{background:var(–bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;position:relative;padding:20px;-webkit-overflow-scrolling:touch;gap:10px}
-
-.canvas-size-label{font-family:‘DM Mono’,monospace;font-size:10px;color:var(–muted);flex-shrink:0;letter-spacing:.06em}
+/* ══ CANVAS AREA ══ */
+.canvas-area{
+  background:var(--bg);display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;overflow:auto;position:relative;padding:20px;
+  -webkit-overflow-scrolling:touch;gap:10px;
+}
+.canvas-size-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;letter-spacing:.06em}
 
 /* THE CANVAS */
 #canvas{
-position:relative;
-background:#ffffff;
-box-shadow:0 1px 4px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.07);
-border-radius:4px;
-flex-shrink:0;
-overflow:hidden;
-touch-action:none;
-user-select:none;
+  position:relative;background:#ffffff;
+  box-shadow:var(--shadow-lg);border-radius:4px;flex-shrink:0;
+  overflow:visible;touch-action:none;user-select:none;
 }
 
-/* GRID OVERLAY — cream cells */
-.grid-overlay{
-position:absolute;inset:0;
-pointer-events:none;
-z-index:1;
+/* Grid lines overlay */
+.grid-lines-layer{
+  position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:4px;overflow:hidden;
 }
+
+/* GRID CELLS */
+.grid-overlay{position:absolute;inset:0;pointer-events:none;z-index:1;}
 .grid-cell-bg{
-position:absolute;
-background:var(–cell-bg);
-border-radius:2px;
-/* pointer events added per cell */
-pointer-events:all;
-cursor:crosshair;
-transition:background .1s;
-display:flex;align-items:center;justify-content:center;
+  position:absolute;pointer-events:all;cursor:crosshair;
+  display:flex;align-items:center;justify-content:center;
 }
-.grid-cell-bg:hover{background:rgba(0,0,0,.18)}
+/* Plus button — no circle */
 .add-btn{
-width:26px;height:26px;border-radius:50%;
-background:rgba(255,255,255,.55);
-border:1.5px solid rgba(0,0,0,.18);
-color:rgba(0,0,0,.45);
-font-size:17px;font-weight:300;
-display:flex;align-items:center;justify-content:center;
-cursor:pointer;opacity:0;
-transition:opacity .12s;
--webkit-tap-highlight-color:transparent;
-line-height:1;
+  width:28px;height:28px;
+  color:rgba(0,0,0,0.3);font-size:22px;font-weight:300;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;transition:opacity .12s, color .12s;
+  -webkit-tap-highlight-color:transparent;line-height:1;
+  font-family:'DM Sans',sans-serif;
+  background:none;border:none;padding:0;
 }
-.grid-cell-bg:hover .add-btn{opacity:1}
-@media(hover:none){.add-btn{opacity:.45!important}}
+.grid-cell-bg:hover .add-btn{opacity:1;color:rgba(0,0,0,0.55)}
+@media(hover:none){.add-btn{opacity:.5!important}}
 
 /* DESIGN ELEMENTS */
 .design-el{
-position:absolute;
-background:#ffffff;
-border:1.5px solid rgba(0,0,0,.13);
-border-radius:3px;
-z-index:10;
-touch-action:none;
-cursor:move;
-display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
-overflow:hidden;
-transition:border-color .1s;
+  position:absolute;background:rgba(255,255,255,0.92);
+  border:2px solid rgba(0,0,0,0.15);border-radius:3px;
+  z-index:10;touch-action:none;cursor:move;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
+  overflow:visible;transition:border-color .1s,box-shadow .1s;
+  backdrop-filter:blur(2px);
 }
-.design-el.selected{
-border-color:var(–text);
-z-index:20;
-}
-.design-el.dragging{opacity:.88;z-index:100;cursor:grabbing}
+.design-el:hover{border-color:rgba(0,0,0,0.3);box-shadow:0 2px 12px rgba(0,0,0,0.12)}
+.design-el.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,0.2);z-index:20}
+.design-el.dragging{opacity:.85;z-index:100;cursor:grabbing;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
 
 /* element content */
-.el-lbl{font-family:‘DM Mono’,monospace;font-size:8px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:rgba(0,0,0,.35);pointer-events:none;line-height:1}
-.el-prev{font-family:‘DM Sans’,sans-serif;font-size:11px;color:rgba(0,0,0,.65);text-align:center;padding:0 6px;pointer-events:none;line-height:1.35;max-width:100%;overflow:hidden;word-break:break-word}
+.el-lbl{
+  font-family:'DM Mono',monospace;font-size:8px;font-weight:500;text-transform:uppercase;
+  letter-spacing:.12em;color:rgba(0,0,0,0.3);pointer-events:none;line-height:1;
+  position:absolute;top:5px;left:7px;
+}
+.el-prev{
+  font-family:'DM Sans',sans-serif;font-size:11px;color:rgba(0,0,0,0.65);
+  text-align:center;padding:4px 8px;pointer-events:none;line-height:1.35;
+  max-width:100%;overflow:hidden;word-break:break-word;
+}
 
-/* CLOSE button — pink circle */
+/* CLOSE ✕ — top right */
 .el-close{
-position:absolute;top:-10px;right:-10px;
-width:22px;height:22px;border-radius:50%;
-background:var(–pink);border:2px solid #fff;
-color:#fff;font-size:11px;
-display:flex;align-items:center;justify-content:center;
-cursor:pointer;z-index:50;
-box-shadow:0 1px 4px rgba(0,0,0,.25);
-opacity:0;transition:opacity .15s;
--webkit-tap-highlight-color:transparent;
-line-height:1;
+  position:absolute;top:-10px;right:-10px;width:22px;height:22px;border-radius:50%;
+  background:var(--accent2);border:2px solid #fff;color:#fff;font-size:11px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;
+  box-shadow:0 1px 4px rgba(0,0,0,0.25);opacity:0;transition:opacity .15s;
+  -webkit-tap-highlight-color:transparent;line-height:1;
 }
 .design-el.selected .el-close,
 .design-el:hover .el-close{opacity:1}
 
-/* RESIZE handle — bottom-right L-bracket */
-.el-resize{
-position:absolute;bottom:-6px;right:-6px;
-width:18px;height:18px;
-cursor:se-resize;z-index:50;
-opacity:0;transition:opacity .15s;
-touch-action:none;
+/* RESIZE handles — BR and BL */
+.el-resize-br,.el-resize-bl{
+  position:absolute;bottom:-7px;width:20px;height:20px;
+  cursor:se-resize;z-index:50;opacity:0;transition:opacity .15s;touch-action:none;
 }
-.design-el.selected .el-resize,
-.design-el:hover .el-resize{opacity:1}
-.el-resize::before{
-content:’’;position:absolute;
-bottom:3px;right:3px;
-width:9px;height:9px;
-border-right:2.5px solid var(–text);
-border-bottom:2.5px solid var(–text);
-border-radius:0 0 2px 0;
+.el-resize-br{right:-7px;cursor:se-resize}
+.el-resize-bl{left:-7px;cursor:sw-resize}
+.design-el.selected .el-resize-br,
+.design-el.selected .el-resize-bl,
+.design-el:hover .el-resize-br,
+.design-el:hover .el-resize-bl{opacity:1}
+/* L-bracket icons */
+.el-resize-br::before{
+  content:'';position:absolute;bottom:3px;right:3px;
+  width:10px;height:10px;
+  border-right:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);
+  border-radius:0 0 2px 0;
+}
+.el-resize-bl::before{
+  content:'';position:absolute;bottom:3px;left:3px;
+  width:10px;height:10px;
+  border-left:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);
+  border-radius:0 0 0 2px;
 }
 
-/* element type styles */
-.el-headline .el-prev{font-family:‘Playfair Display’,serif;font-size:15px;font-weight:700;color:#1a1a1a}
-.el-subheadline .el-prev{font-size:12px;color:#333}
-.el-description .el-prev{font-size:10px;color:#888;line-height:1.5}
-.el-footer .el-prev{font-family:‘DM Mono’,monospace;font-size:9px;color:#999}
-.el-visualhook{background:rgba(233,30,140,.04)!important;border-color:rgba(233,30,140,.25)!important}
-.el-visualhook .el-prev{font-size:20px;color:var(–pink)}
+/* type styles */
+.el-headline .el-prev{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#1a1a1a}
+.el-subheadline .el-prev{font-size:12px;color:#333;font-weight:500}
+.el-description .el-prev{font-size:10px;color:#666;line-height:1.5}
+.el-footer .el-prev{font-family:'DM Mono',monospace;font-size:9px;color:#999}
+.el-visualhook{background:rgba(233,30,140,0.05)!important;border-color:rgba(233,30,140,0.3)!important}
+.el-visualhook .el-prev{font-size:22px;color:var(--pink)}
 
-/* RIGHT PANEL */
-.right-panel{background:var(–panel);border-left:1px solid var(–border);display:flex;flex-direction:column;overflow:hidden}
-.r-tabs{display:flex;border-bottom:1px solid var(–border);flex-shrink:0}
-.r-tab{flex:1;padding:14px 8px;font-size:10px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.1em;color:var(–muted);background:transparent;border:none;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.r-tab.active{color:var(–text);border-bottom:2px solid var(–text)}
+/* ══ RIGHT PANEL ══ */
+.right-panel{background:var(--panel);border-left:2px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.r-tabs{display:flex;border-bottom:2px solid var(--border);flex-shrink:0;background:var(--panel2)}
+.r-tab{
+  flex:1;padding:13px 8px;font-size:10px;font-family:'DM Mono',monospace;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--muted);
+  background:transparent;border:none;cursor:pointer;transition:all .15s;
+  -webkit-tap-highlight-color:transparent;font-weight:500;border-bottom:2px solid transparent;margin-bottom:-2px;
+}
+.r-tab:hover{color:var(--text2)}
+.r-tab.active{color:var(--text);border-bottom-color:var(--text);background:var(--panel)}
 .tab-body{flex:1;overflow-y:auto;padding:16px 14px}
-.tp{display:none}
-.tp.active{display:block}
-.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;color:var(–muted);font-size:11px;text-align:center;gap:10px;line-height:1.6}
-.no-sel-icon{font-size:28px;opacity:.18}
+.tp{display:none}.tp.active{display:block}
+.no-sel{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:180px;color:var(--muted);font-size:11px;text-align:center;gap:10px;line-height:1.6;
+}
+.no-sel-icon{font-size:28px;opacity:.2}
 .pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.pr-label{font-size:9px;color:var(–muted);font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.12em}
-.pr-inp{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:8px 10px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
-.pr-inp:focus{border-color:var(–text)}
+.pr-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.pr-inp{
+  background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;
+  padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;
+  outline:none;width:100%;transition:border-color .15s;
+}
+.pr-inp:focus{border-color:var(--accent)}
 .pr2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .pm{display:flex;flex-direction:column;gap:4px}
 .pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.pos-box{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:8px;text-align:center}
-.pos-box-l{font-family:‘DM Mono’,monospace;font-size:8px;color:var(–muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px}
-.pos-box-v{font-family:‘DM Mono’,monospace;font-size:13px;color:var(–text);font-weight:500}
-.code-blk{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:12px;margin-bottom:10px}
-.code-lbl{font-family:‘DM Mono’,monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:7px}
-.code-txt{font-family:‘DM Mono’,monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:180px;overflow-y:auto}
-.copy-btn{width:100%;margin-top:8px;padding:8px;background:var(–text);border:none;border-radius:20px;color:#fff;font-family:‘DM Mono’,monospace;font-size:10px;cursor:pointer;transition:background .15s}
-.copy-btn:active{background:#444}
-.del-btn{width:100%;padding:10px;background:transparent;border:1px solid var(–accent2);border-radius:20px;color:var(–accent2);font-family:‘DM Mono’,monospace;font-size:11px;cursor:pointer;margin-top:4px;transition:all .15s}
-.del-btn:active{background:var(–accent2);color:#fff}
-
-/* ELEMENT PICKER */
-.picker{position:fixed;background:#fff;border:1px solid var(–border);border-radius:12px;padding:12px;z-index:3000;box-shadow:0 8px 32px rgba(0,0,0,.12);display:none;width:195px;animation:pickerIn .12s ease}
-@keyframes pickerIn{from{opacity:0;transform:scale(.93) translateY(-4px)}to{opacity:1;transform:none}}
-.picker-ttl{font-family:‘DM Mono’,monospace;font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(–muted);margin-bottom:8px}
-.picker-list{display:flex;flex-direction:column;gap:4px}
-.picker-itm{padding:8px 10px;border-radius:7px;border:1px solid var(–border);cursor:pointer;display:flex;align-items:center;gap:9px;transition:all .1s;-webkit-tap-highlight-color:transparent}
-.picker-itm:active{border-color:var(–text);background:#f5f0eb}
-.picker-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.picker-n{font-size:12px;font-weight:500;color:var(–text)}
-.picker-s{font-size:9px;color:var(–muted)}
-
-/* MOBILE NAV */
-.mob-nav{display:none;height:56px;background:var(–panel);border-top:1px solid var(–border);flex-shrink:0}
-.mob-nav-items{display:flex;height:56px}
-.mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;background:transparent;border:none;color:var(–muted);font-size:9px;font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.05em;-webkit-tap-highlight-color:transparent;transition:color .15s}
-.mob-nav-btn.active{color:var(–text)}
-.mob-nav-ico{font-size:18px;line-height:1}
-
-/* DRAWER */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;opacity:0;transition:opacity .22s}
-.overlay.vis{opacity:1}
-.drawer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(–border);border-radius:16px 16px 0 0;z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);max-height:86vh;display:flex;flex-direction:column;padding-bottom:calc(var(–safe-bottom)+8px)}
-.drawer.open{transform:translateY(0)}
-.drw-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:10px auto 0;flex-shrink:0}
-.drw-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;flex-shrink:0;border-bottom:1px solid var(–border)}
-.drw-title{font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em}
-.drw-cls{width:28px;height:28px;border-radius:50%;background:var(–border);border:none;color:var(–muted);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
-
-/* mobile shared */
-.m-sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px}
-.m-col-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.m-el-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.m-el-item{padding:13px 8px;border:1px solid var(–border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .12s;background:white}
-.m-el-item:active{border-color:var(–text);background:#f5f0eb}
-.m-el-item.fw{grid-column:1/-1}
-.m-el-ico{font-size:20px}
-.m-el-n{font-size:11px;font-weight:500}
-.m-el-h{font-size:9px;color:var(–muted)}
-.m-pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.m-prl{font-size:9px;color:var(–muted);font-family:‘DM Mono’,monospace;text-transform:uppercase;letter-spacing:.12em}
-.m-pri{background:#f5f0eb;border:1px solid var(–border);border-radius:6px;padding:10px 12px;color:var(–text);font-family:‘DM Mono’,monospace;font-size:13px;outline:none;width:100%}
-.m-pr2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.m-pm{display:flex;flex-direction:column;gap:5px}
-.m-cb{background:#f5f0eb;border:1px solid var(–border);border-radius:8px;padding:12px;margin-bottom:12px}
-.m-cl{font-family:‘DM Mono’,monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(–muted);margin-bottom:8px}
-.m-ct{font-family:‘DM Mono’,monospace;font-size:10px;color:#2a7a2a;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto}
-.m-cpb{width:100%;margin-top:10px;padding:12px;background:var(–text);color:#fff;border:none;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
-
-/* mobile grid sys */
-.m-gs-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.m-gs-btn{background:transparent;border:1px solid var(–border);border-radius:7px;padding:9px 11px;cursor:pointer;text-align:left;color:var(–text);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.m-gs-btn.active{border-color:var(–text);background:rgba(26,26,26,.05)}
-
-/* TOAST */
-.toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(60px);background:var(–text);color:#fff;padding:9px 20px;border-radius:20px;font-family:‘DM Mono’,monospace;font-size:11px;font-weight:500;z-index:9999;transition:transform .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(–border);border-radius:2px}
-
-/* ── SNAP GUIDE LINES ── */
-.snap-guide{
-position:absolute;
-pointer-events:none;
-z-index:200;
-background:#e05a5a;
-opacity:0;
-transition:opacity .06s;
+.pos-box{background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;padding:8px;text-align:center}
+.pos-box-l{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px;font-weight:500}
+.pos-box-v{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);font-weight:600}
+.code-blk{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px}
+.code-lbl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:7px;font-weight:500}
+.code-txt{font-family:'DM Mono',monospace;font-size:10px;color:#166534;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:180px;overflow-y:auto}
+.copy-btn{
+  width:100%;margin-top:8px;padding:8px;background:var(--text);border:none;
+  border-radius:8px;color:#fff;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:background .15s;font-weight:500;
 }
+.copy-btn:hover{background:#333}
+.del-btn{
+  width:100%;padding:10px;background:transparent;border:1.5px solid var(--accent2);
+  border-radius:8px;color:var(--accent2);font-family:'DM Mono',monospace;font-size:11px;
+  cursor:pointer;margin-top:4px;transition:all .15s;font-weight:500;
+}
+.del-btn:hover{background:var(--accent2);color:#fff}
+
+/* ══ SNAP GUIDES ══ */
+.snap-guide{position:absolute;pointer-events:none;z-index:200;background:#e05a5a;opacity:0;transition:opacity .06s}
 .snap-guide.vis{opacity:1}
 .snap-guide.h{left:0;right:0;height:1px}
 .snap-guide.v{top:0;bottom:0;width:1px}
-/* ghost preview cell highlight */
 .snap-preview{
-position:absolute;
-pointer-events:none;
-z-index:90;
-border:1.5px dashed #e05a5a;
-border-radius:3px;
-background:rgba(224,90,90,.07);
-display:none;
+  position:absolute;pointer-events:none;z-index:90;
+  border:2px dashed #2563eb;border-radius:3px;
+  background:rgba(37,99,235,0.06);display:none;
 }
 
+/* ══ PREVIEW MODE ══ */
+#canvas.preview-mode .grid-lines-layer,
+#canvas.preview-mode .grid-overlay,
+#canvas.preview-mode .snap-guide{display:none!important}
+#canvas.preview-mode .design-el{
+  border:none!important;box-shadow:none!important;cursor:default;
+}
+#canvas.preview-mode .el-lbl,
+#canvas.preview-mode .el-close,
+#canvas.preview-mode .el-resize-br,
+#canvas.preview-mode .el-resize-bl,
+#canvas.preview-mode .snap-preview{display:none!important}
+#canvas.preview-mode .el-prev{font-size:inherit}
+
+/* ══ MOBILE NAV ══ */
+.mob-nav{display:none;height:56px;background:var(--panel);border-top:2px solid var(--border);flex-shrink:0;box-shadow:0 -2px 8px rgba(0,0,0,0.06)}
+.mob-nav-items{display:flex;height:56px}
+.mob-nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;background:transparent;border:none;color:var(--muted);
+  font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;
+  -webkit-tap-highlight-color:transparent;transition:color .15s;font-weight:500;
+}
+.mob-nav-btn.active{color:var(--text)}
+.mob-nav-ico{font-size:18px;line-height:1}
+
+/* ══ DRAWER ══ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;opacity:0;transition:opacity .22s}
+.overlay.vis{opacity:1}
+.drawer{
+  position:fixed;bottom:0;left:0;right:0;background:var(--panel);
+  border-top:2px solid var(--border);border-radius:16px 16px 0 0;
+  z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);
+  max-height:86vh;display:flex;flex-direction:column;
+  padding-bottom:calc(var(--safe-bottom)+8px);
+  box-shadow:0 -4px 32px rgba(0,0,0,0.12);
+}
+.drawer.open{transform:translateY(0)}
+.drw-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.drw-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px 10px;flex-shrink:0;border-bottom:1.5px solid var(--border);
+}
+.drw-title{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--text)}
+.drw-cls{
+  width:28px;height:28px;border-radius:8px;background:var(--panel2);
+  border:1.5px solid var(--border);color:var(--muted);font-size:16px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:all .15s;
+}
+.drw-cls:hover{color:var(--text);border-color:var(--border2)}
+.drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+
+/* mobile grid */
+.m-sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px}
+.m-col-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.m-el-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m-el-item{
+  padding:13px 8px;border:1.5px solid var(--border);border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;
+  transition:all .12s;background:var(--panel2);
+}
+.m-el-item:active{border-color:var(--text);background:var(--border)}
+.m-el-item.fw{grid-column:1/-1}
+.m-el-ico{font-size:20px}
+.m-el-n{font-size:11px;font-weight:500}
+.m-el-h{font-size:9px;color:var(--muted)}
+.m-pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.m-prl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.m-pri{background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%;transition:border-color .15s}
+.m-pri:focus{border-color:var(--accent)}
+.m-pr2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.m-pm{display:flex;flex-direction:column;gap:5px}
+.m-cb{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
+.m-cl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:8px;font-weight:500}
+.m-ct{font-family:'DM Mono',monospace;font-size:10px;color:#166534;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto}
+.m-cpb{width:100%;margin-top:10px;padding:12px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.m-gs-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.m-gs-btn{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.m-gs-btn.active{border-color:var(--accent);background:rgba(26,26,26,.07);box-shadow:inset 2px 0 0 var(--accent)}
+
+/* ══ PICKER ══ */
+.picker{
+  position:fixed;background:var(--panel);border:1.5px solid var(--border);
+  border-radius:12px;padding:12px;z-index:3000;
+  box-shadow:var(--shadow-lg);display:none;width:195px;
+  animation:pickerIn .12s ease;
+}
+@keyframes pickerIn{from{opacity:0;transform:scale(.93) translateY(-4px)}to{opacity:1;transform:none}}
+.picker-ttl{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:8px;font-weight:500}
+.picker-list{display:flex;flex-direction:column;gap:4px}
+.picker-itm{
+  padding:8px 10px;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;
+  display:flex;align-items:center;gap:9px;transition:all .1s;-webkit-tap-highlight-color:transparent;
+  background:var(--panel2);
+}
+.picker-itm:hover{border-color:var(--border2);background:var(--border)}
+.picker-itm:active{border-color:var(--text);background:var(--panel2)}
+.picker-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.picker-n{font-size:12px;font-weight:500;color:var(--text)}
+.picker-s{font-size:9px;color:var(--muted)}
+
+/* ══ TOAST ══ */
+.toast{
+  position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(60px);
+  background:var(--text);color:#fff;padding:9px 20px;border-radius:20px;
+  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;z-index:9999;
+  transition:transform .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(0,0,0,0.2);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ══ LOADING OVERLAY ══ */
+.loading-overlay{
+  position:fixed;inset:0;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);
+  z-index:9998;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+}
+.loading-overlay.show{display:flex}
+.loading-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
+.loading-text{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);font-weight:500}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══ SECTION DIVIDER ══ */
+.section-divider{height:1.5px;background:var(--border);margin:10px 0}
+
+/* ══ BADGE ══ */
+.badge{
+  display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.05em;
+  background:var(--panel2);border:1px solid var(--border);color:var(--muted);
+}
+.badge.blue{background:#eff6ff;border-color:#bfdbfe;color:var(--blue)}
+.badge.green{background:#f0fdf4;border-color:#bbf7d0;color:var(--green)}
+
+/* ══ RESPONSIVE ══ */
 @media(max-width:900px){
-.app-body{grid-template-columns:240px 1fr}
-.right-panel{display:none}
+  .app-body{grid-template-columns:240px 1fr}
+  .right-panel{display:none}
 }
 @media(max-width:640px){
-header{padding:0 12px}
-.app-body{grid-template-columns:1fr}
-.left-panel,.right-panel{display:none}
-.mob-nav{display:block}
-.canvas-area{padding:10px;align-items:flex-start}
-.toast{bottom:64px}
+  header{padding:0 12px}
+  .app-body{grid-template-columns:1fr}
+  .left-panel,.right-panel{display:none}
+  .mob-nav{display:block}
+  .canvas-area{padding:10px;align-items:flex-start}
+  .toast{bottom:64px}
 }
 </style>
-
 </head>
 <body>
+
+<!-- ══ LOADING ══ -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loading-text">Exporting PDF…</div>
+</div>
 
 <header>
   <div class="logo">
@@ -336,25 +489,24 @@ header{padding:0 12px}
   </div>
   <div class="header-div"></div>
   <div class="header-right">
-    <button class="btn-reset" onclick="resetCanvas()" title="Reset">↺</button>
-    <button class="btn-css" onclick="copyCSS()">Copy CSS</button>
+    <button class="btn-icon danger" onclick="resetCanvas()" title="Reset canvas">↺</button>
+    <button class="btn-icon" id="btn-preview" onclick="togglePreview()" title="Preview mode (hides grid)">◉</button>
+    <button class="btn-primary green" onclick="exportPDF()" title="Export PDF">⬇ Export PDF</button>
   </div>
 </header>
 
 <div class="app-body">
 
-<!-- ══ LEFT ══ -->
-
+<!-- ══ LEFT PANEL ══ -->
 <div class="left-panel">
 
   <!-- Canvas Size -->
-
   <div class="ps">
     <div class="ps-title">Canvas Size</div>
     <div class="size-grid">
       <button class="sz-btn" onclick="setRatio('1:1',this)"><span class="sz-r">1:1</span><span class="sz-l">Square</span></button>
       <button class="sz-btn" onclick="setRatio('4:5',this)"><span class="sz-r">4:5</span><span class="sz-l">Portrait</span></button>
-      <button class="sz-btn" onclick="setRatio('9:16',this)"><span class="sz-r">9:16</span><span class="sz-l">Story / Reel</span></button>
+      <button class="sz-btn" onclick="setRatio('9:16',this)"><span class="sz-r">9:16</span><span class="sz-l">Story/Reel</span></button>
       <button class="sz-btn active" onclick="setRatio('custom',this)"><span class="sz-r">⊡</span><span class="sz-l">Custom</span></button>
     </div>
     <div class="custom-wh" id="custom-wh">
@@ -364,33 +516,27 @@ header{padding:0 12px}
   </div>
 
   <!-- Grid System -->
-
   <div class="ps">
     <div class="ps-title">Grid System</div>
     <div class="grid-sys-list">
       <button class="gs-btn active" onclick="setGridSystem('column',this)">
-        <span class="gs-name">Column Grid</span>
-        <span class="gs-desc">Classic editorial columns, same width</span>
+        <span class="gs-name">Column Grid</span><span class="gs-desc">Editorial columns, same width</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('modular',this)">
-        <span class="gs-name">Modular Grid</span>
-        <span class="gs-desc">Equal rows × columns matrix</span>
+        <span class="gs-name">Modular Grid</span><span class="gs-desc">Equal rows × columns matrix</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('hierarchy',this)">
-        <span class="gs-name">Hierarchy Grid</span>
-        <span class="gs-desc">Unequal zones — 2fr + 1fr, 4 rows</span>
+        <span class="gs-name">Hierarchy Grid</span><span class="gs-desc">Unequal zones — 2fr + 1fr, 4 rows</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('golden',this)">
-        <span class="gs-name">Golden Ratio</span>
-        <span class="gs-desc">φ = 1.618 harmonic columns</span>
+        <span class="gs-name">Golden Ratio</span><span class="gs-desc">φ = 1.618 harmonic columns</span>
       </button>
     </div>
   </div>
 
   <!-- Grid Controls -->
-
   <div class="ps" id="manual-ctrl">
-    <div class="ps-title">Grid</div>
+    <div class="ps-title">Grid Controls</div>
     <div class="col-row-wrap">
       <div class="nr-wrap">
         <div class="nr-label">Columns</div>
@@ -416,9 +562,8 @@ header{padding:0 12px}
   </div>
 
   <!-- Elements -->
-
   <div class="ps">
-    <div class="ps-title">Elements — drag to canvas</div>
+    <div class="ps-title">Elements — drag or click + on canvas</div>
     <div class="pal-list">
       <div class="pal-item" draggable="true" ondragstart="palDragStart('headline',event)">
         <div class="pal-dot" style="background:#1a1a1a"></div>
@@ -429,7 +574,7 @@ header{padding:0 12px}
         <div><div class="pal-name">Sub Headline</div><div class="pal-hint">Supporting</div></div>
       </div>
       <div class="pal-item" draggable="true" ondragstart="palDragStart('description',event)">
-        <div class="pal-dot" style="background:#999"></div>
+        <div class="pal-dot" style="background:#888"></div>
         <div><div class="pal-name">Description</div><div class="pal-hint">Body copy</div></div>
       </div>
       <div class="pal-item" draggable="true" ondragstart="palDragStart('footer',event)">
@@ -445,7 +590,6 @@ header{padding:0 12px}
 </div>
 
 <!-- ══ CANVAS ══ -->
-
 <div class="canvas-area" id="canvas-area"
      ondragover="event.preventDefault()"
      ondrop="palDrop(event)"
@@ -453,13 +597,13 @@ header{padding:0 12px}
   <div class="canvas-size-label" id="cv-lbl">540 × 400 px</div>
   <div id="canvas">
     <div class="grid-overlay" id="grid-overlay"></div>
+    <canvas class="grid-lines-layer" id="grid-lines-canvas"></canvas>
     <div id="snap-guide-layer" style="position:absolute;inset:0;pointer-events:none;z-index:200;overflow:hidden"></div>
     <div class="snap-preview" id="snap-preview"></div>
   </div>
 </div>
 
-<!-- ══ RIGHT ══ -->
-
+<!-- ══ RIGHT PANEL ══ -->
 <div class="right-panel">
   <div class="r-tabs">
     <button class="r-tab active" onclick="switchTab('props',this)">Properties</button>
@@ -469,10 +613,11 @@ header{padding:0 12px}
     <div class="tp active" id="tp-props">
       <div id="no-sel" class="no-sel">
         <div class="no-sel-icon">◱</div>
-        <div>Select an element<br>to edit properties</div>
+        <div>Select or double-tap an element<br>to edit properties</div>
       </div>
       <div id="props-form" style="display:none">
-        <div class="pr"><div class="pr-label">Type</div>
+        <div class="pr">
+          <div class="pr-label">Type</div>
           <div id="pr-type" style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;padding:2px 0"></div>
         </div>
         <div class="pr"><div class="pr-label">Content</div>
@@ -504,8 +649,7 @@ header{padding:0 12px}
 </div>
 </div>
 
-<!-- MOBILE NAV -->
-
+<!-- ══ MOBILE NAV ══ -->
 <nav class="mob-nav">
   <div class="mob-nav-items">
     <button class="mob-nav-btn" onclick="openDrw('grid')" id="mn-grid"><span class="mob-nav-ico">⊞</span>Grid</button>
@@ -518,7 +662,6 @@ header{padding:0 12px}
 <div class="overlay" id="overlay" onclick="closeDrw()"></div>
 
 <!-- DRAWER: GRID -->
-
 <div class="drawer" id="drw-grid">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Grid & Canvas</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
@@ -560,16 +703,19 @@ header{padding:0 12px}
       <div class="gap-label">Gap <span class="gap-val-disp" id="gap-disp-m">8px</span></div>
       <input type="range" id="gap-sl-m" min="0" max="40" value="8" oninput="onGap('m')">
     </div>
+    <div style="margin-top:14px;display:flex;gap:8px">
+      <button class="btn-primary" style="flex:1;justify-content:center" onclick="togglePreview();closeDrw()">◉ Preview</button>
+      <button class="btn-primary green" style="flex:1;justify-content:center" onclick="exportPDF();closeDrw()">⬇ Export PDF</button>
+    </div>
   </div>
 </div>
 
 <!-- DRAWER: ADD -->
-
 <div class="drawer" id="drw-add">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Add Element</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
   <div class="drw-body">
-    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap to place at grid origin. Then drag to move, or drag corner handle to resize.</p>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5">Tap to place at grid origin. Drag or tap handles to move/resize.</p>
     <div class="m-el-grid">
       <div class="m-el-item" onclick="mobPlace('headline')"><div class="m-el-ico">𝗛</div><div class="m-el-n">Headline</div><div class="m-el-h">Primary title</div></div>
       <div class="m-el-item" onclick="mobPlace('subheadline')"><div class="m-el-ico">𝗦</div><div class="m-el-n">Sub Headline</div><div class="m-el-h">Supporting</div></div>
@@ -581,12 +727,11 @@ header{padding:0 12px}
 </div>
 
 <!-- DRAWER: PROPS -->
-
 <div class="drawer" id="drw-props">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title" id="m-prop-title">Properties</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
   <div class="drw-body">
-    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Tap any element on the canvas<br>to edit its properties</div>
+    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Double-tap any element on the canvas<br>to edit its properties</div>
     <div id="m-props-form" style="display:none">
       <div class="m-pr"><div class="m-prl">Content</div><input class="m-pri" id="m-pr-content" oninput="updContent('m')"></div>
       <div class="m-pr2">
@@ -603,7 +748,6 @@ header{padding:0 12px}
 </div>
 
 <!-- DRAWER: CODE -->
-
 <div class="drawer" id="drw-code">
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title">Generated Code</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
@@ -614,13 +758,12 @@ header{padding:0 12px}
 </div>
 
 <!-- PICKER -->
-
 <div class="picker" id="picker">
   <div class="picker-ttl">Add Element</div>
   <div class="picker-list">
     <div class="picker-itm" onclick="pickerPick('headline')"><div class="picker-dot" style="background:#1a1a1a"></div><div><div class="picker-n">Headline</div><div class="picker-s">Primary title</div></div></div>
     <div class="picker-itm" onclick="pickerPick('subheadline')"><div class="picker-dot" style="background:#555"></div><div><div class="picker-n">Sub Headline</div><div class="picker-s">Supporting</div></div></div>
-    <div class="picker-itm" onclick="pickerPick('description')"><div class="picker-dot" style="background:#999"></div><div><div class="picker-n">Description</div><div class="picker-s">Body copy</div></div></div>
+    <div class="picker-itm" onclick="pickerPick('description')"><div class="picker-dot" style="background:#888"></div><div><div class="picker-n">Description</div><div class="picker-s">Body copy</div></div></div>
     <div class="picker-itm" onclick="pickerPick('footer')"><div class="picker-dot" style="background:#bbb"></div><div><div class="picker-n">Footer</div><div class="picker-s">Bottom zone</div></div></div>
     <div class="picker-itm" onclick="pickerPick('visualhook')"><div class="picker-dot" style="background:#e91e8c"></div><div><div class="picker-n">Visual Hook</div><div class="picker-s">Image / CTA</div></div></div>
   </div>
@@ -629,153 +772,165 @@ header{padding:0 12px}
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  STATE
-// ════════════════════════════════
+// ══════════════════════════════════════
 let cols=5, rows=5, gap=8;
 let canvasW=540, canvasH=400;
 let ratio='custom';
-let gridSystem='column'; // column | modular | hierarchy | golden
+let gridSystem='column';
 let elements=[], selId=null, eid=0;
 let pendDrop={x:0,y:0};
 let palType=null;
+let isPreview=false;
 
-// element defaults (fraction of canvas)
+// logical (full-res) canvas dims for export
+let logicalW=540, logicalH=400;
+
 const EL_DEF={
   headline:    {lbl:'Headline',    content:'Your Headline',          fw:.55, fh:.16, dot:'#1a1a1a'},
   subheadline: {lbl:'Sub Headline',content:'Supporting subtitle',    fw:.4,  fh:.12, dot:'#555'},
-  description: {lbl:'Description', content:'Body copy goes here.',   fw:.38, fh:.27, dot:'#999'},
+  description: {lbl:'Description', content:'Body copy goes here.',   fw:.38, fh:.27, dot:'#888'},
   footer:      {lbl:'Footer',      content:'© 2025 Brand · Privacy', fw:1.0, fh:.13, dot:'#bbb'},
   visualhook:  {lbl:'Visual Hook', content:'◈',                      fw:.35, fh:.42, dot:'#e91e8c'},
 };
 
-// Grid system presets
 const GS={
-  column:   {cols:5,  rows:1,  showRows:false, desc:'Column Grid'},
-  modular:  {cols:5,  rows:5,  showRows:true,  desc:'Modular Grid'},
-  hierarchy:{cols:2,  rows:4,  showRows:false, desc:'Hierarchy Grid'},
-  golden:   {cols:2,  rows:3,  showRows:false, desc:'Golden Ratio'},
+  column:   {cols:5,  rows:1,  showRows:false},
+  modular:  {cols:5,  rows:5,  showRows:true},
+  hierarchy:{cols:2,  rows:4,  showRows:false},
+  golden:   {cols:2,  rows:3,  showRows:false},
 };
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  CANVAS SIZE
-// ════════════════════════════════
+// ══════════════════════════════════════
 const RATIOS={'1:1':1,'4:5':5/4,'9:16':16/9};
+const LOGICAL_BASE=600; // px for export
 
 function dispW(){
   const area=document.getElementById('canvas-area');
   const mob=window.innerWidth<=640;
-  return Math.max(200, Math.min(mob?area.clientWidth-20:area.clientWidth-48, mob?400:640));
+  return Math.max(200,Math.min(mob?area.clientWidth-20:area.clientWidth-48,mob?380:620));
 }
 
 function setRatio(r,btn,ctx){
   ratio=r;
-  document.querySelectorAll('.sz-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.sz-btn').forEach(b=>{
     const fn=b.getAttribute('onclick')||'';
-    if(fn.includes(`'${r}'`)) b.classList.add('active');
+    b.classList.toggle('active',fn.includes(`'${r}'`));
   });
   const cwhEl=document.getElementById('custom-wh');
-  if(cwhEl) cwhEl.style.display=r==='custom'?'grid':'none';
-  applyRatio();
+  if(cwhEl)cwhEl.style.display=r==='custom'?'grid':'none';
+  applyRatio(true);
 }
 
-function applyRatio(){
+function applyRatio(rescaleElements){
   const dw=dispW();
   const maxH=window.innerWidth<=640?460:560;
+  const oldW=canvasW, oldH=canvasH;
+
   if(ratio==='custom'){
     const iw=parseInt(document.getElementById('cw').value)||540;
     const ih=parseInt(document.getElementById('ch').value)||400;
     const sc=Math.min(1,dw/iw,maxH/ih);
     canvasW=Math.round(iw*sc);
     canvasH=Math.round(ih*sc);
+    logicalW=iw; logicalH=ih;
   } else {
     canvasW=dw;
     canvasH=Math.min(maxH,Math.round(dw*RATIOS[ratio]));
     if(canvasH>=maxH) canvasW=Math.round(maxH/RATIOS[ratio]);
+    logicalW=LOGICAL_BASE;
+    logicalH=Math.round(LOGICAL_BASE*RATIOS[ratio]);
   }
+
   const cv=document.getElementById('canvas');
-  cv.style.width=canvasW+'px'; cv.style.height=canvasH+'px';
+  cv.style.width=canvasW+'px';
+  cv.style.height=canvasH+'px';
   document.getElementById('cv-lbl').textContent=`${canvasW} × ${canvasH} px`;
+
+  // Rescale elements proportionally
+  if(rescaleElements && elements.length>0 && oldW>0 && oldH>0){
+    const sx=canvasW/oldW, sy=canvasH/oldH;
+    elements.forEach(el=>{
+      el.x=Math.round(el.x*sx);
+      el.y=Math.round(el.y*sy);
+      el.w=Math.round(el.w*sx);
+      el.h=Math.round(el.h*sy);
+    });
+  }
+
+  invalidateSnapCache();
   buildGrid();
   renderEls();
   genCode();
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  GRID SYSTEM
-// ════════════════════════════════
+// ══════════════════════════════════════
 function setGridSystem(gs,btn,ctx){
   gridSystem=gs;
-  // sync all gs buttons
-  document.querySelectorAll('.gs-btn,.m-gs-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.gs-btn,.m-gs-btn').forEach(b=>{
     const fn=b.getAttribute('onclick')||'';
-    if(fn.includes(`'${gs}'`)) b.classList.add('active');
+    b.classList.toggle('active',fn.includes(`'${gs}'`));
   });
   const preset=GS[gs];
   cols=preset.cols; rows=preset.rows;
-  // apply golden gap if golden
   if(gs==='golden') gap=0;
   syncInputs();
-  // show/hide row control based on grid system
   const showR=preset.showRows;
   const rcD=document.getElementById('rows-ctrl');
   const rcM=document.getElementById('m-rows-ctrl');
-  if(rcD) rcD.style.display=showR?'block':'none';
-  if(rcM) rcM.style.display=showR?'block':'none';
+  if(rcD)rcD.style.display=showR?'block':'none';
+  if(rcM)rcM.style.display=showR?'block':'none';
   elements=[]; selId=null;
+  invalidateSnapCache();
   buildGrid(); renderEls(); genCode(); showProps(null);
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  GRID CONTROLS
-// ════════════════════════════════
+// ══════════════════════════════════════
 function step(which,delta){
   if(which==='cols') cols=Math.max(1,Math.min(20,cols+delta));
   else rows=Math.max(1,Math.min(20,rows+delta));
-  syncInputs(); buildGrid(); renderEls(); genCode();
+  syncInputs(); invalidateSnapCache(); buildGrid(); renderEls(); genCode();
 }
 function onNR(which,ctx){
-  const id=ctx==='m'?`${which==='cols'?'cols':'rows'}-m`:`${which==='cols'?'cols':'rows'}-d`;
+  const id=which==='cols'?(ctx==='m'?'cols-m':'cols-d'):(ctx==='m'?'rows-m':'rows-d');
   const v=Math.max(1,Math.min(20,parseInt(document.getElementById(id).value)||1));
   if(which==='cols') cols=v; else rows=v;
-  syncInputs(); buildGrid(); renderEls(); genCode();
+  syncInputs(); invalidateSnapCache(); buildGrid(); renderEls(); genCode();
 }
 function onGap(ctx){
   const id=ctx==='m'?'gap-sl-m':'gap-sl-d';
   gap=parseInt(document.getElementById(id).value)||0;
-  syncInputs(); buildGrid(); renderEls(); genCode();
+  syncInputs(); invalidateSnapCache(); buildGrid(); renderEls(); genCode();
 }
 function syncInputs(){
   const setV=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
-  setV('cols-d',cols); setV('cols-m',cols);
-  setV('rows-d',rows); setV('rows-m',rows);
-  setV('gap-sl-d',gap); setV('gap-sl-m',gap);
+  setV('cols-d',cols);setV('cols-m',cols);
+  setV('rows-d',rows);setV('rows-m',rows);
+  setV('gap-sl-d',gap);setV('gap-sl-m',gap);
   const setT=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
-  setT('gap-disp-d',gap+'px'); setT('gap-disp-m',gap+'px');
+  setT('gap-disp-d',gap+'px');setT('gap-disp-m',gap+'px');
 }
 
-// ════════════════════════════════
-//  COMPUTE GRID CELL RECTS
-//  Returns array of {x,y,w,h,col,row} for each cell
-//  This is the SINGLE source of truth for snap
-// ════════════════════════════════
+// ══════════════════════════════════════
+//  COMPUTE GRID CELLS
+// ══════════════════════════════════════
 function computeCells(){
   const cells=[];
   if(gridSystem==='hierarchy'){
-    // 2 cols: 2fr + 1fr, 4 rows with specific heights
-    const cTotal=canvasW-gap*3; // 2 gaps (left,middle,right)
-    const c1w=Math.round(cTotal*2/3);
-    const c2w=cTotal-c1w;
-    const rTotal=canvasH-gap*5; // 4 gaps
+    const cTotal=canvasW-gap*3;
+    const c1w=Math.round(cTotal*2/3),c2w=cTotal-c1w;
+    const rTotal=canvasH-gap*5;
     const rH=[
-      Math.round(rTotal*.15),
-      Math.round(rTotal*.52),
-      Math.round(rTotal*.18),
-      rTotal-Math.round(rTotal*.15)-Math.round(rTotal*.52)-Math.round(rTotal*.18)
+      Math.round(rTotal*.15),Math.round(rTotal*.52),
+      Math.round(rTotal*.18),rTotal-Math.round(rTotal*.15)-Math.round(rTotal*.52)-Math.round(rTotal*.18)
     ];
-    const xs=[gap, gap+c1w+gap];
     const cws=[c1w,c2w];
     let yCur=gap;
     for(let r=0;r<4;r++){
@@ -787,11 +942,9 @@ function computeCells(){
       yCur+=rH[r]+gap;
     }
   } else if(gridSystem==='golden'){
-    // φ cols, 3 rows: top φ, middle 1, bottom φ-1
     const phi=1.618;
     const cTotal=canvasW-gap*3;
-    const c1w=Math.round(cTotal*phi/(phi+1));
-    const c2w=cTotal-c1w;
+    const c1w=Math.round(cTotal*phi/(phi+1)),c2w=cTotal-c1w;
     const rTotal=canvasH-gap*4;
     const r1h=Math.round(rTotal*phi/(phi+1+phi-1));
     const r3h=Math.round(rTotal*(phi-1)/(phi+1+phi-1));
@@ -808,14 +961,12 @@ function computeCells(){
       yCur+=rhs[r]+gap;
     }
   } else {
-    // column / modular — uniform grid
-    const effCols=cols, effRows=(gridSystem==='column')?1:rows;
+    const effCols=cols,effRows=(gridSystem==='column')?1:rows;
     const cellW=(canvasW-gap*(effCols+1))/effCols;
     const cellH=(canvasH-gap*(effRows+1))/effRows;
     for(let r=0;r<effRows;r++){
       for(let c=0;c<effCols;c++){
-        const x=gap+c*(cellW+gap);
-        const y=gap+r*(cellH+gap);
+        const x=gap+c*(cellW+gap),y=gap+r*(cellH+gap);
         cells.push({x:Math.round(x),y:Math.round(y),w:Math.round(cellW),h:Math.round(cellH),col:c+1,row:r+1});
       }
     }
@@ -823,244 +974,195 @@ function computeCells(){
   return cells;
 }
 
-// ════════════════════════════════════════════════════════════
-//  HYBRID SNAP ENGINE
-//  snapRect / autoSnapToCell removed — replaced by:
-//    strictSnap()    — hard cell-boundary snap on release
-//    getSnapLines()  — proximity guide lines during drag
-//    drawSnapLines() — renders / clears guide SVG lines
-// ════════════════════════════════════════════════════════════
+// ══════════════════════════════════════
+//  DRAW GRID LINES ON CANVAS
+// ══════════════════════════════════════
+function drawGridLines(){
+  const cvs=document.getElementById('grid-lines-canvas');
+  if(!cvs) return;
+  cvs.width=canvasW; cvs.height=canvasH;
+  const ctx=cvs.getContext('2d');
+  ctx.clearRect(0,0,canvasW,canvasH);
+  if(isPreview) return;
 
-// Cache: invalidated whenever computeCells() inputs change (buildGrid calls this)
-let _snapCache = null;
+  const cells=computeCells();
 
-function _buildSnapCache(){
-  const cells = computeCells();
-  const xSet = new Set(), ySet = new Set();
-  cells.forEach(c => {
-    xSet.add(c.x);
-    xSet.add(c.x + c.w);
-    ySet.add(c.y);
-    ySet.add(c.y + c.h);
+  // Collect unique X and Y boundaries
+  const xs=new Set(),ys=new Set();
+  cells.forEach(c=>{
+    xs.add(c.x);xs.add(c.x+c.w);
+    ys.add(c.y);ys.add(c.y+c.h);
   });
-  _snapCache = {
-    cells,
-    xs: [...xSet].sort((a,b)=>a-b),
-    ys: [...ySet].sort((a,b)=>a-b),
+
+  // Draw cell fills
+  cells.forEach(c=>{
+    ctx.fillStyle='rgba(170,155,138,0.22)';
+    ctx.fillRect(c.x,c.y,c.w,c.h);
+  });
+
+  // Draw grid lines
+  ctx.lineWidth=1;
+  [...xs].forEach(x=>{
+    const isEdge=(x<=gap||x>=canvasW-gap);
+    ctx.strokeStyle=isEdge?'rgba(90,70,50,0.45)':'rgba(90,70,50,0.28)';
+    ctx.setLineDash(isEdge?[]:[3,3]);
+    ctx.beginPath();ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,canvasH);ctx.stroke();
+  });
+  [...ys].forEach(y=>{
+    const isEdge=(y<=gap||y>=canvasH-gap);
+    ctx.strokeStyle=isEdge?'rgba(90,70,50,0.45)':'rgba(90,70,50,0.28)';
+    ctx.setLineDash(isEdge?[]:[3,3]);
+    ctx.beginPath();ctx.moveTo(0,y+.5);ctx.lineTo(canvasW,y+.5);ctx.stroke();
+  });
+  ctx.setLineDash([]);
+}
+
+// ══════════════════════════════════════
+//  SNAP ENGINE
+// ══════════════════════════════════════
+let _snapCache=null;
+function _buildSnapCache(){
+  const cells=computeCells();
+  const xSet=new Set(),ySet=new Set();
+  cells.forEach(c=>{xSet.add(c.x);xSet.add(c.x+c.w);ySet.add(c.y);ySet.add(c.y+c.h);});
+  _snapCache={cells,xs:[...xSet].sort((a,b)=>a-b),ys:[...ySet].sort((a,b)=>a-b)};
+}
+function _getCache(){if(!_snapCache)_buildSnapCache();return _snapCache;}
+function invalidateSnapCache(){_snapCache=null;}
+
+function strictSnap(x,y,w,h){
+  const{cells,xs,ys}=_getCache();
+  let best=null,bestD=Infinity;
+  for(let i=0;i<cells.length;i++){
+    const c=cells[i];
+    const d=Math.hypot(x-c.x,y-c.y);
+    if(d<bestD){bestD=d;best=c;}
+  }
+  if(!best)best=cells[0];
+  const sx=best.x,sy=best.y;
+  const targetRight=x+w;
+  let snapRight=sx+best.w;
+  for(let i=0;i<xs.length;i++){if(xs[i]>sx&&xs[i]<=targetRight+best.w*.6)snapRight=xs[i];}
+  const targetBottom=y+h;
+  let snapBottom=sy+best.h;
+  for(let i=0;i<ys.length;i++){if(ys[i]>sy&&ys[i]<=targetBottom+best.h*.6)snapBottom=ys[i];}
+  return{
+    x:Math.max(0,sx),y:Math.max(0,sy),
+    w:Math.min(Math.max(best.w,snapRight-sx),canvasW-sx),
+    h:Math.min(Math.max(best.h,snapBottom-sy),canvasH-sy),
   };
 }
 
-function _getCache(){
-  if(!_snapCache) _buildSnapCache();
-  return _snapCache;
+function strictSnapSize(x,y,w,h){
+  const{xs,ys,cells}=_getCache();
+  let anchor=null,bestD=Infinity;
+  for(let i=0;i<cells.length;i++){
+    const c=cells[i];
+    if(x>=c.x-2&&y>=c.y-2){
+      const d=Math.hypot(x-c.x,y-c.y);
+      if(d<bestD){bestD=d;anchor=c;}
+    }
+  }
+  if(!anchor)anchor=cells[0];
+  const targetRight=x+w,targetBottom=y+h;
+  let snapRight=anchor.x+anchor.w,minDx=Infinity;
+  for(let i=0;i<xs.length;i++){if(xs[i]>x){const d=Math.abs(xs[i]-targetRight);if(d<minDx){minDx=d;snapRight=xs[i];}}}
+  let snapBottom=anchor.y+anchor.h,minDy=Infinity;
+  for(let i=0;i<ys.length;i++){if(ys[i]>y){const d=Math.abs(ys[i]-targetBottom);if(d<minDy){minDy=d;snapBottom=ys[i];}}}
+  return{x,y,w:Math.max(anchor.w,snapRight-x),h:Math.max(anchor.h,snapBottom-y)};
 }
 
-// Call this whenever the grid changes so cache is rebuilt next access
-function invalidateSnapCache(){ _snapCache = null; }
-
-// ── strictSnap ────────────────────────────────────────────
-// Hard snap on pointer release.
-// Strategy:
-//   1. Find the cell whose top-left corner is nearest the element's top-left.
-//   2. Span right/down to cover as many cells as the original pixel size suggests.
-//   3. Return exact cell-boundary rect (x, y, w, h).
-function strictSnap(x, y, w, h){
-  const { cells, xs, ys } = _getCache();
-
-  // Find nearest cell whose origin is closest to (x, y)
-  let best = null, bestD = Infinity;
-  for(let i = 0; i < cells.length; i++){
-    const c = cells[i];
-    const d = Math.hypot(x - c.x, y - c.y);
-    if(d < bestD){ bestD = d; best = c; }
+const GUIDE_THRESHOLD=18;
+function getSnapLines(x,y,w,h){
+  const{xs,ys}=_getCache();
+  const vLines=[],hLines=[];
+  for(let i=0;i<xs.length;i++){
+    if(Math.abs(xs[i]-x)<GUIDE_THRESHOLD||Math.abs(xs[i]-(x+w))<GUIDE_THRESHOLD)vLines.push(xs[i]);
   }
-  if(!best) best = cells[0];
-
-  // Snap origin to this cell's top-left
-  const sx = best.x;
-  const sy = best.y;
-
-  // Find the furthest cell boundary that the original right/bottom edge reaches
-  // Walk xs right from sx to cover the original width
-  const targetRight = x + w;
-  let snapRight = sx + best.w;  // minimum: at least one cell wide
-  for(let i = 0; i < xs.length; i++){
-    if(xs[i] > sx && xs[i] <= targetRight + best.w * 0.6){
-      snapRight = xs[i];
-    }
+  for(let i=0;i<ys.length;i++){
+    if(Math.abs(ys[i]-y)<GUIDE_THRESHOLD||Math.abs(ys[i]-(y+h))<GUIDE_THRESHOLD)hLines.push(ys[i]);
   }
-
-  const targetBottom = y + h;
-  let snapBottom = sy + best.h;
-  for(let i = 0; i < ys.length; i++){
-    if(ys[i] > sy && ys[i] <= targetBottom + best.h * 0.6){
-      snapBottom = ys[i];
-    }
-  }
-
-  const nw = Math.max(best.w, snapRight - sx);
-  const nh = Math.max(best.h, snapBottom - sy);
-
-  return {
-    x: Math.max(0, sx),
-    y: Math.max(0, sy),
-    w: Math.min(nw, canvasW - sx),
-    h: Math.min(nh, canvasH - sy),
-  };
+  return{vLines,hLines};
 }
 
-// ── strictSnapSize ─────────────────────────────────────────
-// Used during resize release: keep x/y fixed, snap right+bottom edges only.
-function strictSnapSize(x, y, w, h){
-  const { xs, ys, cells } = _getCache();
-
-  // Anchor cell for origin (needed to get minimum span)
-  let anchor = null, bestD = Infinity;
-  for(let i = 0; i < cells.length; i++){
-    const c = cells[i];
-    if(x >= c.x - 2 && y >= c.y - 2){
-      const d = Math.hypot(x - c.x, y - c.y);
-      if(d < bestD){ bestD = d; anchor = c; }
-    }
-  }
-  if(!anchor) anchor = cells[0];
-
-  const targetRight  = x + w;
-  const targetBottom = y + h;
-
-  // Nearest X boundary to the right of x
-  let snapRight = anchor.x + anchor.w;
-  let minDx = Infinity;
-  for(let i = 0; i < xs.length; i++){
-    if(xs[i] > x){
-      const d = Math.abs(xs[i] - targetRight);
-      if(d < minDx){ minDx = d; snapRight = xs[i]; }
-    }
-  }
-
-  // Nearest Y boundary below y
-  let snapBottom = anchor.y + anchor.h;
-  let minDy = Infinity;
-  for(let i = 0; i < ys.length; i++){
-    if(ys[i] > y){
-      const d = Math.abs(ys[i] - targetBottom);
-      if(d < minDy){ minDy = d; snapBottom = ys[i]; }
-    }
-  }
-
-  return {
-    x,
-    y,
-    w: Math.max(anchor.w, snapRight - x),
-    h: Math.max(anchor.h, snapBottom - y),
-  };
-}
-
-// ── getSnapLines ──────────────────────────────────────────
-// Returns {vLines:[x,...], hLines:[y,...]} of grid boundaries
-// within GUIDE_THRESHOLD pixels of the element's edges.
-const GUIDE_THRESHOLD = 18; // px — how close to trigger a visual guide
-
-function getSnapLines(x, y, w, h){
-  const { xs, ys } = _getCache();
-  const vLines = [], hLines = [];
-  const edges = { x: [x, x+w], y: [y, y+h] };
-
-  for(let i = 0; i < xs.length; i++){
-    const gx = xs[i];
-    if(Math.abs(gx - edges.x[0]) < GUIDE_THRESHOLD ||
-       Math.abs(gx - edges.x[1]) < GUIDE_THRESHOLD){
-      vLines.push(gx);
-    }
-  }
-  for(let i = 0; i < ys.length; i++){
-    const gy = ys[i];
-    if(Math.abs(gy - edges.y[0]) < GUIDE_THRESHOLD ||
-       Math.abs(gy - edges.y[1]) < GUIDE_THRESHOLD){
-      hLines.push(gy);
-    }
-  }
-  return { vLines, hLines };
-}
-
-// ── drawSnapLines ─────────────────────────────────────────
-// Renders red guide lines inside #snap-guide-layer.
-// Pass null to clear all guides.
-let _guideEls = [];
-
+let _guideEls=[];
 function drawSnapLines(snapLines){
-  const layer = document.getElementById('snap-guide-layer');
-  if(!layer) return;
-
-  // Clear previous guides efficiently (reuse DOM nodes)
+  const layer=document.getElementById('snap-guide-layer');
+  if(!layer)return;
   if(!snapLines){
-    _guideEls.forEach(el => el.classList.remove('vis'));
-    // Delay removal so CSS transition fades out
-    setTimeout(()=>{
-      _guideEls.forEach(el => el.remove());
-      _guideEls = [];
-    }, 80);
+    _guideEls.forEach(el=>el.classList.remove('vis'));
+    setTimeout(()=>{_guideEls.forEach(el=>el.remove());_guideEls=[];},80);
     return;
   }
-
-  // Remove stale guides
-  _guideEls.forEach(el => el.remove());
-  _guideEls = [];
-
-  const { vLines, hLines } = snapLines;
-
-  vLines.forEach(gx => {
-    const el = document.createElement('div');
-    el.className = 'snap-guide v';
-    el.style.left = gx + 'px';
-    layer.appendChild(el);
-    requestAnimationFrame(() => el.classList.add('vis'));
-    _guideEls.push(el);
+  _guideEls.forEach(el=>el.remove());_guideEls=[];
+  snapLines.vLines.forEach(gx=>{
+    const el=document.createElement('div');el.className='snap-guide v';el.style.left=gx+'px';
+    layer.appendChild(el);requestAnimationFrame(()=>el.classList.add('vis'));_guideEls.push(el);
   });
-
-  hLines.forEach(gy => {
-    const el = document.createElement('div');
-    el.className = 'snap-guide h';
-    el.style.top = gy + 'px';
-    layer.appendChild(el);
-    requestAnimationFrame(() => el.classList.add('vis'));
-    _guideEls.push(el);
+  snapLines.hLines.forEach(gy=>{
+    const el=document.createElement('div');el.className='snap-guide h';el.style.top=gy+'px';
+    layer.appendChild(el);requestAnimationFrame(()=>el.classList.add('vis'));_guideEls.push(el);
   });
 }
 
-// ── showSnapPreview ───────────────────────────────────────
-// Ghost cell highlight showing where element will land on release
-function showSnapPreview(x, y, w, h){
-  const p = document.getElementById('snap-preview');
-  if(!p) return;
-  const s = strictSnap(x, y, w, h);
-  p.style.display = 'block';
-  p.style.left   = s.x + 'px';
-  p.style.top    = s.y + 'px';
-  p.style.width  = s.w + 'px';
-  p.style.height = s.h + 'px';
+function showSnapPreview(x,y,w,h){
+  const p=document.getElementById('snap-preview');if(!p)return;
+  const s=strictSnap(x,y,w,h);
+  p.style.display='block';p.style.left=s.x+'px';p.style.top=s.y+'px';p.style.width=s.w+'px';p.style.height=s.h+'px';
+}
+function hideSnapPreview(){const p=document.getElementById('snap-preview');if(p)p.style.display='none';}
+
+// ══════════════════════════════════════
+//  AUTO WRAP — resolve overlaps
+// ══════════════════════════════════════
+function autoWrap(){
+  if(elements.length<2)return;
+  const cells=computeCells();
+  if(!cells.length)return;
+  // Assign each element to the first free cell
+  const usedCells=new Set();
+  const sorted=[...elements].sort((a,b)=>a.id-b.id);
+  sorted.forEach(el=>{
+    // Find cell nearest to current position that's not used
+    let best=null,bestD=Infinity;
+    cells.forEach((c,i)=>{
+      if(usedCells.has(i))return;
+      const d=Math.hypot(el.x-c.x,el.y-c.y);
+      if(d<bestD){bestD=d;best={c,i};}
+    });
+    if(!best){
+      // All cells taken, just keep position
+      return;
+    }
+    usedCells.add(best.i);
+    // Check overlap with existing placed elements
+    const overlaps=sorted.filter(other=>
+      other.id!==el.id &&
+      el.x<other.x+other.w && el.x+el.w>other.x &&
+      el.y<other.y+other.h && el.y+el.h>other.y
+    );
+    if(overlaps.length>0){
+      el.x=best.c.x; el.y=best.c.y;
+      el.w=best.c.w; el.h=best.c.h;
+    }
+  });
+  renderEls();genCode();showToast('Elements repositioned ✓');
 }
 
-function hideSnapPreview(){
-  const p = document.getElementById('snap-preview');
-  if(p) p.style.display = 'none';
-}
-
-// ════════════════════════════════
-//  BUILD GRID OVERLAY
-// ════════════════════════════════
+// ══════════════════════════════════════
+//  BUILD GRID OVERLAY (+ buttons)
+// ══════════════════════════════════════
 function buildGrid(){
-  invalidateSnapCache();
   const ov=document.getElementById('grid-overlay');
   ov.innerHTML='';
+  drawGridLines();
   const cells=computeCells();
   cells.forEach(c=>{
     const div=document.createElement('div');
     div.className='grid-cell-bg';
-    div.style.left=c.x+'px'; div.style.top=c.y+'px';
-    div.style.width=c.w+'px'; div.style.height=c.h+'px';
+    div.style.cssText=`left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px`;
     const btn=document.createElement('button');
-    btn.className='add-btn'; btn.textContent='+'; btn.setAttribute('aria-label','Add');
+    btn.className='add-btn';btn.textContent='+';btn.setAttribute('aria-label','Add');
     btn.addEventListener('pointerdown',e=>{e.stopPropagation();});
     btn.addEventListener('click',e=>{
       e.stopPropagation();
@@ -1072,52 +1174,52 @@ function buildGrid(){
   });
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  PICKER
-// ════════════════════════════════
+// ══════════════════════════════════════
 function showPicker(e){
   const p=document.getElementById('picker');
   p.style.display='block';
   const r=e.target.getBoundingClientRect();
-  let left=r.left+window.scrollX, top=r.bottom+6+window.scrollY;
-  if(left+200>window.innerWidth) left=window.innerWidth-208;
-  if(top+260>window.innerHeight) top=r.top-14-220+window.scrollY;
-  p.style.left=left+'px'; p.style.top=top+'px';
+  let left=r.left+window.scrollX,top=r.bottom+6+window.scrollY;
+  if(left+200>window.innerWidth)left=window.innerWidth-208;
+  if(top+260>window.innerHeight)top=r.top-14-220+window.scrollY;
+  p.style.left=left+'px';p.style.top=top+'px';
   e.stopPropagation();
 }
 function hidePicker(){document.getElementById('picker').style.display='none';}
 
 document.addEventListener('click',e=>{
-  if(!e.target.closest('#picker')&&!e.target.closest('.add-btn')) hidePicker();
+  if(!e.target.closest('#picker')&&!e.target.closest('.add-btn'))hidePicker();
   if(!e.target.closest('.design-el')&&!e.target.closest('.drawer')&&!e.target.closest('#picker')){
-    selId=null; renderEls(); showProps(null);
+    selId=null;renderEls();showProps(null);
   }
 });
+function pickerPick(type){hidePicker();placeEl(type,pendDrop.x,pendDrop.y);}
 
-function pickerPick(type){
-  hidePicker();
-  placeEl(type, pendDrop.x, pendDrop.y);
-}
-
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  PLACE ELEMENT
-// ════════════════════════════════
-function placeEl(type, dropX, dropY){
+// ══════════════════════════════════════
+function placeEl(type,dropX,dropY){
   const def=EL_DEF[type];
-  const ew=Math.round(canvasW*def.fw);
-  const eh=Math.round(canvasH*def.fh);
-  // strict-snap to nearest grid cell
-  const s=strictSnap(dropX, dropY, ew, eh);
+  const ew=Math.round(canvasW*def.fw),eh=Math.round(canvasH*def.fh);
+  const s=strictSnap(dropX,dropY,ew,eh);
   const el={
-    id:++eid, type,
-    content:def.content,
+    id:++eid,type,content:def.content,
     x:Math.max(0,Math.min(s.x,canvasW-s.w)),
     y:Math.max(0,Math.min(s.y,canvasH-s.h)),
-    w:s.w, h:s.h
+    w:s.w,h:s.h,
   };
-  elements.push(el); selId=el.id;
-  renderEls(); showProps(el); genCode();
-  showToast(def.lbl+' added ✓');
+  elements.push(el);selId=el.id;
+  renderEls();showProps(el);genCode();
+  // Auto-wrap if overlapping
+  const hasOverlap=elements.some(other=>
+    other.id!==el.id &&
+    el.x<other.x+other.w && el.x+el.w>other.x &&
+    el.y<other.y+other.h && el.y+el.h>other.y
+  );
+  if(hasOverlap) setTimeout(()=>autoWrap(),50);
+  else showToast(def.lbl+' added ✓');
 }
 
 function mobPlace(type){
@@ -1128,28 +1230,30 @@ function mobPlace(type){
   setTimeout(()=>openDrw('props'),280);
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  PALETTE DRAG
-// ════════════════════════════════
+// ══════════════════════════════════════
 function palDragStart(type,e){
   palType=type;
   e.dataTransfer.setData('text/plain',type);
   e.dataTransfer.effectAllowed='copy';
 }
 function palDrop(e){
-  if(!palType) return;
+  if(!palType)return;
   e.preventDefault();
   const cvr=document.getElementById('canvas').getBoundingClientRect();
-  const px=e.clientX-cvr.left, py=e.clientY-cvr.top;
+  const px=e.clientX-cvr.left,py=e.clientY-cvr.top;
   const def=EL_DEF[palType];
-  const ew=Math.round(canvasW*def.fw), eh=Math.round(canvasH*def.fh);
-  placeEl(palType, px-ew/2, py-eh/2);
+  const ew=Math.round(canvasW*def.fw),eh=Math.round(canvasH*def.fh);
+  placeEl(palType,px-ew/2,py-eh/2);
   palType=null;
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  RENDER ELEMENTS
-// ════════════════════════════════
+// ══════════════════════════════════════
+let dblTapTimer={}, dblTapLast={};
+
 function renderEls(){
   document.querySelectorAll('.design-el').forEach(e=>e.remove());
   const canvas=document.getElementById('canvas');
@@ -1157,264 +1261,358 @@ function renderEls(){
     const div=document.createElement('div');
     div.className=`design-el el-${el.type}${el.id===selId?' selected':''}`;
     div.dataset.id=el.id;
-    div.style.left=el.x+'px'; div.style.top=el.y+'px';
-    div.style.width=el.w+'px'; div.style.height=el.h+'px';
+    div.style.cssText=`left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px`;
 
-    // label + preview
-    const lbl=document.createElement('div'); lbl.className='el-lbl'; lbl.textContent=EL_DEF[el.type].lbl;
-    const prev=document.createElement('div'); prev.className='el-prev'; prev.textContent=el.content;
-    div.appendChild(lbl); div.appendChild(prev);
+    const lbl=document.createElement('div');lbl.className='el-lbl';lbl.textContent=EL_DEF[el.type].lbl;
+    const prev=document.createElement('div');prev.className='el-prev';prev.textContent=el.content;
+    div.appendChild(lbl);div.appendChild(prev);
 
-    // close X
-    const cls=document.createElement('button'); cls.className='el-close'; cls.innerHTML='&#x2715;';
+    // Close
+    const cls=document.createElement('button');cls.className='el-close';cls.innerHTML='&#x2715;';
     cls.addEventListener('pointerdown',e=>{e.stopPropagation();});
     cls.addEventListener('click',e=>{e.stopPropagation();delEl(el.id);});
     div.appendChild(cls);
 
-    // resize handle BR
-    const rh=document.createElement('div'); rh.className='el-resize';
-    rh.addEventListener('pointerdown',e=>{
-      e.stopPropagation(); e.preventDefault();
-      selId=el.id; renderEls(); showProps(el);
-      startResize(e,el);
+    // Resize BR
+    const rBR=document.createElement('div');rBR.className='el-resize-br';
+    rBR.addEventListener('pointerdown',e=>{
+      e.stopPropagation();e.preventDefault();
+      selId=el.id;renderEls();showProps(el);
+      startResize(e,el,'br');
     });
-    div.appendChild(rh);
+    div.appendChild(rBR);
 
-    // drag (move)
+    // Resize BL
+    const rBL=document.createElement('div');rBL.className='el-resize-bl';
+    rBL.addEventListener('pointerdown',e=>{
+      e.stopPropagation();e.preventDefault();
+      selId=el.id;renderEls();showProps(el);
+      startResize(e,el,'bl');
+    });
+    div.appendChild(rBL);
+
+    // DRAG (move)
     div.addEventListener('pointerdown',e=>{
-      if(e.target===cls||e.target===rh) return;
-      e.stopPropagation(); e.preventDefault();
-      selId=el.id; renderEls(); showProps(el);
+      if(e.target===cls||e.target===rBR||e.target===rBL)return;
+      e.stopPropagation();e.preventDefault();
+      selId=el.id;renderEls();showProps(el);
       startMove(e,el);
     });
 
-    // tap → props (mobile)
+    // DOUBLE TAP → props on mobile
     div.addEventListener('click',e=>{
       e.stopPropagation();
-      selId=el.id; renderEls(); showProps(el);
-      if(window.innerWidth<=640) openDrw('props');
+      const now=Date.now();
+      const id=el.id;
+      if(dblTapLast[id]&&(now-dblTapLast[id])<400){
+        selId=el.id;renderEls();showProps(el);
+        if(window.innerWidth<=640)openDrw('props');
+        else{switchTab('props',document.querySelector('.r-tab'));showProps(el);}
+        dblTapLast[id]=0;
+      } else {
+        dblTapLast[id]=now;
+        selId=el.id;renderEls();showProps(el);
+      }
     });
 
     canvas.appendChild(div);
   });
 }
 
-// ════════════════════════════════
-//  MOVE — Hybrid: smooth pixel drag + strict snap on release
-// ════════════════════════════════
+// ══════════════════════════════════════
+//  MOVE
+// ══════════════════════════════════════
 function startMove(e,el){
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
-  const sx=e.clientX, sy=e.clientY;
-  const ox=el.x, oy=el.y;
-  let moved=false;
-  let rafId=null;
-
+  const sx=e.clientX,sy=e.clientY,ox=el.x,oy=el.y;
+  let moved=false,rafId=null,pendX=ox,pendY=oy;
   div.classList.add('dragging');
   div.setPointerCapture(e.pointerId);
-
-  // Throttle guide updates to rAF for performance
-  let pendX=ox, pendY=oy;
 
   function applyFrame(){
     rafId=null;
     const nx=Math.max(0,Math.min(pendX,canvasW-el.w));
     const ny=Math.max(0,Math.min(pendY,canvasH-el.h));
-    // Move element freely at pixel level
-    div.style.left=nx+'px';
-    div.style.top =ny+'px';
-    // Guide lines near grid boundaries
+    div.style.left=nx+'px';div.style.top=ny+'px';
     const lines=getSnapLines(nx,ny,el.w,el.h);
-    drawSnapLines(lines);
-    // Ghost preview of snap target
-    showSnapPreview(nx,ny,el.w,el.h);
-    // Keep el state in sync (used by showProps)
-    el.x=nx; el.y=ny;
-    showProps(el);
+    drawSnapLines(lines);showSnapPreview(nx,ny,el.w,el.h);
+    el.x=nx;el.y=ny;showProps(el);
   }
-
   function onMove(ev){
-    if(ev.pointerId!==e.pointerId) return;
-    moved=true;
-    pendX=ox+(ev.clientX-sx);
-    pendY=oy+(ev.clientY-sy);
-    if(!rafId) rafId=requestAnimationFrame(applyFrame);
+    if(ev.pointerId!==e.pointerId)return;
+    moved=true;pendX=ox+(ev.clientX-sx);pendY=oy+(ev.clientY-sy);
+    if(!rafId)rafId=requestAnimationFrame(applyFrame);
   }
-
   function onUp(ev){
-    if(ev.pointerId!==e.pointerId) return;
-    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+    if(ev.pointerId!==e.pointerId)return;
+    if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     div.removeEventListener('pointermove',onMove);
     div.removeEventListener('pointerup',onUp);
     div.classList.remove('dragging');
-    drawSnapLines(null);   // clear guides
-    hideSnapPreview();
-
+    drawSnapLines(null);hideSnapPreview();
     if(moved){
-      // STRICT snap: all final positions derived solely from computeCells()
       const s=strictSnap(el.x,el.y,el.w,el.h);
       el.x=Math.max(0,Math.min(s.x,canvasW-s.w));
       el.y=Math.max(0,Math.min(s.y,canvasH-s.h));
-      el.w=s.w; el.h=s.h;
-      renderEls(); showProps(el); genCode();
+      el.w=s.w;el.h=s.h;
+      renderEls();showProps(el);genCode();
     }
   }
-
   div.addEventListener('pointermove',onMove,{passive:false});
   div.addEventListener('pointerup',onUp);
 }
 
-// ════════════════════════════════
-//  RESIZE — free during, strict grid-span snap on release
-// ════════════════════════════════
-function startResize(e,el){
+// ══════════════════════════════════════
+//  RESIZE (BR and BL handles)
+// ══════════════════════════════════════
+function startResize(e,el,corner){
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
-  const rh=div.querySelector('.el-resize');
-  const sx=e.clientX, sy=e.clientY;
-  const ow=el.w, oh=el.h;
-  const MIN_W=20, MIN_H=16;
-  let rafId=null;
-  let pendW=ow, pendH=oh;
+  const handle=div.querySelector(corner==='br'?'.el-resize-br':'.el-resize-bl');
+  const sx=e.clientX,sy=e.clientY;
+  const ow=el.w,oh=el.h,ox=el.x;
+  const MIN_W=20,MIN_H=16;
+  let rafId=null,pendW=ow,pendH=oh,pendX=ox;
 
-  rh.setPointerCapture(e.pointerId);
+  handle.setPointerCapture(e.pointerId);
 
   function applyFrame(){
     rafId=null;
-    const nw=Math.max(MIN_W,Math.min(pendW,canvasW-el.x));
-    const nh=Math.max(MIN_H,Math.min(pendH,canvasH-el.y));
-    // Free pixel resize during interaction
-    div.style.width =nw+'px';
-    div.style.height=nh+'px';
-    el.w=nw; el.h=nh;
-    // Guide lines on right/bottom edges
-    const lines=getSnapLines(el.x,el.y,nw,nh);
-    drawSnapLines(lines);
+    let nw,nh,nx;
+    if(corner==='br'){
+      nw=Math.max(MIN_W,Math.min(pendW,canvasW-el.x));
+      nh=Math.max(MIN_H,Math.min(pendH,canvasH-el.y));
+      nx=el.x;
+    } else {
+      // BL: x moves, w shrinks from left
+      nw=Math.max(MIN_W,Math.min(pendW,ox+ow));
+      nh=Math.max(MIN_H,Math.min(pendH,canvasH-el.y));
+      nx=Math.max(0,ox+ow-nw);
+      nw=ox+ow-nx;
+    }
+    div.style.width=nw+'px';div.style.height=nh+'px';div.style.left=nx+'px';
+    el.w=nw;el.h=nh;el.x=nx;
+    const lines=getSnapLines(el.x,el.y,nw,nh);drawSnapLines(lines);
     showProps(el);
   }
-
   function onMove(ev){
-    if(ev.pointerId!==e.pointerId) return;
-    pendW=ow+(ev.clientX-sx);
-    pendH=oh+(ev.clientY-sy);
-    if(!rafId) rafId=requestAnimationFrame(applyFrame);
+    if(ev.pointerId!==e.pointerId)return;
+    const dx=ev.clientX-sx,dy=ev.clientY-sy;
+    if(corner==='br'){pendW=ow+dx;pendH=oh+dy;}
+    else {pendW=ow-dx;pendH=oh+dy;}
+    if(!rafId)rafId=requestAnimationFrame(applyFrame);
   }
-
   function onUp(ev){
-    if(ev.pointerId!==e.pointerId) return;
-    if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
-    rh.removeEventListener('pointermove',onMove);
-    rh.removeEventListener('pointerup',onUp);
+    if(ev.pointerId!==e.pointerId)return;
+    if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    handle.removeEventListener('pointermove',onMove);
+    handle.removeEventListener('pointerup',onUp);
     drawSnapLines(null);
-
-    // STRICT snap: snap right/bottom to nearest cell boundary
-    const s=strictSnapSize(el.x,el.y,el.w,el.h);
-    el.w=Math.max(MIN_W,s.w);
-    el.h=Math.max(MIN_H,s.h);
-    renderEls(); showProps(el); genCode();
+    if(corner==='br'){
+      const s=strictSnapSize(el.x,el.y,el.w,el.h);
+      el.w=Math.max(MIN_W,s.w);el.h=Math.max(MIN_H,s.h);
+    } else {
+      // snap left edge
+      const {xs}=_getCache();
+      let snapX=el.x,minD=Infinity;
+      xs.forEach(x=>{const d=Math.abs(x-el.x);if(d<minD){minD=d;snapX=x;}});
+      const snapRight=el.x+el.w;
+      el.x=Math.max(0,snapX);
+      el.w=Math.max(MIN_W,snapRight-el.x);
+    }
+    renderEls();showProps(el);genCode();
   }
-
-  rh.addEventListener('pointermove',onMove,{passive:false});
-  rh.addEventListener('pointerup',onUp);
+  handle.addEventListener('pointermove',onMove,{passive:false});
+  handle.addEventListener('pointerup',onUp);
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  PROPS PANEL
-// ════════════════════════════════
+// ══════════════════════════════════════
 function showProps(el){
   if(!el){
+    ['no-sel','m-no-sel'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='flex'||'block';});
     document.getElementById('no-sel').style.display='flex';
-    document.getElementById('props-form').style.display='none';
     document.getElementById('m-no-sel').style.display='block';
+    document.getElementById('props-form').style.display='none';
     document.getElementById('m-props-form').style.display='none';
     return;
   }
   document.getElementById('no-sel').style.display='none';
   document.getElementById('props-form').style.display='block';
   document.getElementById('pr-type').textContent=EL_DEF[el.type].lbl;
-  document.getElementById('pr-content').value=el.content;
-  document.getElementById('pr-x').value=Math.round(el.x);
-  document.getElementById('pr-y').value=Math.round(el.y);
-  document.getElementById('pr-w').value=Math.round(el.w);
-  document.getElementById('pr-h').value=Math.round(el.h);
-  document.getElementById('pv-x').textContent=Math.round(el.x);
-  document.getElementById('pv-y').textContent=Math.round(el.y);
-  document.getElementById('pv-w').textContent=Math.round(el.w);
-  document.getElementById('pv-h').textContent=Math.round(el.h);
+  const fields={content:el.content,x:Math.round(el.x),y:Math.round(el.y),w:Math.round(el.w),h:Math.round(el.h)};
+  Object.entries(fields).forEach(([k,v])=>{
+    const e=document.getElementById('pr-'+k);if(e)e.value=v;
+  });
+  ['x','y','w','h'].forEach(k=>{
+    const e=document.getElementById('pv-'+k);if(e)e.textContent=Math.round(el[k]);
+  });
   document.getElementById('m-no-sel').style.display='none';
   document.getElementById('m-props-form').style.display='block';
   document.getElementById('m-prop-title').textContent=EL_DEF[el.type].lbl;
-  document.getElementById('m-pr-content').value=el.content;
-  document.getElementById('m-pr-x').value=Math.round(el.x);
-  document.getElementById('m-pr-y').value=Math.round(el.y);
-  document.getElementById('m-pr-w').value=Math.round(el.w);
-  document.getElementById('m-pr-h').value=Math.round(el.h);
+  const mFields={content:el.content,x:Math.round(el.x),y:Math.round(el.y),w:Math.round(el.w),h:Math.round(el.h)};
+  Object.entries(mFields).forEach(([k,v])=>{
+    const e=document.getElementById('m-pr-'+k);if(e)e.value=v;
+  });
 }
 
 function updContent(ctx){
-  const el=elements.find(e=>e.id===selId); if(!el) return;
-  el.content=ctx==='m'
-    ?document.getElementById('m-pr-content').value
-    :document.getElementById('pr-content').value;
-  renderEls(); genCode();
+  const el=elements.find(e=>e.id===selId);if(!el)return;
+  el.content=document.getElementById(ctx==='m'?'m-pr-content':'pr-content').value;
+  renderEls();genCode();
 }
 function updPosInp(ctx){
-  const el=elements.find(e=>e.id===selId); if(!el) return;
+  const el=elements.find(e=>e.id===selId);if(!el)return;
   const p=ctx==='m'?'m-pr':'pr';
   el.x=parseFloat(document.getElementById(p+'-x').value)||0;
   el.y=parseFloat(document.getElementById(p+'-y').value)||0;
   el.w=Math.max(20,parseFloat(document.getElementById(p+'-w').value)||20);
   el.h=Math.max(16,parseFloat(document.getElementById(p+'-h').value)||16);
-  renderEls(); showProps(el); genCode();
+  renderEls();showProps(el);genCode();
 }
-
 function delEl(id){
   elements=elements.filter(e=>e.id!==id);
   if(selId===id){selId=null;showProps(null);}
-  renderEls(); genCode();
+  renderEls();genCode();
 }
-function deleteSel(){if(selId) delEl(selId);}
+function deleteSel(){if(selId)delEl(selId);}
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  CODE GEN
-// ════════════════════════════════
+// ══════════════════════════════════════
 function genCode(){
   let html=`<div class="layout">\n`;
   elements.forEach(el=>{html+=`  <div class="${el.type}">${el.content}</div>\n`;});
   html+=`</div>`;
-  let css=`.layout {\n  position: relative;\n  width: ${canvasW}px;\n  height: ${canvasH}px;\n  /* Grid: ${GS[gridSystem].desc}, ${cols} cols, gap ${gap}px */\n}\n`;
+  let css=`.layout {\n  position: relative;\n  width: ${canvasW}px;\n  height: ${canvasH}px;\n}\n`;
   elements.forEach(el=>{
     css+=`\n.${el.type} {\n  position: absolute;\n  left: ${Math.round(el.x)}px;\n  top: ${Math.round(el.y)}px;\n  width: ${Math.round(el.w)}px;\n  height: ${Math.round(el.h)}px;\n}\n`;
   });
   const setTxt=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
-  setTxt('code-html',html); setTxt('m-code-html',html);
-  setTxt('code-css',css);   setTxt('m-code-css',css);
+  setTxt('code-html',html);setTxt('m-code-html',html);
+  setTxt('code-css',css);setTxt('m-code-css',css);
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
+//  PREVIEW MODE
+// ══════════════════════════════════════
+function togglePreview(){
+  isPreview=!isPreview;
+  const cv=document.getElementById('canvas');
+  const btn=document.getElementById('btn-preview');
+  cv.classList.toggle('preview-mode',isPreview);
+  btn.classList.toggle('active',isPreview);
+  btn.title=isPreview?'Exit preview':'Preview mode (hides grid)';
+  drawGridLines(); // redraw (clears if preview)
+  if(isPreview) showToast('Preview mode — grid hidden');
+  else showToast('Edit mode');
+}
+
+// ══════════════════════════════════════
+//  EXPORT PDF
+// ══════════════════════════════════════
+async function exportPDF(){
+  const loading=document.getElementById('loading-overlay');
+  const loadText=document.getElementById('loading-text');
+  loading.classList.add('show');
+  loadText.textContent='Preparing canvas…';
+
+  try{
+    // Temporarily enter preview mode for clean export
+    const wasPreview=isPreview;
+    if(!wasPreview){
+      isPreview=true;
+      document.getElementById('canvas').classList.add('preview-mode');
+      drawGridLines();
+    }
+
+    await new Promise(r=>setTimeout(r,80));
+    loadText.textContent='Rendering elements…';
+
+    const cv=document.getElementById('canvas');
+
+    // Scale factor for higher resolution
+    const scale=window.devicePixelRatio||2;
+
+    const canvasImg=await html2canvas(cv,{
+      scale:scale,
+      useCORS:true,
+      logging:false,
+      backgroundColor:'#ffffff',
+      width:canvasW,
+      height:canvasH,
+    });
+
+    loadText.textContent='Building PDF…';
+    await new Promise(r=>setTimeout(r,30));
+
+    // Restore
+    if(!wasPreview){
+      isPreview=false;
+      document.getElementById('canvas').classList.remove('preview-mode');
+      drawGridLines();
+    }
+
+    const imgData=canvasImg.toDataURL('image/png',1.0);
+
+    // PDF dimensions — use logical sizes
+    // jsPDF uses pt by default; 1pt = 1/72 inch
+    // We use mm for accurate ratio
+    const {jsPDF}=window.jspdf;
+
+    // Determine page dimensions in mm
+    let pdfW,pdfH;
+    if(ratio==='1:1'){pdfW=150;pdfH=150;}
+    else if(ratio==='4:5'){pdfW=120;pdfH=150;}
+    else if(ratio==='9:16'){pdfW=90;pdfH=160;}
+    else{
+      // custom: maintain aspect ratio, fit in ~200mm max
+      const aspect=logicalH/logicalW;
+      pdfW=180;pdfH=Math.round(180*aspect);
+      if(pdfH>280){pdfH=280;pdfW=Math.round(280/aspect);}
+    }
+
+    const orientation=pdfH>pdfW?'portrait':'landscape';
+    const pdf=new jsPDF({orientation,unit:'mm',format:[pdfW,pdfH],compress:true});
+    pdf.addImage(imgData,'PNG',0,0,pdfW,pdfH,undefined,'FAST');
+
+    const ratioLabel=ratio==='custom'?`${logicalW}x${logicalH}`:ratio.replace(':','-');
+    pdf.save(`grid-design-${ratioLabel}.pdf`);
+
+    showToast('PDF exported ✓');
+  } catch(err){
+    console.error(err);
+    showToast('Export failed — try again');
+  } finally{
+    loading.classList.remove('show');
+  }
+}
+
+// ══════════════════════════════════════
 //  TABS
-// ════════════════════════════════
+// ══════════════════════════════════════
 function switchTab(name,btn){
   document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('tp-'+name).classList.add('active');
-  if(name==='code') genCode();
+  if(name==='code')genCode();
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  DRAWER
-// ════════════════════════════════
+// ══════════════════════════════════════
 function openDrw(name){
   closeDrw(true);
   const ov=document.getElementById('overlay');
   const drw=document.getElementById('drw-'+name);
   ov.style.display='block';
   requestAnimationFrame(()=>{ov.classList.add('vis');drw.classList.add('open');});
-  if(name==='code') genCode();
+  if(name==='code')genCode();
   document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
-  const nb=document.getElementById('mn-'+name);
-  if(nb) nb.classList.add('active');
+  const nb=document.getElementById('mn-'+name);if(nb)nb.classList.add('active');
 }
 function closeDrw(silent){
   const ov=document.getElementById('overlay');
@@ -1426,27 +1624,34 @@ function closeDrw(silent){
   }
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  COPY
-// ════════════════════════════════
+// ══════════════════════════════════════
 function copyHTML(){
   const t=document.getElementById('code-html').textContent||document.getElementById('m-code-html').textContent;
-  navigator.clipboard.writeText(t); showToast('HTML copied!');
+  navigator.clipboard.writeText(t);showToast('HTML copied!');
 }
 function copyCSS(){
   genCode();
   const t=document.getElementById('code-css').textContent||document.getElementById('m-code-css').textContent;
-  navigator.clipboard.writeText(t); showToast('CSS copied!');
+  navigator.clipboard.writeText(t);showToast('CSS copied!');
 }
 
-// ════════════════════════════════
-//  RESET / MISC
-// ════════════════════════════════
-function resetCanvas(){elements=[];selId=null;renderEls();showProps(null);genCode();showToast('Canvas reset');}
+// ══════════════════════════════════════
+//  RESET
+// ══════════════════════════════════════
+function resetCanvas(){
+  elements=[];selId=null;
+  if(isPreview){isPreview=false;document.getElementById('canvas').classList.remove('preview-mode');drawGridLines();}
+  renderEls();showProps(null);genCode();showToast('Canvas reset');
+}
 
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
+  setTimeout(()=>t.classList.remove('show'),2200);
 }
 function areaClick(e){
   if(e.target===document.getElementById('canvas-area')||e.target===document.getElementById('canvas')){
@@ -1454,35 +1659,35 @@ function areaClick(e){
   }
 }
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  KEYBOARD
-// ════════════════════════════════
+// ══════════════════════════════════════
 document.addEventListener('keydown',e=>{
-  if((e.key==='Delete'||e.key==='Backspace')&&document.activeElement.tagName!=='INPUT') deleteSel();
+  if((e.key==='Delete'||e.key==='Backspace')&&document.activeElement.tagName!=='INPUT')deleteSel();
   if(e.key==='Escape'){selId=null;renderEls();showProps(null);}
+  if(e.key==='p'&&(e.ctrlKey||e.metaKey)){e.preventDefault();togglePreview();}
   if(selId&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
     const el=elements.find(e2=>e2.id===selId);if(!el)return;
-    const step=e.shiftKey?10:1;
-    if(e.key==='ArrowLeft')  el.x=Math.max(0,el.x-step);
-    if(e.key==='ArrowRight') el.x=Math.min(canvasW-el.w,el.x+step);
-    if(e.key==='ArrowUp')    el.y=Math.max(0,el.y-step);
-    if(e.key==='ArrowDown')  el.y=Math.min(canvasH-el.h,el.y+step);
-    e.preventDefault();
-    renderEls();showProps(el);genCode();
+    const s=e.shiftKey?10:1;
+    if(e.key==='ArrowLeft')el.x=Math.max(0,el.x-s);
+    if(e.key==='ArrowRight')el.x=Math.min(canvasW-el.w,el.x+s);
+    if(e.key==='ArrowUp')el.y=Math.max(0,el.y-s);
+    if(e.key==='ArrowDown')el.y=Math.min(canvasH-el.h,el.y+s);
+    e.preventDefault();renderEls();showProps(el);genCode();
   }
 });
 
-// ════════════════════════════════
+// ══════════════════════════════════════
 //  INIT
-// ════════════════════════════════
+// ══════════════════════════════════════
 window.addEventListener('load',()=>{
   document.getElementById('custom-wh').style.display='grid';
-  applyRatio(); // also calls buildGrid + genCode
+  applyRatio(false);
   syncInputs();
   showProps(null);
+  genCode();
 });
-window.addEventListener('resize',()=>{applyRatio();});
+window.addEventListener('resize',()=>{applyRatio(true);});
 </script>
-
 </body>
 </html>
