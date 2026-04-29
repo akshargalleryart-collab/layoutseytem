@@ -35,7 +35,6 @@
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
@@ -67,6 +66,7 @@ header{
   padding:8px 16px;background:var(--text);color:#fff;border:none;border-radius:8px;
   font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;
   -webkit-tap-highlight-color:transparent;transition:all .15s;display:flex;align-items:center;gap:5px;
+  white-space:nowrap;
 }
 .btn-primary:hover{background:#333}
 .btn-primary:active{transform:scale(.96)}
@@ -88,7 +88,6 @@ header{
   text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:500;
 }
 
-/* Size presets */
 .size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
 .sz-btn{
   background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;
@@ -107,19 +106,17 @@ header{
 }
 .cw-inp:focus{border-color:var(--accent)}
 
-/* Grid system */
 .grid-sys-list{display:flex;flex-direction:column;gap:5px}
 .gs-btn{
   background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;
   padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);
-  transition:all .15s;-webkit-tap-highlight-color:transparent;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;width:100%;
 }
 .gs-btn:hover{border-color:var(--border2);background:var(--border)}
 .gs-btn.active{border-color:var(--accent);background:rgba(26,26,26,.07);box-shadow:inset 2px 0 0 var(--accent)}
 .gs-name{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;display:block;margin-bottom:1px}
 .gs-desc{font-size:9px;color:var(--muted);line-height:1.4}
 
-/* Grid controls */
 .col-row-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .nr-wrap{display:flex;flex-direction:column;gap:4px}
 .nr-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
@@ -145,7 +142,6 @@ input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(-
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--text);border-radius:50%;cursor:pointer;transition:transform .1s}
 input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 
-/* Palette */
 .pal-list{display:flex;flex-direction:column;gap:5px}
 .pal-item{
   display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:8px;
@@ -166,25 +162,21 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 }
 .canvas-size-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;letter-spacing:.06em}
 
-/* THE CANVAS */
 #canvas{
   position:relative;background:#ffffff;
   box-shadow:var(--shadow-lg);border-radius:4px;flex-shrink:0;
-  overflow:visible;touch-action:none;user-select:none;
+  overflow:hidden; /* FIX: was overflow:visible — caused elements to render outside bounds */
+  touch-action:none;user-select:none;
 }
 
-/* Grid lines overlay */
 .grid-lines-layer{
   position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:4px;overflow:hidden;
 }
-
-/* GRID CELLS */
 .grid-overlay{position:absolute;inset:0;pointer-events:none;z-index:1;}
 .grid-cell-bg{
   position:absolute;pointer-events:all;cursor:crosshair;
   display:flex;align-items:center;justify-content:center;
 }
-/* Plus button — no circle */
 .add-btn{
   width:28px;height:28px;
   color:rgba(0,0,0,0.3);font-size:22px;font-weight:300;
@@ -210,7 +202,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .design-el.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,0.2);z-index:20}
 .design-el.dragging{opacity:.85;z-index:100;cursor:grabbing;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
 
-/* element content */
 .el-lbl{
   font-family:'DM Mono',monospace;font-size:8px;font-weight:500;text-transform:uppercase;
   letter-spacing:.12em;color:rgba(0,0,0,0.3);pointer-events:none;line-height:1;
@@ -222,7 +213,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   max-width:100%;overflow:hidden;word-break:break-word;
 }
 
-/* CLOSE ✕ — top right */
+/* CLOSE button */
 .el-close{
   position:absolute;top:-10px;right:-10px;width:22px;height:22px;border-radius:50%;
   background:var(--accent2);border:2px solid #fff;color:#fff;font-size:11px;
@@ -233,10 +224,10 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .design-el.selected .el-close,
 .design-el:hover .el-close{opacity:1}
 
-/* RESIZE handles — BR and BL */
+/* RESIZE handles */
 .el-resize-br,.el-resize-bl{
   position:absolute;bottom:-7px;width:20px;height:20px;
-  cursor:se-resize;z-index:50;opacity:0;transition:opacity .15s;touch-action:none;
+  z-index:50;opacity:0;transition:opacity .15s;touch-action:none;
 }
 .el-resize-br{right:-7px;cursor:se-resize}
 .el-resize-bl{left:-7px;cursor:sw-resize}
@@ -244,7 +235,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .design-el.selected .el-resize-bl,
 .design-el:hover .el-resize-br,
 .design-el:hover .el-resize-bl{opacity:1}
-/* L-bracket icons */
 .el-resize-br::before{
   content:'';position:absolute;bottom:3px;right:3px;
   width:10px;height:10px;
@@ -258,7 +248,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   border-radius:0 0 0 2px;
 }
 
-/* type styles */
+/* element type styles */
 .el-headline .el-prev{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#1a1a1a}
 .el-subheadline .el-prev{font-size:12px;color:#333;font-weight:500}
 .el-description .el-prev{font-size:10px;color:#666;line-height:1.5}
@@ -327,7 +317,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 /* ══ PREVIEW MODE ══ */
 #canvas.preview-mode .grid-lines-layer,
 #canvas.preview-mode .grid-overlay,
-#canvas.preview-mode .snap-guide{display:none!important}
+#canvas.preview-mode #snap-guide-layer{display:none!important}
 #canvas.preview-mode .design-el{
   border:none!important;box-shadow:none!important;cursor:default;
 }
@@ -336,7 +326,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 #canvas.preview-mode .el-resize-br,
 #canvas.preview-mode .el-resize-bl,
 #canvas.preview-mode .snap-preview{display:none!important}
-#canvas.preview-mode .el-prev{font-size:inherit}
 
 /* ══ MOBILE NAV ══ */
 .mob-nav{display:none;height:56px;background:var(--panel);border-top:2px solid var(--border);flex-shrink:0;box-shadow:0 -2px 8px rgba(0,0,0,0.06)}
@@ -377,7 +366,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .drw-cls:hover{color:var(--text);border-color:var(--border2)}
 .drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
 
-/* mobile grid */
 .m-sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:12px}
 .m-col-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .m-el-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -403,7 +391,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .m-ct{font-family:'DM Mono',monospace;font-size:10px;color:#166534;line-height:1.7;white-space:pre-wrap;word-break:break-all;max-height:130px;overflow-y:auto}
 .m-cpb{width:100%;margin-top:10px;padding:12px;background:var(--text);color:#fff;border:none;border-radius:8px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .m-gs-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.m-gs-btn{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.m-gs-btn{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent;width:100%}
 .m-gs-btn.active{border-color:var(--accent);background:rgba(26,26,26,.07);box-shadow:inset 2px 0 0 var(--accent)}
 
 /* ══ PICKER ══ */
@@ -447,18 +435,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .loading-text{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);font-weight:500}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ══ SECTION DIVIDER ══ */
-.section-divider{height:1.5px;background:var(--border);margin:10px 0}
-
-/* ══ BADGE ══ */
-.badge{
-  display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;
-  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.05em;
-  background:var(--panel2);border:1px solid var(--border);color:var(--muted);
-}
-.badge.blue{background:#eff6ff;border-color:#bfdbfe;color:var(--blue)}
-.badge.green{background:#f0fdf4;border-color:#bbf7d0;color:var(--green)}
-
 /* ══ RESPONSIVE ══ */
 @media(max-width:900px){
   .app-body{grid-template-columns:240px 1fr}
@@ -476,7 +452,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 </head>
 <body>
 
-<!-- ══ LOADING ══ -->
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Exporting PDF…</div>
@@ -500,7 +475,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 <!-- ══ LEFT PANEL ══ -->
 <div class="left-panel">
 
-  <!-- Canvas Size -->
   <div class="ps">
     <div class="ps-title">Canvas Size</div>
     <div class="size-grid">
@@ -515,7 +489,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     </div>
   </div>
 
-  <!-- Grid System -->
   <div class="ps">
     <div class="ps-title">Grid System</div>
     <div class="grid-sys-list">
@@ -534,7 +507,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     </div>
   </div>
 
-  <!-- Grid Controls -->
   <div class="ps" id="manual-ctrl">
     <div class="ps-title">Grid Controls</div>
     <div class="col-row-wrap">
@@ -561,7 +533,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     </div>
   </div>
 
-  <!-- Elements -->
   <div class="ps">
     <div class="ps-title">Elements — drag or click + on canvas</div>
     <div class="pal-list">
@@ -783,8 +754,6 @@ let elements=[], selId=null, eid=0;
 let pendDrop={x:0,y:0};
 let palType=null;
 let isPreview=false;
-
-// logical (full-res) canvas dims for export
 let logicalW=540, logicalH=400;
 
 const EL_DEF={
@@ -806,7 +775,7 @@ const GS={
 //  CANVAS SIZE
 // ══════════════════════════════════════
 const RATIOS={'1:1':1,'4:5':5/4,'9:16':16/9};
-const LOGICAL_BASE=600; // px for export
+const LOGICAL_BASE=600;
 
 function dispW(){
   const area=document.getElementById('canvas-area');
@@ -814,14 +783,17 @@ function dispW(){
   return Math.max(200,Math.min(mob?area.clientWidth-20:area.clientWidth-48,mob?380:620));
 }
 
+// FIX: setRatio — removed unreliable querySelectorAll toggle, using data-ratio attributes instead
 function setRatio(r,btn,ctx){
   ratio=r;
-  document.querySelectorAll('.sz-btn').forEach(b=>{
-    const fn=b.getAttribute('onclick')||'';
-    b.classList.toggle('active',fn.includes(`'${r}'`));
-  });
+  // Toggle desktop size buttons
+  document.querySelectorAll('.size-grid .sz-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.m-sz-grid .sz-btn').forEach(b=>b.classList.remove('active'));
+  // Mark clicked button active
+  if(btn) btn.classList.add('active');
+
   const cwhEl=document.getElementById('custom-wh');
-  if(cwhEl)cwhEl.style.display=r==='custom'?'grid':'none';
+  if(cwhEl) cwhEl.style.display=r==='custom'?'grid':'none';
   applyRatio(true);
 }
 
@@ -850,7 +822,6 @@ function applyRatio(rescaleElements){
   cv.style.height=canvasH+'px';
   document.getElementById('cv-lbl').textContent=`${canvasW} × ${canvasH} px`;
 
-  // Rescale elements proportionally
   if(rescaleElements && elements.length>0 && oldW>0 && oldH>0){
     const sx=canvasW/oldW, sy=canvasH/oldH;
     elements.forEach(el=>{
@@ -872,19 +843,22 @@ function applyRatio(rescaleElements){
 // ══════════════════════════════════════
 function setGridSystem(gs,btn,ctx){
   gridSystem=gs;
-  document.querySelectorAll('.gs-btn,.m-gs-btn').forEach(b=>{
-    const fn=b.getAttribute('onclick')||'';
-    b.classList.toggle('active',fn.includes(`'${gs}'`));
-  });
+  // FIX: scope selectors to avoid cross-contaminating desktop and mobile buttons
+  document.querySelectorAll('.gs-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.m-gs-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
   const preset=GS[gs];
   cols=preset.cols; rows=preset.rows;
   if(gs==='golden') gap=0;
   syncInputs();
+
   const showR=preset.showRows;
   const rcD=document.getElementById('rows-ctrl');
   const rcM=document.getElementById('m-rows-ctrl');
-  if(rcD)rcD.style.display=showR?'block':'none';
-  if(rcM)rcM.style.display=showR?'block':'none';
+  if(rcD) rcD.style.display=showR?'block':'none';
+  if(rcM) rcM.style.display=showR?'block':'none';
+
   elements=[]; selId=null;
   invalidateSnapCache();
   buildGrid(); renderEls(); genCode(); showProps(null);
@@ -927,30 +901,32 @@ function computeCells(){
     const cTotal=canvasW-gap*3;
     const c1w=Math.round(cTotal*2/3),c2w=cTotal-c1w;
     const rTotal=canvasH-gap*5;
+    // FIX: guard against negative rTotal
+    const safeRT=Math.max(rTotal,40);
     const rH=[
-      Math.round(rTotal*.15),Math.round(rTotal*.52),
-      Math.round(rTotal*.18),rTotal-Math.round(rTotal*.15)-Math.round(rTotal*.52)-Math.round(rTotal*.18)
+      Math.round(safeRT*.15),Math.round(safeRT*.52),
+      Math.round(safeRT*.18),safeRT-Math.round(safeRT*.15)-Math.round(safeRT*.52)-Math.round(safeRT*.18)
     ];
-    const cws=[c1w,c2w];
+    const cws=[Math.max(c1w,1),Math.max(c2w,1)];
     let yCur=gap;
     for(let r=0;r<4;r++){
       let xCur=gap;
       for(let c=0;c<2;c++){
-        cells.push({x:xCur,y:yCur,w:cws[c],h:rH[r],col:c+1,row:r+1});
+        cells.push({x:xCur,y:yCur,w:cws[c],h:Math.max(rH[r],1),col:c+1,row:r+1});
         xCur+=cws[c]+gap;
       }
       yCur+=rH[r]+gap;
     }
   } else if(gridSystem==='golden'){
     const phi=1.618;
-    const cTotal=canvasW-gap*3;
+    const cTotal=Math.max(canvasW-gap*3,10);
     const c1w=Math.round(cTotal*phi/(phi+1)),c2w=cTotal-c1w;
-    const rTotal=canvasH-gap*4;
+    const rTotal=Math.max(canvasH-gap*4,10);
     const r1h=Math.round(rTotal*phi/(phi+1+phi-1));
     const r3h=Math.round(rTotal*(phi-1)/(phi+1+phi-1));
     const r2h=rTotal-r1h-r3h;
-    const cws=[c1w,c2w];
-    const rhs=[r1h,r2h,r3h];
+    const cws=[Math.max(c1w,1),Math.max(c2w,1)];
+    const rhs=[Math.max(r1h,1),Math.max(r2h,1),Math.max(r3h,1)];
     let yCur=gap;
     for(let r=0;r<3;r++){
       let xCur=gap;
@@ -961,9 +937,13 @@ function computeCells(){
       yCur+=rhs[r]+gap;
     }
   } else {
-    const effCols=cols,effRows=(gridSystem==='column')?1:rows;
-    const cellW=(canvasW-gap*(effCols+1))/effCols;
-    const cellH=(canvasH-gap*(effRows+1))/effRows;
+    const effCols=Math.max(cols,1);
+    const effRows=(gridSystem==='column')?1:Math.max(rows,1);
+    // FIX: avoid division by zero / negative cell sizes
+    const totalGapX=gap*(effCols+1);
+    const totalGapY=gap*(effRows+1);
+    const cellW=Math.max((canvasW-totalGapX)/effCols,1);
+    const cellH=Math.max((canvasH-totalGapY)/effRows,1);
     for(let r=0;r<effRows;r++){
       for(let c=0;c<effCols;c++){
         const x=gap+c*(cellW+gap),y=gap+r*(cellH+gap);
@@ -975,7 +955,7 @@ function computeCells(){
 }
 
 // ══════════════════════════════════════
-//  DRAW GRID LINES ON CANVAS
+//  DRAW GRID LINES
 // ══════════════════════════════════════
 function drawGridLines(){
   const cvs=document.getElementById('grid-lines-canvas');
@@ -986,21 +966,17 @@ function drawGridLines(){
   if(isPreview) return;
 
   const cells=computeCells();
-
-  // Collect unique X and Y boundaries
   const xs=new Set(),ys=new Set();
   cells.forEach(c=>{
     xs.add(c.x);xs.add(c.x+c.w);
     ys.add(c.y);ys.add(c.y+c.h);
   });
 
-  // Draw cell fills
   cells.forEach(c=>{
     ctx.fillStyle='rgba(170,155,138,0.22)';
     ctx.fillRect(c.x,c.y,c.w,c.h);
   });
 
-  // Draw grid lines
   ctx.lineWidth=1;
   [...xs].forEach(x=>{
     const isEdge=(x<=gap||x>=canvasW-gap);
@@ -1032,13 +1008,14 @@ function invalidateSnapCache(){_snapCache=null;}
 
 function strictSnap(x,y,w,h){
   const{cells,xs,ys}=_getCache();
+  if(!cells.length) return {x,y,w,h};
   let best=null,bestD=Infinity;
   for(let i=0;i<cells.length;i++){
     const c=cells[i];
     const d=Math.hypot(x-c.x,y-c.y);
     if(d<bestD){bestD=d;best=c;}
   }
-  if(!best)best=cells[0];
+  if(!best) best=cells[0];
   const sx=best.x,sy=best.y;
   const targetRight=x+w;
   let snapRight=sx+best.w;
@@ -1055,6 +1032,7 @@ function strictSnap(x,y,w,h){
 
 function strictSnapSize(x,y,w,h){
   const{xs,ys,cells}=_getCache();
+  if(!cells.length) return {x,y,w,h};
   let anchor=null,bestD=Infinity;
   for(let i=0;i<cells.length;i++){
     const c=cells[i];
@@ -1063,7 +1041,7 @@ function strictSnapSize(x,y,w,h){
       if(d<bestD){bestD=d;anchor=c;}
     }
   }
-  if(!anchor)anchor=cells[0];
+  if(!anchor) anchor=cells[0];
   const targetRight=x+w,targetBottom=y+h;
   let snapRight=anchor.x+anchor.w,minDx=Infinity;
   for(let i=0;i<xs.length;i++){if(xs[i]>x){const d=Math.abs(xs[i]-targetRight);if(d<minDx){minDx=d;snapRight=xs[i];}}}
@@ -1088,7 +1066,7 @@ function getSnapLines(x,y,w,h){
 let _guideEls=[];
 function drawSnapLines(snapLines){
   const layer=document.getElementById('snap-guide-layer');
-  if(!layer)return;
+  if(!layer) return;
   if(!snapLines){
     _guideEls.forEach(el=>el.classList.remove('vis'));
     setTimeout(()=>{_guideEls.forEach(el=>el.remove());_guideEls=[];},80);
@@ -1116,26 +1094,20 @@ function hideSnapPreview(){const p=document.getElementById('snap-preview');if(p)
 //  AUTO WRAP — resolve overlaps
 // ══════════════════════════════════════
 function autoWrap(){
-  if(elements.length<2)return;
+  if(elements.length<2) return;
   const cells=computeCells();
-  if(!cells.length)return;
-  // Assign each element to the first free cell
+  if(!cells.length) return;
   const usedCells=new Set();
   const sorted=[...elements].sort((a,b)=>a.id-b.id);
   sorted.forEach(el=>{
-    // Find cell nearest to current position that's not used
     let best=null,bestD=Infinity;
     cells.forEach((c,i)=>{
-      if(usedCells.has(i))return;
+      if(usedCells.has(i)) return;
       const d=Math.hypot(el.x-c.x,el.y-c.y);
       if(d<bestD){bestD=d;best={c,i};}
     });
-    if(!best){
-      // All cells taken, just keep position
-      return;
-    }
+    if(!best) return;
     usedCells.add(best.i);
-    // Check overlap with existing placed elements
     const overlaps=sorted.filter(other=>
       other.id!==el.id &&
       el.x<other.x+other.w && el.x+el.w>other.x &&
@@ -1182,15 +1154,15 @@ function showPicker(e){
   p.style.display='block';
   const r=e.target.getBoundingClientRect();
   let left=r.left+window.scrollX,top=r.bottom+6+window.scrollY;
-  if(left+200>window.innerWidth)left=window.innerWidth-208;
-  if(top+260>window.innerHeight)top=r.top-14-220+window.scrollY;
+  if(left+200>window.innerWidth) left=window.innerWidth-208;
+  if(top+260>window.innerHeight) top=r.top-14-220+window.scrollY;
   p.style.left=left+'px';p.style.top=top+'px';
   e.stopPropagation();
 }
 function hidePicker(){document.getElementById('picker').style.display='none';}
 
 document.addEventListener('click',e=>{
-  if(!e.target.closest('#picker')&&!e.target.closest('.add-btn'))hidePicker();
+  if(!e.target.closest('#picker')&&!e.target.closest('.add-btn')) hidePicker();
   if(!e.target.closest('.design-el')&&!e.target.closest('.drawer')&&!e.target.closest('#picker')){
     selId=null;renderEls();showProps(null);
   }
@@ -1208,11 +1180,10 @@ function placeEl(type,dropX,dropY){
     id:++eid,type,content:def.content,
     x:Math.max(0,Math.min(s.x,canvasW-s.w)),
     y:Math.max(0,Math.min(s.y,canvasH-s.h)),
-    w:s.w,h:s.h,
+    w:Math.max(s.w,20),h:Math.max(s.h,16),
   };
   elements.push(el);selId=el.id;
   renderEls();showProps(el);genCode();
-  // Auto-wrap if overlapping
   const hasOverlap=elements.some(other=>
     other.id!==el.id &&
     el.x<other.x+other.w && el.x+el.w>other.x &&
@@ -1239,10 +1210,12 @@ function palDragStart(type,e){
   e.dataTransfer.effectAllowed='copy';
 }
 function palDrop(e){
-  if(!palType)return;
+  if(!palType) return;
   e.preventDefault();
   const cvr=document.getElementById('canvas').getBoundingClientRect();
   const px=e.clientX-cvr.left,py=e.clientY-cvr.top;
+  // FIX: check drop is within canvas bounds
+  if(px<0||py<0||px>canvasW||py>canvasH){palType=null;return;}
   const def=EL_DEF[palType];
   const ew=Math.round(canvasW*def.fw),eh=Math.round(canvasH*def.fh);
   placeEl(palType,px-ew/2,py-eh/2);
@@ -1252,10 +1225,11 @@ function palDrop(e){
 // ══════════════════════════════════════
 //  RENDER ELEMENTS
 // ══════════════════════════════════════
-let dblTapTimer={}, dblTapLast={};
+let dblTapLast={};
 
 function renderEls(){
-  document.querySelectorAll('.design-el').forEach(e=>e.remove());
+  // FIX: only remove .design-el nodes, not grid/snap elements
+  document.querySelectorAll('#canvas > .design-el').forEach(e=>e.remove());
   const canvas=document.getElementById('canvas');
   elements.forEach(el=>{
     const div=document.createElement('div');
@@ -1293,21 +1267,25 @@ function renderEls(){
 
     // DRAG (move)
     div.addEventListener('pointerdown',e=>{
-      if(e.target===cls||e.target===rBR||e.target===rBL)return;
+      if(e.target===cls||e.target===rBR||e.target===rBL) return;
       e.stopPropagation();e.preventDefault();
       selId=el.id;renderEls();showProps(el);
       startMove(e,el);
     });
 
-    // DOUBLE TAP → props on mobile
+    // FIX: double-click / double-tap detection
     div.addEventListener('click',e=>{
       e.stopPropagation();
       const now=Date.now();
       const id=el.id;
       if(dblTapLast[id]&&(now-dblTapLast[id])<400){
         selId=el.id;renderEls();showProps(el);
-        if(window.innerWidth<=640)openDrw('props');
-        else{switchTab('props',document.querySelector('.r-tab'));showProps(el);}
+        if(window.innerWidth<=640) openDrw('props');
+        else{
+          const propsTab=document.querySelector('.r-tab');
+          switchTab('props',propsTab);
+          showProps(el);
+        }
         dblTapLast[id]=0;
       } else {
         dblTapLast[id]=now;
@@ -1325,6 +1303,7 @@ function renderEls(){
 function startMove(e,el){
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  if(!div) return;
   const sx=e.clientX,sy=e.clientY,ox=el.x,oy=el.y;
   let moved=false,rafId=null,pendX=ox,pendY=oy;
   div.classList.add('dragging');
@@ -1340,12 +1319,12 @@ function startMove(e,el){
     el.x=nx;el.y=ny;showProps(el);
   }
   function onMove(ev){
-    if(ev.pointerId!==e.pointerId)return;
+    if(ev.pointerId!==e.pointerId) return;
     moved=true;pendX=ox+(ev.clientX-sx);pendY=oy+(ev.clientY-sy);
-    if(!rafId)rafId=requestAnimationFrame(applyFrame);
+    if(!rafId) rafId=requestAnimationFrame(applyFrame);
   }
   function onUp(ev){
-    if(ev.pointerId!==e.pointerId)return;
+    if(ev.pointerId!==e.pointerId) return;
     if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     div.removeEventListener('pointermove',onMove);
     div.removeEventListener('pointerup',onUp);
@@ -1355,7 +1334,7 @@ function startMove(e,el){
       const s=strictSnap(el.x,el.y,el.w,el.h);
       el.x=Math.max(0,Math.min(s.x,canvasW-s.w));
       el.y=Math.max(0,Math.min(s.y,canvasH-s.h));
-      el.w=s.w;el.h=s.h;
+      el.w=Math.max(s.w,20);el.h=Math.max(s.h,16);
       renderEls();showProps(el);genCode();
     }
   }
@@ -1369,7 +1348,9 @@ function startMove(e,el){
 function startResize(e,el,corner){
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  if(!div) return;
   const handle=div.querySelector(corner==='br'?'.el-resize-br':'.el-resize-bl');
+  if(!handle) return;
   const sx=e.clientX,sy=e.clientY;
   const ow=el.w,oh=el.h,ox=el.x;
   const MIN_W=20,MIN_H=16;
@@ -1385,7 +1366,6 @@ function startResize(e,el,corner){
       nh=Math.max(MIN_H,Math.min(pendH,canvasH-el.y));
       nx=el.x;
     } else {
-      // BL: x moves, w shrinks from left
       nw=Math.max(MIN_W,Math.min(pendW,ox+ow));
       nh=Math.max(MIN_H,Math.min(pendH,canvasH-el.y));
       nx=Math.max(0,ox+ow-nw);
@@ -1397,14 +1377,14 @@ function startResize(e,el,corner){
     showProps(el);
   }
   function onMove(ev){
-    if(ev.pointerId!==e.pointerId)return;
+    if(ev.pointerId!==e.pointerId) return;
     const dx=ev.clientX-sx,dy=ev.clientY-sy;
     if(corner==='br'){pendW=ow+dx;pendH=oh+dy;}
-    else {pendW=ow-dx;pendH=oh+dy;}
-    if(!rafId)rafId=requestAnimationFrame(applyFrame);
+    else{pendW=ow-dx;pendH=oh+dy;}
+    if(!rafId) rafId=requestAnimationFrame(applyFrame);
   }
   function onUp(ev){
-    if(ev.pointerId!==e.pointerId)return;
+    if(ev.pointerId!==e.pointerId) return;
     if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     handle.removeEventListener('pointermove',onMove);
     handle.removeEventListener('pointerup',onUp);
@@ -1413,8 +1393,7 @@ function startResize(e,el,corner){
       const s=strictSnapSize(el.x,el.y,el.w,el.h);
       el.w=Math.max(MIN_W,s.w);el.h=Math.max(MIN_H,s.h);
     } else {
-      // snap left edge
-      const {xs}=_getCache();
+      const{xs}=_getCache();
       let snapX=el.x,minD=Infinity;
       xs.forEach(x=>{const d=Math.abs(x-el.x);if(d<minD){minD=d;snapX=x;}});
       const snapRight=el.x+el.w;
@@ -1431,17 +1410,24 @@ function startResize(e,el,corner){
 //  PROPS PANEL
 // ══════════════════════════════════════
 function showProps(el){
+  const noSelD=document.getElementById('no-sel');
+  const formD=document.getElementById('props-form');
+  const noSelM=document.getElementById('m-no-sel');
+  const formM=document.getElementById('m-props-form');
+
   if(!el){
-    ['no-sel','m-no-sel'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='flex'||'block';});
-    document.getElementById('no-sel').style.display='flex';
-    document.getElementById('m-no-sel').style.display='block';
-    document.getElementById('props-form').style.display='none';
-    document.getElementById('m-props-form').style.display='none';
+    if(noSelD) noSelD.style.display='flex';
+    if(formD) formD.style.display='none';
+    if(noSelM) noSelM.style.display='block';
+    if(formM) formM.style.display='none';
     return;
   }
-  document.getElementById('no-sel').style.display='none';
-  document.getElementById('props-form').style.display='block';
-  document.getElementById('pr-type').textContent=EL_DEF[el.type].lbl;
+
+  if(noSelD) noSelD.style.display='none';
+  if(formD) formD.style.display='block';
+  const typeEl=document.getElementById('pr-type');
+  if(typeEl) typeEl.textContent=EL_DEF[el.type].lbl;
+
   const fields={content:el.content,x:Math.round(el.x),y:Math.round(el.y),w:Math.round(el.w),h:Math.round(el.h)};
   Object.entries(fields).forEach(([k,v])=>{
     const e=document.getElementById('pr-'+k);if(e)e.value=v;
@@ -1449,29 +1435,44 @@ function showProps(el){
   ['x','y','w','h'].forEach(k=>{
     const e=document.getElementById('pv-'+k);if(e)e.textContent=Math.round(el[k]);
   });
-  document.getElementById('m-no-sel').style.display='none';
-  document.getElementById('m-props-form').style.display='block';
-  document.getElementById('m-prop-title').textContent=EL_DEF[el.type].lbl;
-  const mFields={content:el.content,x:Math.round(el.x),y:Math.round(el.y),w:Math.round(el.w),h:Math.round(el.h)};
-  Object.entries(mFields).forEach(([k,v])=>{
+
+  if(noSelM) noSelM.style.display='none';
+  if(formM) formM.style.display='block';
+  const titleM=document.getElementById('m-prop-title');
+  if(titleM) titleM.textContent=EL_DEF[el.type].lbl;
+  Object.entries(fields).forEach(([k,v])=>{
     const e=document.getElementById('m-pr-'+k);if(e)e.value=v;
   });
 }
 
 function updContent(ctx){
   const el=elements.find(e=>e.id===selId);if(!el)return;
-  el.content=document.getElementById(ctx==='m'?'m-pr-content':'pr-content').value;
-  renderEls();genCode();
+  const inp=document.getElementById(ctx==='m'?'m-pr-content':'pr-content');
+  if(inp) el.content=inp.value;
+  // FIX: update the preview text directly without full re-render to preserve selection
+  const canvas=document.getElementById('canvas');
+  const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  if(div){
+    const prev=div.querySelector('.el-prev');
+    if(prev) prev.textContent=el.content;
+  }
+  genCode();
 }
+
 function updPosInp(ctx){
   const el=elements.find(e=>e.id===selId);if(!el)return;
   const p=ctx==='m'?'m-pr':'pr';
-  el.x=parseFloat(document.getElementById(p+'-x').value)||0;
-  el.y=parseFloat(document.getElementById(p+'-y').value)||0;
-  el.w=Math.max(20,parseFloat(document.getElementById(p+'-w').value)||20);
-  el.h=Math.max(16,parseFloat(document.getElementById(p+'-h').value)||16);
+  const getV=(id,def)=>{const e=document.getElementById(id);return e?parseFloat(e.value)||def:def;};
+  el.x=getV(p+'-x',0);
+  el.y=getV(p+'-y',0);
+  el.w=Math.max(20,getV(p+'-w',20));
+  el.h=Math.max(16,getV(p+'-h',16));
+  // FIX: clamp to canvas bounds
+  el.x=Math.max(0,Math.min(el.x,canvasW-el.w));
+  el.y=Math.max(0,Math.min(el.y,canvasH-el.h));
   renderEls();showProps(el);genCode();
 }
+
 function delEl(id){
   elements=elements.filter(e=>e.id!==id);
   if(selId===id){selId=null;showProps(null);}
@@ -1505,13 +1506,12 @@ function togglePreview(){
   cv.classList.toggle('preview-mode',isPreview);
   btn.classList.toggle('active',isPreview);
   btn.title=isPreview?'Exit preview':'Preview mode (hides grid)';
-  drawGridLines(); // redraw (clears if preview)
-  if(isPreview) showToast('Preview mode — grid hidden');
-  else showToast('Edit mode');
+  drawGridLines();
+  showToast(isPreview?'Preview mode — grid hidden':'Edit mode');
 }
 
 // ══════════════════════════════════════
-//  EXPORT PDF
+//  EXPORT PDF — FIX: properly restore state
 // ══════════════════════════════════════
 async function exportPDF(){
   const loading=document.getElementById('loading-overlay');
@@ -1519,56 +1519,40 @@ async function exportPDF(){
   loading.classList.add('show');
   loadText.textContent='Preparing canvas…';
 
+  const wasPreview=isPreview;
   try{
-    // Temporarily enter preview mode for clean export
-    const wasPreview=isPreview;
     if(!wasPreview){
       isPreview=true;
       document.getElementById('canvas').classList.add('preview-mode');
       drawGridLines();
+      await new Promise(r=>setTimeout(r,100));
     }
 
-    await new Promise(r=>setTimeout(r,80));
     loadText.textContent='Rendering elements…';
-
     const cv=document.getElementById('canvas');
-
-    // Scale factor for higher resolution
-    const scale=window.devicePixelRatio||2;
+    const scale=Math.max(window.devicePixelRatio||1,2);
 
     const canvasImg=await html2canvas(cv,{
-      scale:scale,
+      scale,
       useCORS:true,
       logging:false,
       backgroundColor:'#ffffff',
       width:canvasW,
       height:canvasH,
+      // FIX: ignore elements outside canvas
+      ignoreElements:(el)=>el.classList&&(el.classList.contains('snap-guide')||el.classList.contains('snap-preview')),
     });
 
     loadText.textContent='Building PDF…';
-    await new Promise(r=>setTimeout(r,30));
-
-    // Restore
-    if(!wasPreview){
-      isPreview=false;
-      document.getElementById('canvas').classList.remove('preview-mode');
-      drawGridLines();
-    }
 
     const imgData=canvasImg.toDataURL('image/png',1.0);
+    const{jsPDF}=window.jspdf;
 
-    // PDF dimensions — use logical sizes
-    // jsPDF uses pt by default; 1pt = 1/72 inch
-    // We use mm for accurate ratio
-    const {jsPDF}=window.jspdf;
-
-    // Determine page dimensions in mm
     let pdfW,pdfH;
     if(ratio==='1:1'){pdfW=150;pdfH=150;}
     else if(ratio==='4:5'){pdfW=120;pdfH=150;}
     else if(ratio==='9:16'){pdfW=90;pdfH=160;}
     else{
-      // custom: maintain aspect ratio, fit in ~200mm max
       const aspect=logicalH/logicalW;
       pdfW=180;pdfH=Math.round(180*aspect);
       if(pdfH>280){pdfH=280;pdfW=Math.round(280/aspect);}
@@ -1580,12 +1564,17 @@ async function exportPDF(){
 
     const ratioLabel=ratio==='custom'?`${logicalW}x${logicalH}`:ratio.replace(':','-');
     pdf.save(`grid-design-${ratioLabel}.pdf`);
-
     showToast('PDF exported ✓');
   } catch(err){
-    console.error(err);
+    console.error('Export error:',err);
     showToast('Export failed — try again');
   } finally{
+    // FIX: always restore preview state in finally block
+    if(!wasPreview){
+      isPreview=false;
+      document.getElementById('canvas').classList.remove('preview-mode');
+      drawGridLines();
+    }
     loading.classList.remove('show');
   }
 }
@@ -1596,9 +1585,10 @@ async function exportPDF(){
 function switchTab(name,btn){
   document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tp-'+name).classList.add('active');
-  if(name==='code')genCode();
+  if(btn) btn.classList.add('active');
+  const tp=document.getElementById('tp-'+name);
+  if(tp) tp.classList.add('active');
+  if(name==='code') genCode();
 }
 
 // ══════════════════════════════════════
@@ -1608,9 +1598,14 @@ function openDrw(name){
   closeDrw(true);
   const ov=document.getElementById('overlay');
   const drw=document.getElementById('drw-'+name);
+  if(!drw) return;
   ov.style.display='block';
   requestAnimationFrame(()=>{ov.classList.add('vis');drw.classList.add('open');});
-  if(name==='code')genCode();
+  if(name==='code') genCode();
+  if(name==='props' && selId){
+    const el=elements.find(e=>e.id===selId);
+    if(el) showProps(el);
+  }
   document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
   const nb=document.getElementById('mn-'+name);if(nb)nb.classList.add('active');
 }
@@ -1628,13 +1623,14 @@ function closeDrw(silent){
 //  COPY
 // ══════════════════════════════════════
 function copyHTML(){
-  const t=document.getElementById('code-html').textContent||document.getElementById('m-code-html').textContent;
-  navigator.clipboard.writeText(t);showToast('HTML copied!');
+  genCode();
+  const t=document.getElementById('code-html')?.textContent||document.getElementById('m-code-html')?.textContent||'';
+  navigator.clipboard.writeText(t).then(()=>showToast('HTML copied!')).catch(()=>showToast('Copy failed'));
 }
 function copyCSS(){
   genCode();
-  const t=document.getElementById('code-css').textContent||document.getElementById('m-code-css').textContent;
-  navigator.clipboard.writeText(t);showToast('CSS copied!');
+  const t=document.getElementById('code-css')?.textContent||document.getElementById('m-code-css')?.textContent||'';
+  navigator.clipboard.writeText(t).then(()=>showToast('CSS copied!')).catch(()=>showToast('Copy failed'));
 }
 
 // ══════════════════════════════════════
@@ -1642,7 +1638,12 @@ function copyCSS(){
 // ══════════════════════════════════════
 function resetCanvas(){
   elements=[];selId=null;
-  if(isPreview){isPreview=false;document.getElementById('canvas').classList.remove('preview-mode');drawGridLines();}
+  if(isPreview){
+    isPreview=false;
+    document.getElementById('canvas').classList.remove('preview-mode');
+    document.getElementById('btn-preview').classList.remove('active');
+  }
+  drawGridLines();
   renderEls();showProps(null);genCode();showToast('Canvas reset');
 }
 
@@ -1650,8 +1651,11 @@ function resetCanvas(){
 //  TOAST
 // ══════════════════════════════════════
 function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
+  const t=document.getElementById('toast');
+  if(!t) return;
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),2200);
 }
 function areaClick(e){
   if(e.target===document.getElementById('canvas-area')||e.target===document.getElementById('canvas')){
@@ -1663,16 +1667,18 @@ function areaClick(e){
 //  KEYBOARD
 // ══════════════════════════════════════
 document.addEventListener('keydown',e=>{
-  if((e.key==='Delete'||e.key==='Backspace')&&document.activeElement.tagName!=='INPUT')deleteSel();
-  if(e.key==='Escape'){selId=null;renderEls();showProps(null);}
+  const tag=document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA') return;
+  if(e.key==='Delete'||e.key==='Backspace') deleteSel();
+  if(e.key==='Escape'){selId=null;renderEls();showProps(null);hidePicker();}
   if(e.key==='p'&&(e.ctrlKey||e.metaKey)){e.preventDefault();togglePreview();}
   if(selId&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
     const el=elements.find(e2=>e2.id===selId);if(!el)return;
     const s=e.shiftKey?10:1;
-    if(e.key==='ArrowLeft')el.x=Math.max(0,el.x-s);
-    if(e.key==='ArrowRight')el.x=Math.min(canvasW-el.w,el.x+s);
-    if(e.key==='ArrowUp')el.y=Math.max(0,el.y-s);
-    if(e.key==='ArrowDown')el.y=Math.min(canvasH-el.h,el.y+s);
+    if(e.key==='ArrowLeft') el.x=Math.max(0,el.x-s);
+    if(e.key==='ArrowRight') el.x=Math.min(canvasW-el.w,el.x+s);
+    if(e.key==='ArrowUp') el.y=Math.max(0,el.y-s);
+    if(e.key==='ArrowDown') el.y=Math.min(canvasH-el.h,el.y+s);
     e.preventDefault();renderEls();showProps(el);genCode();
   }
 });
@@ -1682,6 +1688,11 @@ document.addEventListener('keydown',e=>{
 // ══════════════════════════════════════
 window.addEventListener('load',()=>{
   document.getElementById('custom-wh').style.display='grid';
+  // Hide rows control initially (column grid has showRows:false)
+  const rcD=document.getElementById('rows-ctrl');
+  const rcM=document.getElementById('m-rows-ctrl');
+  if(rcD) rcD.style.display='none';
+  if(rcM) rcM.style.display='none';
   applyRatio(false);
   syncInputs();
   showProps(null);
