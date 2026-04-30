@@ -22,11 +22,9 @@
   --text2:#444;
   --muted:#888;
   --muted2:#aaa;
-  /* FIX 1: Grid warna merah */
   --grid-cell-bg:rgba(220,50,50,0.07);
   --grid-line:rgba(200,40,40,0.30);
   --grid-line-strong:rgba(180,30,30,0.55);
-  --grid-line-preview:rgba(200,30,30,0.55);
   --pink:#e91e8c;
   --green:#16a34a;
   --blue:#2563eb;
@@ -52,12 +50,9 @@ header{
 .logo-box{width:26px;height:26px;background:var(--text);border-radius:5px;display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:5px}
 .logo-box span{background:white;border-radius:1px;display:block}
 .header-div{width:1px;height:28px;background:var(--border);flex-shrink:0}
-.header-info{display:flex;flex-direction:column;gap:1px;min-width:0}
-.header-desc{font-size:10px;color:var(--muted);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
-.header-author{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted2);letter-spacing:.06em}
+/* FIX 4: Author tetap di header */
+.header-author{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em}
 .header-right{margin-left:auto;display:flex;gap:6px;align-items:center;flex-shrink:0}
-@media(max-width:900px){.header-desc{max-width:160px}}
-@media(max-width:640px){.header-info{display:none}}
 
 .btn-icon{
   width:34px;height:34px;border-radius:8px;border:1.5px solid var(--border);
@@ -79,8 +74,6 @@ header{
 .btn-primary:active{transform:scale(.96)}
 .btn-primary.green{background:var(--green)}
 .btn-primary.green:hover{background:#15803d}
-.btn-primary.red-outline{background:transparent;color:var(--red);border:1.5px solid var(--red)}
-.btn-primary.red-outline:hover{background:var(--red);color:#fff}
 
 /* ══ APP LAYOUT ══ */
 .app-body{flex:1;display:grid;grid-template-columns:264px 1fr 300px;overflow:hidden;min-height:0}
@@ -163,7 +156,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .pal-name{font-size:12px;font-weight:500;color:var(--text)}
 .pal-hint{font-size:10px;color:var(--muted)}
 
-/* Auto Layout button */
 .auto-layout-btn{
   width:100%;padding:10px;background:var(--panel2);border:1.5px solid var(--border);
   border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;
@@ -174,13 +166,22 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .auto-layout-btn:active{transform:scale(.97)}
 
 /* ══ CANVAS AREA ══ */
+/* FIX 4: canvas-area column layout, desc below canvas */
 .canvas-area{
   background:var(--bg);display:flex;flex-direction:column;align-items:center;
   justify-content:flex-start;overflow:auto;position:relative;padding:20px;
-  -webkit-overflow-scrolling:touch;gap:10px;
+  -webkit-overflow-scrolling:touch;gap:8px;
 }
 .canvas-size-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;letter-spacing:.06em}
+/* FIX 4: Description below canvas */
+.canvas-desc{
+  font-size:11px;color:var(--muted);text-align:center;line-height:1.5;
+  max-width:520px;flex-shrink:0;padding:0 10px;
+  font-family:'DM Sans',sans-serif;
+  opacity:.8;
+}
 
+/* FIX 2: Canvas with elevated z so grid shows through but elements sit above */
 #canvas{
   position:relative;background:#ffffff;
   box-shadow:var(--shadow-lg);border-radius:4px;flex-shrink:0;
@@ -188,32 +189,31 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   touch-action:none;user-select:none;
 }
 
+/* FIX 2: grid lines layer on TOP of elements (z-index higher) */
 .grid-lines-layer{
-  position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:4px;overflow:hidden;
+  position:absolute;inset:0;pointer-events:none;z-index:30;border-radius:4px;overflow:hidden;
 }
 .grid-overlay{position:absolute;inset:0;pointer-events:none;z-index:1;}
 .grid-cell-bg{
   position:absolute;pointer-events:all;cursor:crosshair;
-  display:flex;align-items:center;justify-content:center;
 }
-/* add-btn removed — use FAB instead */
 
-/* DESIGN ELEMENTS */
+/* FIX 2: Design elements z below grid lines */
 .design-el{
-  position:absolute;background:rgba(255,255,255,0.92);
-  border:2px solid rgba(0,0,0,0.15);border-radius:3px;
-  z-index:10;touch-action:none;cursor:move;
+  position:absolute;background:rgba(255,255,255,0.88);
+  border:2px solid rgba(0,0,0,0.38);border-radius:3px;
+  z-index:10; /* below grid-lines-layer z:30 */
+  touch-action:none;cursor:move;
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;
   overflow:visible;transition:border-color .1s,box-shadow .1s;
-  backdrop-filter:blur(2px);
 }
-.design-el:hover{border-color:rgba(0,0,0,0.3);box-shadow:0 2px 12px rgba(0,0,0,0.12)}
-.design-el.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,0.2);z-index:20}
-.design-el.dragging{opacity:.85;z-index:100;cursor:grabbing;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.design-el:hover{border-color:rgba(0,0,0,0.55);box-shadow:0 2px 12px rgba(0,0,0,0.12)}
+.design-el.selected{border:3px solid var(--blue);box-shadow:0 0 0 2px rgba(37,99,235,0.15);z-index:20}
+.design-el.dragging{opacity:.82;z-index:25;cursor:grabbing;box-shadow:0 8px 24px rgba(0,0,0,0.18)}
 
 .el-lbl{
   font-family:'DM Mono',monospace;font-size:8px;font-weight:500;text-transform:uppercase;
-  letter-spacing:.12em;color:rgba(0,0,0,0.3);pointer-events:none;line-height:1;
+  letter-spacing:.12em;color:rgba(0,0,0,0.28);pointer-events:none;line-height:1;
   position:absolute;top:5px;left:7px;
 }
 .el-prev{
@@ -232,42 +232,36 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .design-el.selected .el-close,
 .design-el:hover .el-close{opacity:1}
 
-.el-resize-br,.el-resize-bl,.el-resize-tr,.el-resize-tl{
-  position:absolute;width:20px;height:20px;
+/* FIX 1: Only 3 resize handles — BR, BL, TL */
+.el-resize-br,.el-resize-bl,.el-resize-tl{
+  position:absolute;width:22px;height:22px;
   z-index:50;opacity:0;transition:opacity .15s;touch-action:none;
 }
-.el-resize-br{bottom:-7px;right:-7px;cursor:se-resize}
-.el-resize-bl{bottom:-7px;left:-7px;cursor:sw-resize}
-.el-resize-tr{top:-7px;right:-7px;cursor:ne-resize}
-.el-resize-tl{top:-7px;left:-7px;cursor:nw-resize}
+.el-resize-br{bottom:-8px;right:-8px;cursor:se-resize}
+.el-resize-bl{bottom:-8px;left:-8px;cursor:sw-resize}
+.el-resize-tl{top:-8px;left:-8px;cursor:nw-resize}
+
 .design-el.selected .el-resize-br,
 .design-el.selected .el-resize-bl,
-.design-el.selected .el-resize-tr,
 .design-el.selected .el-resize-tl,
 .design-el:hover .el-resize-br,
 .design-el:hover .el-resize-bl,
-.design-el:hover .el-resize-tr,
 .design-el:hover .el-resize-tl{opacity:1}
+
 .el-resize-br::before{
-  content:'';position:absolute;bottom:3px;right:3px;
+  content:'';position:absolute;bottom:4px;right:4px;
   width:10px;height:10px;
   border-right:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);
   border-radius:0 0 2px 0;
 }
 .el-resize-bl::before{
-  content:'';position:absolute;bottom:3px;left:3px;
+  content:'';position:absolute;bottom:4px;left:4px;
   width:10px;height:10px;
   border-left:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);
   border-radius:0 0 0 2px;
 }
-.el-resize-tr::before{
-  content:'';position:absolute;top:3px;right:3px;
-  width:10px;height:10px;
-  border-right:2.5px solid var(--blue);border-top:2.5px solid var(--blue);
-  border-radius:0 2px 0 0;
-}
 .el-resize-tl::before{
-  content:'';position:absolute;top:3px;left:3px;
+  content:'';position:absolute;top:4px;left:4px;
   width:10px;height:10px;
   border-left:2.5px solid var(--blue);border-top:2.5px solid var(--blue);
   border-radius:2px 0 0 0;
@@ -278,20 +272,18 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .el-subheadline .el-prev{font-size:12px;color:#333;font-weight:500}
 .el-description .el-prev{font-size:10px;color:#666;line-height:1.5}
 .el-footer .el-prev{font-family:'DM Mono',monospace;font-size:9px;color:#999}
-.el-visualhook{background:rgba(233,30,140,0.05)!important;border-color:rgba(233,30,140,0.3)!important}
+.el-visualhook{background:rgba(233,30,140,0.05)!important;border-color:rgba(233,30,140,0.28)!important}
 .el-visualhook .el-prev{font-size:22px;color:var(--pink)}
 
-/* FIX 2: Preview mode — sembunyikan grid overlay tapi TAMPILKAN grid lines merah + border elemen */
+/* Preview mode */
 #canvas.preview-mode .grid-overlay{display:none!important}
 #canvas.preview-mode #snap-guide-layer{display:none!important}
 #canvas.preview-mode .el-lbl,
 #canvas.preview-mode .el-close,
 #canvas.preview-mode .el-resize-br,
 #canvas.preview-mode .el-resize-bl,
-#canvas.preview-mode .el-resize-tr,
 #canvas.preview-mode .el-resize-tl,
 #canvas.preview-mode .snap-preview{display:none!important}
-/* Grid lines & border tetap terlihat di preview */
 
 /* ══ RIGHT PANEL ══ */
 .right-panel{background:var(--panel);border-left:2px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
@@ -340,21 +332,25 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 }
 .del-btn:hover{background:var(--accent2);color:#fff}
 
-/* FIX 3: Typography section in props */
+/* FIX 3: Typography section */
 .typo-section{margin-bottom:12px}
 .typo-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
 .typo-select{
   background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;
   padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;
   outline:none;width:100%;transition:border-color .15s;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
 }
 .typo-select:focus{border-color:var(--accent)}
-.typo-color-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.color-swatch{width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;flex-shrink:0}
-.color-presets{display:flex;gap:4px;flex-wrap:wrap;flex:1}
-.color-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;transition:transform .1s;border:2px solid transparent}
-.color-dot:hover{transform:scale(1.2);border-color:rgba(0,0,0,0.2)}
-.color-dot.active{border-color:var(--blue);transform:scale(1.1)}
+.color-presets{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;margin-bottom:10px}
+.color-dot{
+  width:22px;height:22px;border-radius:50%;cursor:pointer;
+  transition:transform .1s;border:2px solid transparent;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.color-dot:hover{transform:scale(1.18)}
+.color-dot.active{border-color:var(--blue);transform:scale(1.12);box-shadow:0 0 0 1px var(--blue)}
+.color-input-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 
 /* ══ SNAP GUIDES ══ */
 .snap-guide{position:absolute;pointer-events:none;z-index:200;background:#e05a5a;opacity:0;transition:opacity .06s}
@@ -364,7 +360,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .snap-preview{
   position:absolute;pointer-events:none;z-index:90;
   border:2px dashed #2563eb;border-radius:3px;
-  background:rgba(37,99,235,0.06);display:none;
+  background:rgba(37,99,235,0.05);display:none;
 }
 
 /* ══ MOBILE NAV ══ */
@@ -386,7 +382,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   position:fixed;bottom:0;left:0;right:0;background:var(--panel);
   border-top:2px solid var(--border);border-radius:16px 16px 0 0;
   z-index:600;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,0,1);
-  max-height:86vh;display:flex;flex-direction:column;
+  max-height:92vh;display:flex;flex-direction:column;
   padding-bottom:calc(var(--safe-bottom)+8px);
   box-shadow:0 -4px 32px rgba(0,0,0,0.12);
 }
@@ -419,7 +415,12 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .m-el-h{font-size:9px;color:var(--muted)}
 .m-pr{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
 .m-prl{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;font-weight:500}
-.m-pri{background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;width:100%;transition:border-color .15s}
+.m-pri{
+  background:var(--panel2);border:1.5px solid var(--border);border-radius:6px;
+  padding:10px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;
+  outline:none;width:100%;transition:border-color .15s;
+  -webkit-appearance:none;appearance:none;
+}
 .m-pri:focus{border-color:var(--accent)}
 .m-pr2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .m-pm{display:flex;flex-direction:column;gap:5px}
@@ -431,6 +432,9 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .m-gs-btn{background:var(--panel2);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);transition:all .15s;-webkit-tap-highlight-color:transparent;width:100%}
 .m-gs-btn.active{border-color:var(--accent);background:rgba(26,26,26,.07);box-shadow:inset 2px 0 0 var(--accent)}
 .drw-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+
+/* FIX 3: Mobile props with color swatches */
+.m-color-dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;margin-bottom:10px}
 
 /* ══ PICKER ══ */
 .picker{
@@ -452,7 +456,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .picker-n{font-size:12px;font-weight:500;color:var(--text)}
 .picker-s{font-size:9px;color:var(--muted)}
 
-/* FIX 5: Auto Layout modal */
+/* Auto Layout modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:4000;display:none;align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
 .modal{background:var(--panel);border-radius:16px;padding:24px;max-width:400px;width:90%;box-shadow:var(--shadow-lg)}
@@ -484,8 +488,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .loading-text{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);font-weight:500}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Hapus status pill */
-
 /* Floating Add Button */
 .fab-add{
   position:fixed;right:320px;bottom:28px;z-index:400;
@@ -496,13 +498,11 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   display:flex;align-items:center;justify-content:center;
   transition:transform .15s,box-shadow .15s;
   -webkit-tap-highlight-color:transparent;
-  line-height:1;font-family:'DM Sans',sans-serif;
 }
 .fab-add:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(0,0,0,0.32)}
 .fab-add:active{transform:scale(.94)}
 @media(max-width:900px){.fab-add{right:20px;bottom:28px}}
 @media(max-width:640px){.fab-add{right:16px;bottom:68px}}
-/* no toast/pill */
 
 /* ══ RESPONSIVE ══ */
 @media(max-width:900px){
@@ -529,7 +529,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
 <div class="modal-overlay" id="auto-layout-modal">
   <div class="modal">
     <div class="modal-title">Auto Layout</div>
-    <div class="modal-sub">Pilih template editorial. Element yang ada akan diatur ulang sesuai canvas.</div>
+    <div class="modal-sub">Pilih template editorial. Element akan diatur ulang sesuai grid canvas.</div>
     <div class="layout-grid" id="layout-grid">
       <div class="layout-opt selected" data-layout="magazine" onclick="selectLayout(this)">
         <div class="layout-ico">📰</div>
@@ -565,10 +565,8 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     Grid Design
   </div>
   <div class="header-div"></div>
-  <div class="header-info">
-    <div class="header-desc">Tool desain grid editorial — atur layout, tambah elemen, export PDF</div>
-    <div class="header-author">By. Akshardesign.id</div>
-  </div>
+  <!-- FIX 4: Author in header -->
+  <div class="header-author">By. Akshardesign.id</div>
   <div class="header-right">
     <button class="btn-icon" onclick="resetCanvas()" title="Reset canvas" style="font-size:13px">↺</button>
     <button class="btn-icon" id="btn-preview" onclick="togglePreview()" title="Preview mode">◉</button>
@@ -598,7 +596,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <div class="ps-title">Grid System</div>
     <div class="grid-sys-list">
       <button class="gs-btn active" onclick="setGridSystem('column',this)">
-        <span class="gs-name">Column Grid</span><span class="gs-desc">Kolom editorial + row bebas</span>
+        <span class="gs-name">Column Grid</span><span class="gs-desc">Kolom editorial — row transparan</span>
       </button>
       <button class="gs-btn" onclick="setGridSystem('modular',this)">
         <span class="gs-name">Modular Grid</span><span class="gs-desc">Matrix baris × kolom sama</span>
@@ -612,7 +610,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     </div>
   </div>
 
-  <!-- FIX 4: Column Grid sekarang punya rows -->
   <div class="ps" id="manual-ctrl">
     <div class="ps-title">Grid Controls</div>
     <div class="col-row-wrap">
@@ -663,7 +660,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
         <div><div class="pal-name">Visual Hook</div><div class="pal-hint">Gambar / CTA</div></div>
       </div>
     </div>
-    <!-- FIX 5: Auto Layout button -->
     <button class="auto-layout-btn" onclick="openAutoLayout()">⚡ Auto Layout</button>
   </div>
 </div>
@@ -676,10 +672,13 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   <div class="canvas-size-label" id="cv-lbl">540 × 400 px</div>
   <div id="canvas">
     <div class="grid-overlay" id="grid-overlay"></div>
+    <!-- FIX 2: grid lines canvas is z:30, above elements -->
     <canvas class="grid-lines-layer" id="grid-lines-canvas"></canvas>
     <div id="snap-guide-layer" style="position:absolute;inset:0;pointer-events:none;z-index:200;overflow:hidden"></div>
     <div class="snap-preview" id="snap-preview"></div>
   </div>
+  <!-- FIX 4: Description below canvas -->
+  <div class="canvas-desc">Tool desain grid editorial — atur layout, tambah element, snap ke grid, export PDF</div>
 </div>
 
 <!-- ══ RIGHT PANEL ══ -->
@@ -692,8 +691,9 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
     <div class="tp active" id="tp-props">
       <div id="no-sel" class="no-sel">
         <div class="no-sel-icon">◱</div>
-        <div>Klik 2x element untuk<br>edit properti & typography</div>
+        <div>Klik element untuk pilih<br>Klik 2× untuk edit properti</div>
       </div>
+      <!-- FIX 3: Props form fully clickable, no form tag -->
       <div id="props-form" style="display:none">
         <div class="pr">
           <div class="pr-label">Type</div>
@@ -701,10 +701,9 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
         </div>
         <div class="pr">
           <div class="pr-label">Content</div>
-          <input class="pr-inp" id="pr-content" oninput="updContent('d')">
+          <input class="pr-inp" id="pr-content" type="text" oninput="updContent('d')">
         </div>
 
-        <!-- FIX 3: Typography controls -->
         <div class="pr-label" style="margin-bottom:8px">Typography</div>
         <div class="typo-section">
           <div class="typo-row">
@@ -746,18 +745,23 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
             </div>
           </div>
           <div class="pr-label" style="margin-bottom:6px">Color</div>
-          <div class="typo-color-row">
-            <input type="color" id="pr-color" value="#1a1a1a" style="width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;padding:1px" oninput="updTypo('d')">
-            <div class="color-presets">
-              <div class="color-dot active" style="background:#1a1a1a" onclick="setColor('#1a1a1a','d',this)"></div>
-              <div class="color-dot" style="background:#ffffff;border:1.5px solid #ddd" onclick="setColor('#ffffff','d',this)"></div>
-              <div class="color-dot" style="background:#dc2626" onclick="setColor('#dc2626','d',this)"></div>
-              <div class="color-dot" style="background:#2563eb" onclick="setColor('#2563eb','d',this)"></div>
-              <div class="color-dot" style="background:#16a34a" onclick="setColor('#16a34a','d',this)"></div>
-              <div class="color-dot" style="background:#e91e8c" onclick="setColor('#e91e8c','d',this)"></div>
-              <div class="color-dot" style="background:#888" onclick="setColor('#888','d',this)"></div>
-              <div class="color-dot" style="background:#f59e0b" onclick="setColor('#f59e0b','d',this)"></div>
-            </div>
+          <div class="color-input-row">
+            <input type="color" id="pr-color" value="#1a1a1a"
+              style="width:32px;height:32px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;padding:2px;background:none"
+              oninput="updColor('d')">
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)" id="pr-color-hex">#1a1a1a</span>
+          </div>
+          <div class="color-presets">
+            <div class="color-dot active" style="background:#1a1a1a" title="#1a1a1a" onclick="setColor('#1a1a1a','d',this)"></div>
+            <div class="color-dot" style="background:#ffffff;outline:1px solid #ddd" title="#ffffff" onclick="setColor('#ffffff','d',this)"></div>
+            <div class="color-dot" style="background:#dc2626" title="#dc2626" onclick="setColor('#dc2626','d',this)"></div>
+            <div class="color-dot" style="background:#2563eb" title="#2563eb" onclick="setColor('#2563eb','d',this)"></div>
+            <div class="color-dot" style="background:#16a34a" title="#16a34a" onclick="setColor('#16a34a','d',this)"></div>
+            <div class="color-dot" style="background:#e91e8c" title="#e91e8c" onclick="setColor('#e91e8c','d',this)"></div>
+            <div class="color-dot" style="background:#888" title="#888888" onclick="setColor('#888888','d',this)"></div>
+            <div class="color-dot" style="background:#f59e0b" title="#f59e0b" onclick="setColor('#f59e0b','d',this)"></div>
+            <div class="color-dot" style="background:#7c3aed" title="#7c3aed" onclick="setColor('#7c3aed','d',this)"></div>
+            <div class="color-dot" style="background:#ea580c" title="#ea580c" onclick="setColor('#ea580c','d',this)"></div>
           </div>
         </div>
 
@@ -796,7 +800,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   </div>
 </nav>
 
-<!-- Floating Add Button -->
 <button class="fab-add" onclick="openDrw('add')" title="Tambah Elemen">＋</button>
 
 <div class="overlay" id="overlay" onclick="closeDrw()"></div>
@@ -872,9 +875,9 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
   <div class="drw-handle"></div>
   <div class="drw-hdr"><div class="drw-title" id="m-prop-title">Properties</div><button class="drw-cls" onclick="closeDrw()">×</button></div>
   <div class="drw-body">
-    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Klik 2x element di canvas untuk edit properti</div>
+    <div id="m-no-sel" style="text-align:center;color:var(--muted);font-size:12px;padding:24px 0;line-height:1.6">Klik 2× element di canvas untuk edit properti</div>
     <div id="m-props-form" style="display:none">
-      <div class="m-pr"><div class="m-prl">Content</div><input class="m-pri" id="m-pr-content" oninput="updContent('m')"></div>
+      <div class="m-pr"><div class="m-prl">Content</div><input class="m-pri" id="m-pr-content" type="text" oninput="updContent('m')"></div>
       <div class="m-pr2">
         <div class="m-pm"><div class="m-prl">Font Size</div><input class="m-pri" id="m-pr-fsize" type="number" value="14" oninput="updTypo('m')"></div>
         <div class="m-pm"><div class="m-prl">Weight</div>
@@ -885,6 +888,25 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
             <option value="700">Bold</option>
             <option value="900">Black</option>
           </select>
+        </div>
+      </div>
+      <!-- FIX 3: Color for mobile -->
+      <div class="m-pr">
+        <div class="m-prl">Color</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+          <input type="color" id="m-pr-color" value="#1a1a1a"
+            style="width:36px;height:36px;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;padding:2px;background:none"
+            oninput="updColor('m')">
+        </div>
+        <div class="m-color-dots">
+          <div class="color-dot active" style="background:#1a1a1a" onclick="setColor('#1a1a1a','m',this)"></div>
+          <div class="color-dot" style="background:#ffffff;outline:1px solid #ddd" onclick="setColor('#ffffff','m',this)"></div>
+          <div class="color-dot" style="background:#dc2626" onclick="setColor('#dc2626','m',this)"></div>
+          <div class="color-dot" style="background:#2563eb" onclick="setColor('#2563eb','m',this)"></div>
+          <div class="color-dot" style="background:#16a34a" onclick="setColor('#16a34a','m',this)"></div>
+          <div class="color-dot" style="background:#e91e8c" onclick="setColor('#e91e8c','m',this)"></div>
+          <div class="color-dot" style="background:#888" onclick="setColor('#888888','m',this)"></div>
+          <div class="color-dot" style="background:#f59e0b" onclick="setColor('#f59e0b','m',this)"></div>
         </div>
       </div>
       <div class="m-pr2">
@@ -945,15 +967,12 @@ const EL_DEF={
   visualhook:  {lbl:'Visual Hook', content:'◈',                      fw:.35, fh:.42, dot:'#e91e8c'},
 };
 
-// FIX 4: Column Grid sekarang tampilkan rows
 const GS={
   column:   {cols:5, rows:5, showRows:true},
   modular:  {cols:5, rows:5, showRows:true},
   hierarchy:{cols:2, rows:4, showRows:false},
   golden:   {cols:2, rows:3, showRows:false},
 };
-
-// Status removed — no toast/pill
 
 // ══════════════════════════════════════
 //  CANVAS SIZE
@@ -1032,7 +1051,6 @@ function setGridSystem(gs,btn,ctx){
   if(gs==='golden') gap=0;
   syncInputs();
 
-  // FIX 4: Selalu tampilkan rows kecuali hierarchy & golden (sudah hardcoded)
   const showR=preset.showRows;
   const rcD=document.getElementById('rows-ctrl');
   const rcM=document.getElementById('m-rows-ctrl');
@@ -1116,7 +1134,6 @@ function computeCells(){
       yCur+=rhs[r]+gap;
     }
   } else {
-    // FIX 4: column grid juga pakai rows
     const effCols=Math.max(cols,1);
     const effRows=Math.max(rows,1);
     const totalGapX=gap*(effCols+1);
@@ -1134,7 +1151,9 @@ function computeCells(){
 }
 
 // ══════════════════════════════════════
-//  DRAW GRID LINES (FIX 1 & 2: warna merah, tetap di preview)
+//  FIX 5: DRAW GRID LINES
+//  Column grid: only vertical lines (no horizontal row lines drawn)
+//  Modular/others: both H + V lines
 // ══════════════════════════════════════
 function drawGridLines(){
   const cvs=document.getElementById('grid-lines-canvas');
@@ -1144,32 +1163,61 @@ function drawGridLines(){
   ctx.clearRect(0,0,canvasW,canvasH);
 
   const cells=computeCells();
-  const xs=new Set(),ys=new Set();
-  cells.forEach(c=>{
-    xs.add(c.x);xs.add(c.x+c.w);
-    ys.add(c.y);ys.add(c.y+c.h);
-  });
+  const isColumnOnly=(gridSystem==='column');
 
-  // FIX 1: Sel background warna merah muda
+  // Collect unique X and Y lines
+  const xSet=new Set(),ySet=new Set();
   cells.forEach(c=>{
-    ctx.fillStyle='rgba(220,38,38,0.06)';
+    xSet.add(c.x);xSet.add(c.x+c.w);
+    ySet.add(c.y);ySet.add(c.y+c.h);
+  });
+  const xs=[...xSet].sort((a,b)=>a-b);
+  const ys=[...ySet].sort((a,b)=>a-b);
+
+  // Cell background — column mode: no fill for rows (just columns show)
+  cells.forEach(c=>{
+    if(isColumnOnly){
+      // Only alternating column highlight, no row distinction
+      const colIdx=c.col;
+      if(colIdx%2===0){
+        ctx.fillStyle='rgba(220,38,38,0.04)';
+      } else {
+        ctx.fillStyle='rgba(220,38,38,0.09)';
+      }
+    } else {
+      ctx.fillStyle='rgba(220,38,38,0.06)';
+    }
     ctx.fillRect(c.x,c.y,c.w,c.h);
   });
 
-  // FIX 1 & 2: Garis merah, tetap di preview
   ctx.lineWidth=1;
-  [...xs].forEach(x=>{
+
+  // Vertical lines — always drawn for all grid types
+  xs.forEach(x=>{
     const isEdge=(x<=gap||x>=canvasW-gap);
-    ctx.strokeStyle=isEdge?'rgba(180,30,30,0.55)':'rgba(210,50,50,0.35)';
-    ctx.setLineDash(isEdge?[]:[3,3]);
+    ctx.strokeStyle=isEdge?'rgba(180,30,30,0.55)':'rgba(210,50,50,0.38)';
+    ctx.setLineDash(isEdge?[]:[3,4]);
     ctx.beginPath();ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,canvasH);ctx.stroke();
   });
-  [...ys].forEach(y=>{
-    const isEdge=(y<=gap||y>=canvasH-gap);
-    ctx.strokeStyle=isEdge?'rgba(180,30,30,0.55)':'rgba(210,50,50,0.35)';
-    ctx.setLineDash(isEdge?[]:[3,3]);
-    ctx.beginPath();ctx.moveTo(0,y+.5);ctx.lineTo(canvasW,y+.5);ctx.stroke();
-  });
+
+  // FIX 5: Horizontal lines — TRANSPARENT for column grid, drawn for others
+  if(!isColumnOnly){
+    ys.forEach(y=>{
+      const isEdge=(y<=gap||y>=canvasH-gap);
+      ctx.strokeStyle=isEdge?'rgba(180,30,30,0.55)':'rgba(210,50,50,0.38)';
+      ctx.setLineDash(isEdge?[]:[3,4]);
+      ctx.beginPath();ctx.moveTo(0,y+.5);ctx.lineTo(canvasW,y+.5);ctx.stroke();
+    });
+  } else {
+    // FIX 5: For column grid, only draw top & bottom border lines
+    const topY=Math.min(...ys);
+    const botY=Math.max(...ys);
+    ctx.strokeStyle='rgba(180,30,30,0.40)';
+    ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(0,topY+.5);ctx.lineTo(canvasW,topY+.5);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,botY+.5);ctx.lineTo(canvasW,botY+.5);ctx.stroke();
+  }
+
   ctx.setLineDash([]);
 }
 
@@ -1186,23 +1234,25 @@ function _buildSnapCache(){
 function _getCache(){if(!_snapCache)_buildSnapCache();return _snapCache;}
 function invalidateSnapCache(){_snapCache=null;}
 
+// FIX 6: Snap to nearest cell origin with exact cell dimensions
 function strictSnap(x,y,w,h){
-  const{cells,xs,ys}=_getCache();
+  const{cells}=_getCache();
   if(!cells.length) return {x,y,w,h};
   let best=null,bestD=Infinity;
-  for(let i=0;i<cells.length;i++){
-    const c=cells[i];
+  for(const c of cells){
     const d=Math.hypot(x-c.x,y-c.y);
     if(d<bestD){bestD=d;best=c;}
   }
-  if(!best) best=cells[0];
+  if(!best) return {x,y,w,h};
+  // Use cell's own position, extend width/height to span multiple cells if needed
   const sx=best.x,sy=best.y;
   const targetRight=x+w;
-  let snapRight=sx+best.w;
-  for(let i=0;i<xs.length;i++){if(xs[i]>sx&&xs[i]<=targetRight+best.w*.6)snapRight=xs[i];}
   const targetBottom=y+h;
-  let snapBottom=sy+best.h;
-  for(let i=0;i<ys.length;i++){if(ys[i]>sy&&ys[i]<=targetBottom+best.h*.6)snapBottom=ys[i];}
+  const{xs,ys}=_getCache();
+  let snapRight=best.x+best.w;
+  for(const rx of xs){if(rx>sx&&rx<=targetRight+best.w*.7){snapRight=rx;}}
+  let snapBottom=best.y+best.h;
+  for(const ry of ys){if(ry>sy&&ry<=targetBottom+best.h*.7){snapBottom=ry;}}
   return{
     x:Math.max(0,sx),y:Math.max(0,sy),
     w:Math.min(Math.max(best.w,snapRight-sx),canvasW-sx),
@@ -1210,12 +1260,55 @@ function strictSnap(x,y,w,h){
   };
 }
 
+// FIX 6: snap for auto-layout — snap given rect to grid, returns exact cell boundaries
+function snapRectToGrid(x,y,w,h){
+  const{cells,xs,ys}=_getCache();
+  if(!cells.length) return {x,y,w,h};
+
+  // Find closest cell origin
+  let bestCell=cells[0],bestD=Infinity;
+  for(const c of cells){
+    const d=Math.hypot(x-c.x,y-c.y);
+    if(d<bestD){bestD=d;bestCell=c;}
+  }
+
+  const sx=bestCell.x,sy=bestCell.y;
+
+  // Find the right edge from xs that best fits x+w
+  const targetRight=x+w;
+  let snapRight=bestCell.x+bestCell.w;
+  let minDX=Infinity;
+  for(const rx of xs){
+    if(rx>sx){
+      const d=Math.abs(rx-targetRight);
+      if(d<minDX){minDX=d;snapRight=rx;}
+    }
+  }
+
+  // Find the bottom edge from ys that best fits y+h
+  const targetBottom=y+h;
+  let snapBottom=bestCell.y+bestCell.h;
+  let minDY=Infinity;
+  for(const ry of ys){
+    if(ry>sy){
+      const d=Math.abs(ry-targetBottom);
+      if(d<minDY){minDY=d;snapBottom=ry;}
+    }
+  }
+
+  return{
+    x:Math.max(0,sx),
+    y:Math.max(0,sy),
+    w:Math.max(bestCell.w,snapRight-sx),
+    h:Math.max(bestCell.h,snapBottom-sy),
+  };
+}
+
 function strictSnapSize(x,y,w,h){
   const{xs,ys,cells}=_getCache();
   if(!cells.length) return {x,y,w,h};
   let anchor=null,bestD=Infinity;
-  for(let i=0;i<cells.length;i++){
-    const c=cells[i];
+  for(const c of cells){
     if(x>=c.x-2&&y>=c.y-2){
       const d=Math.hypot(x-c.x,y-c.y);
       if(d<bestD){bestD=d;anchor=c;}
@@ -1224,21 +1317,21 @@ function strictSnapSize(x,y,w,h){
   if(!anchor) anchor=cells[0];
   const targetRight=x+w,targetBottom=y+h;
   let snapRight=anchor.x+anchor.w,minDx=Infinity;
-  for(let i=0;i<xs.length;i++){if(xs[i]>x){const d=Math.abs(xs[i]-targetRight);if(d<minDx){minDx=d;snapRight=xs[i];}}}
+  for(const rx of xs){if(rx>x){const d=Math.abs(rx-targetRight);if(d<minDx){minDx=d;snapRight=rx;}}}
   let snapBottom=anchor.y+anchor.h,minDy=Infinity;
-  for(let i=0;i<ys.length;i++){if(ys[i]>y){const d=Math.abs(ys[i]-targetBottom);if(d<minDy){minDy=d;snapBottom=ys[i];}}}
+  for(const ry of ys){if(ry>y){const d=Math.abs(ry-targetBottom);if(d<minDy){minDy=d;snapBottom=ry;}}}
   return{x,y,w:Math.max(anchor.w,snapRight-x),h:Math.max(anchor.h,snapBottom-y)};
 }
 
-const GUIDE_THRESHOLD=18;
+const GUIDE_THRESHOLD=20;
 function getSnapLines(x,y,w,h){
   const{xs,ys}=_getCache();
   const vLines=[],hLines=[];
-  for(let i=0;i<xs.length;i++){
-    if(Math.abs(xs[i]-x)<GUIDE_THRESHOLD||Math.abs(xs[i]-(x+w))<GUIDE_THRESHOLD)vLines.push(xs[i]);
+  for(const rx of xs){
+    if(Math.abs(rx-x)<GUIDE_THRESHOLD||Math.abs(rx-(x+w))<GUIDE_THRESHOLD)vLines.push(rx);
   }
-  for(let i=0;i<ys.length;i++){
-    if(Math.abs(ys[i]-y)<GUIDE_THRESHOLD||Math.abs(ys[i]-(y+h))<GUIDE_THRESHOLD)hLines.push(ys[i]);
+  for(const ry of ys){
+    if(Math.abs(ry-y)<GUIDE_THRESHOLD||Math.abs(ry-(y+h))<GUIDE_THRESHOLD)hLines.push(ry);
   }
   return{vLines,hLines};
 }
@@ -1271,7 +1364,7 @@ function showSnapPreview(x,y,w,h){
 function hideSnapPreview(){const p=document.getElementById('snap-preview');if(p)p.style.display='none';}
 
 // ══════════════════════════════════════
-//  BUILD GRID OVERLAY (+ buttons)
+//  BUILD GRID OVERLAY
 // ══════════════════════════════════════
 function buildGrid(){
   const ov=document.getElementById('grid-overlay');
@@ -1302,65 +1395,58 @@ function showPicker(e){
 function hidePicker(){document.getElementById('picker').style.display='none';}
 
 document.addEventListener('click',e=>{
+  // Only hide picker and deselect when clicking completely outside canvas and drawers
   if(!e.target.closest('.design-el')&&!e.target.closest('.drawer')&&!e.target.closest('.fab-add')){
-    selId=null;renderEls();showProps(null);
+    hidePicker();
   }
+  // Do NOT deselect here — areaClick handles canvas deselect;
+  // deselecting from global click causes props panel to disappear on any click.
 });
 function pickerPick(type){hidePicker();placeEl(type,pendDrop.x,pendDrop.y);}
 
 // ══════════════════════════════════════
-//  PLACE ELEMENT — FIX 5a: tidak replace, cari cell kosong
+//  PLACE ELEMENT
 // ══════════════════════════════════════
-function findFreeCellForEl(preferX, preferY, ew, eh){
+function findFreeCellForEl(preferX, preferY){
   const cells=computeCells();
-  // Cari cell terdekat ke posisi yang diinginkan yang TIDAK overlap dengan element yang ada
   let best=null, bestD=Infinity;
   for(const c of cells){
-    const cx=c.x,cy=c.y;
-    // Cek apakah ada elemen yang sudah di cell ini
     const occupied=elements.some(el=>{
-      return el.x<cx+c.w && el.x+el.w>cx &&
-             el.y<cy+c.h && el.y+el.h>cy;
+      return el.x<c.x+c.w && el.x+el.w>c.x &&
+             el.y<c.y+c.h && el.y+el.h>c.y;
     });
     if(occupied) continue;
-    const d=Math.hypot(preferX-cx,preferY-cy);
+    const d=Math.hypot(preferX-c.x,preferY-c.y);
     if(d<bestD){bestD=d;best=c;}
   }
-  // Kalau semua occupied, tetap pakai cell terdekat ke preferX,preferY
   if(!best){
     for(const c of cells){
       const d=Math.hypot(preferX-c.x,preferY-c.y);
       if(d<bestD){bestD=d;best=c;}
     }
   }
-  if(!best) return {x:preferX,y:preferY,w:ew,h:eh};
-  return {x:best.x,y:best.y,w:ew,h:eh};
+  return best;
 }
 
 function placeEl(type,dropX,dropY){
   const def=EL_DEF[type];
   const ew=Math.round(canvasW*def.fw),eh=Math.round(canvasH*def.fh);
-
-  // FIX 5a: Cari cell bebas
-  const pos=findFreeCellForEl(dropX,dropY,ew,eh);
-  const s=strictSnap(pos.x,pos.y,ew,eh);
+  const freeCell=findFreeCellForEl(dropX,dropY);
+  const s=strictSnap(freeCell?freeCell.x:dropX,freeCell?freeCell.y:dropY,ew,eh);
   const el={
     id:++eid,type,content:def.content,
     x:Math.max(0,Math.min(s.x,canvasW-s.w)),
     y:Math.max(0,Math.min(s.y,canvasH-s.h)),
     w:Math.max(s.w,20),h:Math.max(s.h,16),
-    // Typography defaults
-    fontFamily:null, fontSize:null, fontWeight:null, color:null, textAlign:null,
+    fontFamily:null,fontSize:null,fontWeight:null,color:null,textAlign:null,
   };
   elements.push(el);selId=el.id;
   renderEls();showProps(el);genCode();
-  
 }
 
 function mobPlace(type){
   closeDrw();
   const cells=computeCells();
-  // FIX 5a: Cari cell kosong untuk mobile
   let targetCell=cells[0]||{x:gap,y:gap};
   for(const c of cells){
     const occupied=elements.some(el=>{
@@ -1394,7 +1480,7 @@ function palDrop(e){
 // ══════════════════════════════════════
 //  RENDER ELEMENTS
 // ══════════════════════════════════════
-let dblTapLast={};
+let lastTap={};
 
 function applyTypoToEl(div,el){
   const prev=div.querySelector('.el-prev');
@@ -1418,83 +1504,90 @@ function renderEls(){
     const lbl=document.createElement('div');lbl.className='el-lbl';lbl.textContent=EL_DEF[el.type].lbl;
     const prev=document.createElement('div');prev.className='el-prev';prev.textContent=el.content;
     div.appendChild(lbl);div.appendChild(prev);
-
-    // Apply typography
     applyTypoToEl(div,el);
 
-    // Close
+    // Close button
     const cls=document.createElement('button');cls.className='el-close';cls.innerHTML='&#x2715;';
     cls.addEventListener('pointerdown',e=>{e.stopPropagation();});
     cls.addEventListener('click',e=>{e.stopPropagation();delEl(el.id);});
     div.appendChild(cls);
 
-    // Resize BR
-    const rBR=document.createElement('div');rBR.className='el-resize-br';
-    rBR.addEventListener('pointerdown',e=>{
-      e.stopPropagation();e.preventDefault();
-      selId=el.id;renderEls();showProps(el);
-      startResize(e,el,'br');
+    // FIX 1: 3 resize handles only — BR, BL, TL
+    const corners=['br','bl','tl'];
+    corners.forEach(corner=>{
+      const handle=document.createElement('div');
+      handle.className=`el-resize-${corner}`;
+      handle.addEventListener('pointerdown',e=>{
+        e.stopPropagation();e.preventDefault();
+        selId=el.id;renderEls();showProps(el);
+        startResize(e,el,corner);
+      });
+      div.appendChild(handle);
     });
-    div.appendChild(rBR);
 
-    // Resize BL
-    const rBL=document.createElement('div');rBL.className='el-resize-bl';
-    rBL.addEventListener('pointerdown',e=>{
-      e.stopPropagation();e.preventDefault();
-      selId=el.id;renderEls();showProps(el);
-      startResize(e,el,'bl');
-    });
-    div.appendChild(rBL);
-
-    // Resize TR
-    const rTR=document.createElement('div');rTR.className='el-resize-tr';
-    rTR.addEventListener('pointerdown',e=>{
-      e.stopPropagation();e.preventDefault();
-      selId=el.id;renderEls();showProps(el);
-      startResize(e,el,'tr');
-    });
-    div.appendChild(rTR);
-
-    // Resize TL
-    const rTL=document.createElement('div');rTL.className='el-resize-tl';
-    rTL.addEventListener('pointerdown',e=>{
-      e.stopPropagation();e.preventDefault();
-      selId=el.id;renderEls();showProps(el);
-      startResize(e,el,'tl');
-    });
-    div.appendChild(rTL);
-
-    // DRAG (move)
+    // FIX 3: Single click selects, double click opens props
+    let clickTimer=null;
     div.addEventListener('pointerdown',e=>{
-      if(e.target===cls||e.target===rBR||e.target===rBL||e.target===rTR||e.target===rTL) return;
+      if(e.target.classList.contains('el-close')||e.target.classList.contains('el-resize-br')||
+         e.target.classList.contains('el-resize-bl')||e.target.classList.contains('el-resize-tl')) return;
       e.stopPropagation();e.preventDefault();
-      selId=el.id;renderEls();showProps(el);
+      selId=el.id;
       startMove(e,el);
     });
 
-    // FIX 3: Double-click/tap buka props
+    // Single click: select only, stop propagation so areaClick doesn't deselect
     div.addEventListener('click',e=>{
       e.stopPropagation();
-      const now=Date.now();
-      const id=el.id;
-      if(dblTapLast[id]&&(now-dblTapLast[id])<400){
-        selId=el.id;renderEls();showProps(el);
-        if(window.innerWidth<=640){
-          openDrw('props');
-        } else {
-          // Pastikan tab Properties aktif
-          document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
-          document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
-          document.querySelector('.r-tab')?.classList.add('active');
-          document.getElementById('tp-props')?.classList.add('active');
-          showProps(el);
-          // Scroll ke props panel
-          document.querySelector('.tab-body')?.scrollTo(0,0);
-        }
-        dblTapLast[id]=0;
+      if(selId!==el.id){
+        selId=el.id;
+        renderEls();
+        showProps(el);
+      }
+    });
+
+    // Double click (desktop): open/focus props panel
+    div.addEventListener('dblclick',e=>{
+      e.stopPropagation();
+      selId=el.id;renderEls();showProps(el);
+      if(window.innerWidth<=640){
+        // Mobile: open drawer
+        openDrw('props');
+        const noSelM=document.getElementById('m-no-sel');
+        const formM=document.getElementById('m-props-form');
+        if(noSelM) noSelM.style.display='none';
+        if(formM) formM.style.display='block';
       } else {
-        dblTapLast[id]=now;
-        selId=el.id;renderEls();showProps(el);
+        // Desktop: activate props tab
+        document.querySelectorAll('.r-tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
+        const firstTab=document.querySelector('.r-tab');
+        if(firstTab) firstTab.classList.add('active');
+        const propsTab=document.getElementById('tp-props');
+        if(propsTab) propsTab.classList.add('active');
+        showProps(el);
+        const tabBody=document.querySelector('.tab-body');
+        if(tabBody) tabBody.scrollTo({top:0,behavior:'smooth'});
+      }
+    });
+
+    // Mobile double-tap (~300ms): select + open props drawer
+    div.addEventListener('touchend',e=>{
+      const now=Date.now();
+      const prev=lastTap[el.id]||0;
+      if(prev&&(now-prev)<300){
+        e.preventDefault();
+        e.stopPropagation();
+        selId=el.id;
+        renderEls();
+        showProps(el);
+        openDrw('props');
+        const noSelM=document.getElementById('m-no-sel');
+        const formM=document.getElementById('m-props-form');
+        if(noSelM) noSelM.style.display='none';
+        if(formM) formM.style.display='block';
+        lastTap[el.id]=0;
+      } else {
+        lastTap[el.id]=now;
       }
     });
 
@@ -1540,22 +1633,21 @@ function startMove(e,el){
       el.x=Math.max(0,Math.min(s.x,canvasW-s.w));
       el.y=Math.max(0,Math.min(s.y,canvasH-s.h));
       el.w=Math.max(s.w,20);el.h=Math.max(s.h,16);
-      renderEls();showProps(el);genCode();
     }
+    renderEls();showProps(el);genCode();
   }
   div.addEventListener('pointermove',onMove,{passive:false});
   div.addEventListener('pointerup',onUp);
 }
 
 // ══════════════════════════════════════
-//  RESIZE — 4 corners: br, bl, tr, tl
+//  FIX 1: RESIZE — 3 corners: br, bl, tl
 // ══════════════════════════════════════
 function startResize(e,el,corner){
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
   if(!div) return;
-  const handleCls=`.el-resize-${corner}`;
-  const handle=div.querySelector(handleCls);
+  const handle=div.querySelector(`.el-resize-${corner}`);
   if(!handle) return;
   const sx=e.clientX,sy=e.clientY;
   const ow=el.w,oh=el.h,ox=el.x,oy=el.y;
@@ -1577,12 +1669,6 @@ function startResize(e,el,corner){
       nx=Math.max(0,ox+ow-nw);
       nw=ox+ow-nx;
       ny=el.y;
-    } else if(corner==='tr'){
-      nw=Math.max(MIN_W,Math.min(pendW,canvasW-el.x));
-      nh=Math.max(MIN_H,Math.min(pendH,oy+oh));
-      nx=el.x;
-      ny=Math.max(0,oy+oh-nh);
-      nh=oy+oh-ny;
     } else { // tl
       nw=Math.max(MIN_W,Math.min(pendW,ox+ow));
       nh=Math.max(MIN_H,Math.min(pendH,oy+oh));
@@ -1602,8 +1688,7 @@ function startResize(e,el,corner){
     const dx=ev.clientX-sx,dy=ev.clientY-sy;
     if(corner==='br'){pendW=ow+dx;pendH=oh+dy;}
     else if(corner==='bl'){pendW=ow-dx;pendH=oh+dy;}
-    else if(corner==='tr'){pendW=ow+dx;pendH=oh-dy;}
-    else{pendW=ow-dx;pendH=oh-dy;}
+    else{pendW=ow-dx;pendH=oh-dy;} // tl
     if(!rafId) rafId=requestAnimationFrame(applyFrame);
   }
   function onUp(ev){
@@ -1612,26 +1697,17 @@ function startResize(e,el,corner){
     handle.removeEventListener('pointermove',onMove);
     handle.removeEventListener('pointerup',onUp);
     drawSnapLines(null);
-    // Snap final position
-    if(corner==='br'){
-      const s=strictSnapSize(el.x,el.y,el.w,el.h);
-      el.w=Math.max(MIN_W,s.w);el.h=Math.max(MIN_H,s.h);
-    } else if(corner==='bl'||corner==='tl'){
+    const s=strictSnapSize(el.x,el.y,el.w,el.h);
+    el.w=Math.max(MIN_W,s.w);el.h=Math.max(MIN_H,s.h);
+    if(corner==='bl'||corner==='tl'){
       const{xs}=_getCache();
       let snapX=el.x,minD=Infinity;
       xs.forEach(x=>{const d=Math.abs(x-el.x);if(d<minD){minD=d;snapX=x;}});
       const snapRight=el.x+el.w;
       el.x=Math.max(0,snapX);
       el.w=Math.max(MIN_W,snapRight-el.x);
-      if(corner==='tl'){
-        const{ys}=_getCache();
-        let snapY=el.y,minDy=Infinity;
-        ys.forEach(y=>{const d=Math.abs(y-el.y);if(d<minDy){minDy=d;snapY=y;}});
-        const snapBottom=el.y+el.h;
-        el.y=Math.max(0,snapY);
-        el.h=Math.max(MIN_H,snapBottom-el.y);
-      }
-    } else if(corner==='tr'){
+    }
+    if(corner==='tl'){
       const{ys}=_getCache();
       let snapY=el.y,minDy=Infinity;
       ys.forEach(y=>{const d=Math.abs(y-el.y);if(d<minDy){minDy=d;snapY=y;}});
@@ -1646,7 +1722,7 @@ function startResize(e,el,corner){
 }
 
 // ══════════════════════════════════════
-//  PROPS PANEL — FIX 3: typography support
+//  FIX 3: PROPS PANEL — full typography
 // ══════════════════════════════════════
 function showProps(el){
   const noSelD=document.getElementById('no-sel');
@@ -1655,15 +1731,16 @@ function showProps(el){
   const formM=document.getElementById('m-props-form');
 
   if(!el){
-    if(noSelD){noSelD.style.display='flex';}
-    if(formD){formD.style.display='none';}
-    if(noSelM){noSelM.style.display='block';}
-    if(formM){formM.style.display='none';}
+    if(noSelD) noSelD.style.display='flex';
+    if(formD) formD.style.display='none';
+    if(noSelM) noSelM.style.display='block';
+    if(formM) formM.style.display='none';
     return;
   }
 
-  if(noSelD){noSelD.style.display='none';}
-  if(formD){formD.style.display='block';}
+  if(noSelD) noSelD.style.display='none';
+  if(formD) formD.style.display='block';
+
   const typeEl=document.getElementById('pr-type');
   if(typeEl) typeEl.textContent=EL_DEF[el.type].lbl;
 
@@ -1671,47 +1748,62 @@ function showProps(el){
   const cD=document.getElementById('pr-content');if(cD) cD.value=el.content;
   const cM=document.getElementById('m-pr-content');if(cM) cM.value=el.content;
 
-  // Typography
+  // Font
   const fD=document.getElementById('pr-font');
-  if(fD && el.fontFamily) fD.value=el.fontFamily;
+  if(fD){
+    const fVal=el.fontFamily||getDefaultFont(el.type);
+    // Try to set, fallback gracefully
+    fD.value=fVal;
+    if(fD.value!==fVal) fD.selectedIndex=0;
+  }
+
+  // Font size
   const fsD=document.getElementById('pr-fsize');
   if(fsD) fsD.value=el.fontSize||getDefaultFontSize(el.type);
+  const fsM=document.getElementById('m-pr-fsize');
+  if(fsM) fsM.value=el.fontSize||getDefaultFontSize(el.type);
+
+  // Font weight
   const fwD=document.getElementById('pr-fweight');
   if(fwD) fwD.value=el.fontWeight||getDefaultWeight(el.type);
+  const fwM=document.getElementById('m-pr-fweight');
+  if(fwM) fwM.value=el.fontWeight||getDefaultWeight(el.type);
+
+  // Align
   const faD=document.getElementById('pr-align');
   if(faD) faD.value=el.textAlign||'center';
+
+  // Color
+  const col=el.color||getDefaultColor(el.type);
   const fcD=document.getElementById('pr-color');
-  if(fcD) fcD.value=el.color||getDefaultColor(el.type);
+  if(fcD) fcD.value=col;
+  const fcM=document.getElementById('m-pr-color');
+  if(fcM) fcM.value=col;
+  const hexEl=document.getElementById('pr-color-hex');
+  if(hexEl) hexEl.textContent=col;
 
-  // Update color dots
+  // Update color dot active states
   document.querySelectorAll('.color-dot').forEach(dot=>{
-    dot.classList.toggle('active',dot.style.backgroundColor===hexToRgb(el.color||getDefaultColor(el.type)));
+    const c=dot.title||dot.getAttribute('data-color')||'';
+    dot.classList.toggle('active',c.toLowerCase()===col.toLowerCase());
   });
-
-  // Mobile typography
-  const fsM=document.getElementById('m-pr-fsize');if(fsM) fsM.value=el.fontSize||getDefaultFontSize(el.type);
-  const fwM=document.getElementById('m-pr-fweight');if(fwM) fwM.value=el.fontWeight||getDefaultWeight(el.type);
 
   // Position
   ['x','y','w','h'].forEach(k=>{
-    const e=document.getElementById('pv-'+k);if(e) e.textContent=Math.round(el[k]);
-    const i=document.getElementById('pr-'+k);if(i) i.value=Math.round(el[k]);
-    const m=document.getElementById('m-pr-'+k);if(m) m.value=Math.round(el[k]);
+    const pvEl=document.getElementById('pv-'+k);if(pvEl) pvEl.textContent=Math.round(el[k]);
+    const inp=document.getElementById('pr-'+k);if(inp) inp.value=Math.round(el[k]);
+    const mInp=document.getElementById('m-pr-'+k);if(mInp) mInp.value=Math.round(el[k]);
   });
 
-  if(noSelM){noSelM.style.display='none';}
-  if(formM){formM.style.display='block';}
+  if(noSelM) noSelM.style.display='none';
+  if(formM) formM.style.display='block';
   const titleM=document.getElementById('m-prop-title');
   if(titleM) titleM.textContent=EL_DEF[el.type].lbl;
 }
 
-function hexToRgb(hex){
-  const r=parseInt(hex.slice(1,3),16);
-  const g=parseInt(hex.slice(3,5),16);
-  const b=parseInt(hex.slice(5,7),16);
-  return `rgb(${r}, ${g}, ${b})`;
+function getDefaultFont(type){
+  return {headline:"'Playfair Display',serif",subheadline:"'DM Sans',sans-serif",description:"'DM Sans',sans-serif",footer:"'DM Mono',monospace",visualhook:"'DM Sans',sans-serif"}[type]||"'DM Sans',sans-serif";
 }
-
 function getDefaultFontSize(type){
   return {headline:15,subheadline:12,description:10,footer:9,visualhook:22}[type]||12;
 }
@@ -1729,19 +1821,30 @@ function updTypo(ctx){
     const fsize=document.getElementById('pr-fsize');
     const fweight=document.getElementById('pr-fweight');
     const align=document.getElementById('pr-align');
-    const color=document.getElementById('pr-color');
     if(font) el.fontFamily=font.value;
     if(fsize) el.fontSize=parseInt(fsize.value)||14;
     if(fweight) el.fontWeight=fweight.value;
     if(align) el.textAlign=align.value;
-    if(color) el.color=color.value;
   } else {
     const fsize=document.getElementById('m-pr-fsize');
     const fweight=document.getElementById('m-pr-fweight');
     if(fsize) el.fontSize=parseInt(fsize.value)||14;
     if(fweight) el.fontWeight=fweight.value;
   }
-  // Update live tanpa full re-render
+  const canvas=document.getElementById('canvas');
+  const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
+  if(div) applyTypoToEl(div,el);
+  genCode();
+}
+
+function updColor(ctx){
+  const el=elements.find(e=>e.id===selId);if(!el) return;
+  const inp=document.getElementById(ctx==='m'?'m-pr-color':'pr-color');
+  if(!inp) return;
+  el.color=inp.value;
+  const hexEl=document.getElementById('pr-color-hex');
+  if(hexEl) hexEl.textContent=inp.value;
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
   if(div) applyTypoToEl(div,el);
@@ -1751,8 +1854,12 @@ function updTypo(ctx){
 function setColor(hex,ctx,dot){
   const el=elements.find(e=>e.id===selId);if(!el) return;
   el.color=hex;
-  const colorInput=document.getElementById('pr-color');
-  if(colorInput) colorInput.value=hex;
+  const colorInputD=document.getElementById('pr-color');
+  if(colorInputD) colorInputD.value=hex;
+  const colorInputM=document.getElementById('m-pr-color');
+  if(colorInputM) colorInputM.value=hex;
+  const hexEl=document.getElementById('pr-color-hex');
+  if(hexEl) hexEl.textContent=hex;
   document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));
   if(dot) dot.classList.add('active');
   const canvas=document.getElementById('canvas');
@@ -1767,10 +1874,7 @@ function updContent(ctx){
   if(inp) el.content=inp.value;
   const canvas=document.getElementById('canvas');
   const div=canvas.querySelector(`.design-el[data-id="${el.id}"]`);
-  if(div){
-    const prev=div.querySelector('.el-prev');
-    if(prev) prev.textContent=el.content;
-  }
+  if(div){const prev=div.querySelector('.el-prev');if(prev) prev.textContent=el.content;}
   genCode();
 }
 
@@ -1795,7 +1899,7 @@ function delEl(id){
 function deleteSel(){if(selId)delEl(selId);}
 
 // ══════════════════════════════════════
-//  FIX 5: AUTO LAYOUT
+//  FIX 6: AUTO LAYOUT — snap to grid
 // ══════════════════════════════════════
 function openAutoLayout(){
   document.getElementById('auto-layout-modal').classList.add('show');
@@ -1809,65 +1913,48 @@ function selectLayout(el){
   selectedAutoLayout=el.dataset.layout;
 }
 
-const AUTO_LAYOUTS={
-  magazine:(cW,cH,g)=>{
-    // Hero full width top + 3 col bottom
-    const heroH=Math.round(cH*.45);
-    const bodyH=cH-heroH-g*3;
-    const colW=Math.round((cW-g*4)/3);
-    return [
-      {type:'visualhook',x:g,y:g,w:cW-g*2,h:heroH},
-      {type:'headline',x:g,y:heroH+g*2,w:cW-g*2,h:Math.round(bodyH*.35)},
-      {type:'description',x:g,y:heroH+g*2+Math.round(bodyH*.35)+g,w:colW,h:Math.round(bodyH*.55)},
-      {type:'description',x:g+colW+g,y:heroH+g*2+Math.round(bodyH*.35)+g,w:colW,h:Math.round(bodyH*.55)},
-      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
-    ];
-  },
-  editorial:(cW,cH,g)=>{
-    // Title kiri + body 2 kolom
-    const titleW=Math.round(cW*.38);
-    const bodyW=cW-titleW-g*3;
-    const halfW=Math.round((bodyW-g)/2);
-    return [
-      {type:'headline',x:g,y:g,w:titleW,h:Math.round(cH*.42)},
-      {type:'subheadline',x:g,y:g+Math.round(cH*.42)+g,w:titleW,h:Math.round(cH*.2)},
-      {type:'visualhook',x:titleW+g*2,y:g,w:bodyW,h:Math.round(cH*.52)},
-      {type:'description',x:titleW+g*2,y:Math.round(cH*.52)+g*2,w:halfW,h:cH-Math.round(cH*.52)-g*3-Math.round(cH*.1)},
-      {type:'description',x:titleW+g*2+halfW+g,y:Math.round(cH*.52)+g*2,w:halfW,h:cH-Math.round(cH*.52)-g*3-Math.round(cH*.1)},
-      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
-    ];
-  },
-  poster:(cW,cH,g)=>{
-    // Visual hook besar + text overlay bawah
-    return [
-      {type:'visualhook',x:g,y:g,w:cW-g*2,h:Math.round(cH*.6)},
-      {type:'headline',x:g,y:Math.round(cH*.6)+g*2,w:cW-g*2,h:Math.round(cH*.2)},
-      {type:'subheadline',x:g,y:Math.round(cH*.6)+g*2+Math.round(cH*.2)+g,w:Math.round(cW*.6),h:Math.round(cH*.12)},
-      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
-    ];
-  },
-  minimal:(cW,cH,g)=>{
-    // Terpusat — headline + sub + desc vertikal tengah
-    const elW=Math.round(cW*.7);
-    const startX=Math.round((cW-elW)/2);
-    const totalH=Math.round(cH*.14)+g+Math.round(cH*.1)+g+Math.round(cH*.3);
-    const startY=Math.round((cH-totalH)/2);
-    return [
-      {type:'headline',x:startX,y:startY,w:elW,h:Math.round(cH*.14)},
-      {type:'subheadline',x:startX,y:startY+Math.round(cH*.14)+g,w:elW,h:Math.round(cH*.1)},
-      {type:'description',x:startX,y:startY+Math.round(cH*.14)+g+Math.round(cH*.1)+g,w:elW,h:Math.round(cH*.3)},
-      {type:'footer',x:g,y:cH-Math.round(cH*.1)-g,w:cW-g*2,h:Math.round(cH*.1)},
-    ];
-  },
+// Auto layout definitions use fractions, then we snap each rect to actual grid
+const AUTO_LAYOUT_DEFS={
+  magazine:(cW,cH,g)=>[
+    {type:'visualhook',  xf:0,    yf:0,    wf:1,    hf:.44},
+    {type:'headline',    xf:0,    yf:.44,  wf:1,    hf:.2},
+    {type:'description', xf:0,    yf:.64,  wf:.32,  hf:.26},
+    {type:'description', xf:.34,  yf:.64,  wf:.32,  hf:.26},
+    {type:'footer',      xf:0,    yf:.9,   wf:1,    hf:.1},
+  ],
+  editorial:(cW,cH,g)=>[
+    {type:'headline',    xf:0,    yf:0,    wf:.38,  hf:.42},
+    {type:'subheadline', xf:0,    yf:.42,  wf:.38,  hf:.22},
+    {type:'visualhook',  xf:.4,   yf:0,    wf:.6,   hf:.54},
+    {type:'description', xf:.4,   yf:.54,  wf:.29,  hf:.36},
+    {type:'description', xf:.7,   yf:.54,  wf:.29,  hf:.36},
+    {type:'footer',      xf:0,    yf:.9,   wf:1,    hf:.1},
+  ],
+  poster:(cW,cH,g)=>[
+    {type:'visualhook',  xf:0,    yf:0,    wf:1,    hf:.6},
+    {type:'headline',    xf:0,    yf:.6,   wf:1,    hf:.2},
+    {type:'subheadline', xf:0,    yf:.8,   wf:.6,   hf:.1},
+    {type:'footer',      xf:0,    yf:.9,   wf:1,    hf:.1},
+  ],
+  minimal:(cW,cH,g)=>[
+    {type:'headline',    xf:.15,  yf:.15,  wf:.7,   hf:.15},
+    {type:'subheadline', xf:.15,  yf:.32,  wf:.7,   hf:.1},
+    {type:'description', xf:.15,  yf:.44,  wf:.7,   hf:.34},
+    {type:'footer',      xf:0,    yf:.9,   wf:1,    hf:.1},
+  ],
 };
 
 function applyAutoLayout(){
   closeAutoLayout();
-  const layoutFn=AUTO_LAYOUTS[selectedAutoLayout];
-  if(!layoutFn) return;
-  const specs=layoutFn(canvasW,canvasH,gap);
+  // Need snap cache
+  invalidateSnapCache();
+  _buildSnapCache();
+  const defFn=AUTO_LAYOUT_DEFS[selectedAutoLayout];
+  if(!defFn) return;
 
-  // Ambil konten dari element yang ada (reuse jika ada)
+  const specs=defFn(canvasW,canvasH,gap);
+
+  // Reuse existing content
   const existingByType={};
   elements.forEach(el=>{
     if(!existingByType[el.type]) existingByType[el.type]=[];
@@ -1876,31 +1963,43 @@ function applyAutoLayout(){
 
   elements=[];
   const typeCount={};
+
   specs.forEach(spec=>{
-    const{type,x,y,w,h}=spec;
+    const{type,xf,yf,wf,hf}=spec;
     typeCount[type]=(typeCount[type]||0);
-    // Reuse konten dari element yang ada kalau ada
+
+    // Convert fractions to pixel approximate positions
+    const rawX=Math.round(xf*canvasW);
+    const rawY=Math.round(yf*canvasH);
+    const rawW=Math.round(wf*canvasW);
+    const rawH=Math.round(hf*canvasH);
+
+    // FIX 6: Snap to actual grid cells
+    const snapped=snapRectToGrid(rawX,rawY,rawW,rawH);
+
     let content=EL_DEF[type].content;
     const existList=existingByType[type];
-    if(existList && existList[typeCount[type]]){
+    if(existList&&existList[typeCount[type]]){
       content=existList[typeCount[type]].content;
     }
     typeCount[type]++;
+
     elements.push({
       id:++eid,type,content,
-      x:Math.max(0,x),y:Math.max(0,y),
-      w:Math.max(20,w),h:Math.max(16,h),
+      x:Math.max(0,snapped.x),
+      y:Math.max(0,snapped.y),
+      w:Math.max(20,snapped.w),
+      h:Math.max(16,snapped.h),
       fontFamily:null,fontSize:null,fontWeight:null,color:null,textAlign:null,
     });
   });
 
   selId=null;
   renderEls();showProps(null);genCode();
-  
 }
 
 // ══════════════════════════════════════
-//  CODE GEN — FIX 3: include typography
+//  CODE GEN
 // ══════════════════════════════════════
 function genCode(){
   let html=`<div class="layout">\n`;
@@ -1924,7 +2023,7 @@ function genCode(){
 }
 
 // ══════════════════════════════════════
-//  PREVIEW MODE — FIX 2: grid tetap tampil
+//  PREVIEW MODE
 // ══════════════════════════════════════
 function togglePreview(){
   isPreview=!isPreview;
@@ -1933,9 +2032,7 @@ function togglePreview(){
   cv.classList.toggle('preview-mode',isPreview);
   btn.classList.toggle('active',isPreview);
   btn.title=isPreview?'Keluar preview':'Preview mode';
-  // Grid lines tetap draw (tidak disembunyikan)
   drawGridLines();
-  
 }
 
 // ══════════════════════════════════════
@@ -1946,7 +2043,6 @@ async function exportPDF(){
   const loadText=document.getElementById('loading-text');
   loading.classList.add('show');
   loadText.textContent='Mempersiapkan canvas…';
-
   const wasPreview=isPreview;
   try{
     if(!wasPreview){
@@ -1955,21 +2051,17 @@ async function exportPDF(){
       drawGridLines();
       await new Promise(r=>setTimeout(r,100));
     }
-
     loadText.textContent='Merender elemen…';
     const cv=document.getElementById('canvas');
     const scale=Math.max(window.devicePixelRatio||1,2);
-
     const canvasImg=await html2canvas(cv,{
       scale,useCORS:true,logging:false,backgroundColor:'#ffffff',
       width:canvasW,height:canvasH,
       ignoreElements:(el)=>el.classList&&(el.classList.contains('snap-guide')||el.classList.contains('snap-preview')),
     });
-
     loadText.textContent='Membuat PDF…';
     const imgData=canvasImg.toDataURL('image/png',1.0);
     const{jsPDF}=window.jspdf;
-
     let pdfW,pdfH;
     if(ratio==='1:1'){pdfW=150;pdfH=150;}
     else if(ratio==='4:5'){pdfW=120;pdfH=150;}
@@ -1979,16 +2071,13 @@ async function exportPDF(){
       pdfW=180;pdfH=Math.round(180*aspect);
       if(pdfH>280){pdfH=280;pdfW=Math.round(280/aspect);}
     }
-
     const orientation=pdfH>pdfW?'portrait':'landscape';
     const pdf=new jsPDF({orientation,unit:'mm',format:[pdfW,pdfH],compress:true});
     pdf.addImage(imgData,'PNG',0,0,pdfW,pdfH,undefined,'FAST');
     const ratioLabel=ratio==='custom'?`${logicalW}x${logicalH}`:ratio.replace(':','-');
     pdf.save(`grid-design-${ratioLabel}.pdf`);
-    
   } catch(err){
     console.error('Export error:',err);
-    
   } finally{
     if(!wasPreview){
       isPreview=false;
@@ -2022,9 +2111,20 @@ function openDrw(name){
   ov.style.display='block';
   requestAnimationFrame(()=>{ov.classList.add('vis');drw.classList.add('open');});
   if(name==='code') genCode();
-  if(name==='props' && selId){
-    const el=elements.find(e=>e.id===selId);
-    if(el) showProps(el);
+  if(name==='props'){
+    if(selId){
+      const el=elements.find(e=>e.id===selId);
+      if(el){
+        showProps(el);
+        // Ensure mobile form is visible
+        const noSelM=document.getElementById('m-no-sel');
+        const formM=document.getElementById('m-props-form');
+        if(noSelM) noSelM.style.display='none';
+        if(formM) formM.style.display='block';
+      }
+    } else {
+      showProps(null);
+    }
   }
   document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
   const nb=document.getElementById('mn-'+name);if(nb)nb.classList.add('active');
@@ -2045,12 +2145,12 @@ function closeDrw(silent){
 function copyHTML(){
   genCode();
   const t=document.getElementById('code-html')?.textContent||'';
-  navigator.clipboard.writeText(t).then(()=>{}).catch(()=>{});
+  navigator.clipboard.writeText(t).catch(()=>{});
 }
 function copyCSS(){
   genCode();
   const t=document.getElementById('code-css')?.textContent||'';
-  navigator.clipboard.writeText(t).then(()=>{}).catch(()=>{});
+  navigator.clipboard.writeText(t).catch(()=>{});
 }
 
 // ══════════════════════════════════════
@@ -2064,13 +2164,13 @@ function resetCanvas(){
     document.getElementById('btn-preview').classList.remove('active');
   }
   drawGridLines();renderEls();showProps(null);genCode();
-  
 }
 
 // ══════════════════════════════════════
-//  AREA CLICK
+//  AREA CLICK — deselect only on direct canvas click
 // ══════════════════════════════════════
 function areaClick(e){
+  // Only deselect if the click target is the canvas-area or canvas itself (not a child element)
   if(e.target===document.getElementById('canvas-area')||e.target===document.getElementById('canvas')){
     selId=null;renderEls();showProps(null);
   }
@@ -2101,7 +2201,6 @@ document.addEventListener('keydown',e=>{
 // ══════════════════════════════════════
 window.addEventListener('load',()=>{
   document.getElementById('custom-wh').style.display='grid';
-  // FIX 4: Column grid tampilkan rows
   const rcD=document.getElementById('rows-ctrl');
   const rcM=document.getElementById('m-rows-ctrl');
   if(rcD) rcD.style.display='flex';
